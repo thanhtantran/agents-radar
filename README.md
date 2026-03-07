@@ -1,37 +1,37 @@
 # agents-radar
 
-English | [中文](./README.zh.md)
+Tiếng Việt | [中文](./README.zh.md) | [English](./README.en.md)
 
-A GitHub Actions workflow that runs every morning at 08:00 CST. It tracks GitHub activity from AI CLI tools, OpenClaw and its peer projects in the AI agent ecosystem, scrapes official news and research from Anthropic and OpenAI, and monitors the GitHub AI trending repos daily — then publishes bilingual (Chinese + English) daily digests as GitHub Issues and committed Markdown files. Weekly and monthly rollup reports are also generated automatically.
+Một workflow GitHub Actions chạy mỗi sáng lúc 08:00 CST. Nó theo dõi hoạt động GitHub từ các công cụ AI CLI, OpenClaw và các dự án liên quan trong hệ sinh thái AI agent, thu thập tin tức và nghiên cứu chính thức từ Anthropic và OpenAI, đồng thời giám sát các repo AI trending trên GitHub hàng ngày — sau đó xuất bản bản tin hàng ngày đa ngôn ngữ dưới dạng GitHub Issues và các file Markdown được commit. Báo cáo tổng hợp hàng tuần và hàng tháng cũng được tạo tự động.
 
-## Web UI
+## Giao diện Web
 
 **[https://compasify.github.io/agents-radar](https://compasify.github.io/agents-radar)**
 
-Browse all historical digests in a clean, dark-themed interface — no login required. Reports are rendered from the Markdown files in this repo via GitHub Pages.
+Duyệt tất cả các bản tin lịch sử qua giao diện tối, sạch sẽ — không cần đăng nhập. Báo cáo được render từ các file Markdown trong repo này qua GitHub Pages.
 
 ## RSS Feed
 
 **[https://compasify.github.io/agents-radar/feed.xml](https://compasify.github.io/agents-radar/feed.xml)**
 
-Subscribe in any RSS reader (Feedly, Reeder, NewsBlur, etc.) to receive new digests automatically. The feed includes the latest 30 reports across all report types, updated daily alongside `manifest.json`.
+Đăng ký qua bất kỳ RSS reader nào (Feedly, Reeder, NewsBlur, v.v.) để nhận bản tin mới tự động. Feed bao gồm 30 báo cáo mới nhất trên tất cả các loại, được cập nhật hàng ngày cùng với `manifest.json`.
 
 ## MCP Server
 
 **`https://agents-radar-mcp.duanyytop.workers.dev`**
 
-A hosted [Model Context Protocol](https://modelcontextprotocol.io) server that exposes agents-radar data as tools. Any MCP-compatible client (Claude Desktop, OpenClaw, etc.) can query the latest AI ecosystem reports directly.
+Một [Model Context Protocol](https://modelcontextprotocol.io) server được host sẵn, cung cấp dữ liệu agents-radar dưới dạng các công cụ. Bất kỳ client nào tương thích MCP (Claude Desktop, OpenClaw, v.v.) đều có thể truy vấn các báo cáo hệ sinh thái AI mới nhất trực tiếp.
 
-**Available tools:**
+**Các công cụ khả dụng:**
 
-| Tool | Description |
-|------|-------------|
-| `list_reports` | List available dates and report types (last N days) |
-| `get_latest` | Fetch the most recent report of a given type |
-| `get_report` | Fetch a specific report by date and type |
-| `search` | Keyword search across recent reports |
+| Công cụ        | Mô tả                                                     |
+| -------------- | --------------------------------------------------------- |
+| `list_reports` | Liệt kê các ngày và loại báo cáo có sẵn (N ngày gần nhất) |
+| `get_latest`   | Lấy báo cáo mới nhất của một loại nhất định               |
+| `get_report`   | Lấy báo cáo cụ thể theo ngày và loại                      |
+| `search`       | Tìm kiếm từ khóa trong các báo cáo gần đây                |
 
-**Claude Desktop setup** — add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+**Cài đặt Claude Desktop** — thêm vào `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
@@ -43,18 +43,19 @@ A hosted [Model Context Protocol](https://modelcontextprotocol.io) server that e
 }
 ```
 
-Restart Claude Desktop after saving. You can then ask Claude things like:
-- *"What's the latest in AI CLI tools?"* → calls `get_latest`
-- *"Search for Claude Code mentions this week"* → calls `search`
-- *"Show me the AI trending report for 2026-03-05"* → calls `get_report`
+Khởi động lại Claude Desktop sau khi lưu. Bạn có thể hỏi Claude những câu như:
 
-**OpenClaw setup** — run the following command:
+- _"Có gì mới trong các công cụ AI CLI?"_ → gọi `get_latest`
+- _"Tìm kiếm các đề cập đến Claude Code tuần này"_ → gọi `search`
+- _"Cho tôi xem báo cáo AI trending ngày 2026-03-05"_ → gọi `get_report`
+
+**Cài đặt OpenClaw** — chạy lệnh sau:
 
 ```bash
 openclaw mcp add --transport http agents-radar https://agents-radar-mcp.duanyytop.workers.dev
 ```
 
-Or add it manually to `~/.openclaw/openclaw.json`:
+Hoặc thêm thủ công vào `~/.openclaw/openclaw.json`:
 
 ```json
 {
@@ -67,12 +68,13 @@ Or add it manually to `~/.openclaw/openclaw.json`:
 }
 ```
 
-You can then ask OpenClaw things like:
-- *"What's the latest in AI CLI tools?"* → calls `get_latest`
-- *"Search for Claude Code mentions this week"* → calls `search`
-- *"Show me the AI trending report for 2026-03-05"* → calls `get_report`
+Bạn có thể hỏi OpenClaw những câu như:
 
-**Self-hosting** — deploy your own instance from the `mcp/` directory:
+- _"Có gì mới trong các công cụ AI CLI?"_ → gọi `get_latest`
+- _"Tìm kiếm các đề cập đến Claude Code tuần này"_ → gọi `search`
+- _"Cho tôi xem báo cáo AI trending ngày 2026-03-05"_ → gọi `get_report`
+
+**Tự host** — triển khai instance của bạn từ thư mục `mcp/`:
 
 ```bash
 cd mcp
@@ -80,96 +82,96 @@ pnpm install
 wrangler deploy
 ```
 
-## Telegram Channel
+## Kênh Telegram
 
 **[t.me/agents_radar](https://t.me/agents_radar)**
 
-Subscribe to get daily digest notifications pushed directly to Telegram. Each message links to all reports for that day (ZH and EN variants) plus the Web UI and RSS feed.
+Đăng ký để nhận thông báo bản tin hàng ngày trực tiếp trên Telegram. Mỗi tin nhắn liên kết đến tất cả báo cáo trong ngày (phiên bản ZH và EN) cùng với giao diện Web và RSS feed.
 
-## Tracked sources
+## Nguồn theo dõi
 
-### AI CLI tools (GitHub)
+### Công cụ AI CLI (GitHub)
 
-| Tool | Repository |
-|------|-----------|
-| Claude Code | [anthropics/claude-code](https://github.com/anthropics/claude-code) |
-| OpenAI Codex | [openai/codex](https://github.com/openai/codex) |
-| Gemini CLI | [google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) |
-| GitHub Copilot CLI | [github/copilot-cli](https://github.com/github/copilot-cli) |
-| Kimi Code CLI | [MoonshotAI/kimi-cli](https://github.com/MoonshotAI/kimi-cli) |
-| OpenCode | [anomalyco/opencode](https://github.com/anomalyco/opencode) |
-| Qwen Code | [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code) |
+| Công cụ            | Repository                                                              |
+| ------------------ | ----------------------------------------------------------------------- |
+| Claude Code        | [anthropics/claude-code](https://github.com/anthropics/claude-code)     |
+| OpenAI Codex       | [openai/codex](https://github.com/openai/codex)                         |
+| Gemini CLI         | [google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) |
+| GitHub Copilot CLI | [github/copilot-cli](https://github.com/github/copilot-cli)             |
+| Kimi Code CLI      | [MoonshotAI/kimi-cli](https://github.com/MoonshotAI/kimi-cli)           |
+| OpenCode           | [anomalyco/opencode](https://github.com/anomalyco/opencode)             |
+| Qwen Code          | [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code)                 |
 
 ### Claude Code Skills (GitHub)
 
-| Source | Repository |
-|--------|-----------|
+| Nguồn              | Repository                                                |
+| ------------------ | --------------------------------------------------------- |
 | Claude Code Skills | [anthropics/skills](https://github.com/anthropics/skills) |
 
-PRs and issues are fetched without a date filter and sorted by popularity (comment count), so the report always reflects the most actively discussed skills — not just the newest.
+PR và issue được lấy không có bộ lọc ngày và được sắp xếp theo mức độ phổ biến (số lượng comment), vì vậy báo cáo luôn phản ánh các skills được thảo luận nhiều nhất — không chỉ mới nhất.
 
-### OpenClaw + AI agent ecosystem (GitHub)
+### OpenClaw + Hệ sinh thái AI agent (GitHub)
 
-OpenClaw is tracked as the primary reference project. Ten peer projects in the personal AI assistant / autonomous agent space are tracked alongside it for cross-ecosystem comparison.
+OpenClaw được theo dõi như dự án tham chiếu chính. Mười dự án liên quan trong lĩnh vực trợ lý AI cá nhân / autonomous agent được theo dõi cùng để so sánh đa hệ sinh thái.
 
-| Project | Repository | Stars |
-|---------|-----------|-------|
-| OpenClaw | [openclaw/openclaw](https://github.com/openclaw/openclaw) | 240.5k |
-| NanoBot | [HKUDS/nanobot](https://github.com/HKUDS/nanobot) | 26.9k |
-| Zeroclaw | [zeroclaw-labs/zeroclaw](https://github.com/zeroclaw-labs/zeroclaw) | 21.2k |
-| PicoClaw | [sipeed/picoclaw](https://github.com/sipeed/picoclaw) | 21.1k |
-| NanoClaw | [qwibitai/nanoclaw](https://github.com/qwibitai/nanoclaw) | 16.6k |
-| IronClaw | [nearai/ironclaw](https://github.com/nearai/ironclaw) | 3.9k |
-| LobsterAI | [netease-youdao/LobsterAI](https://github.com/netease-youdao/LobsterAI) | 3.0k |
-| TinyClaw | [TinyAGI/tinyclaw](https://github.com/TinyAGI/tinyclaw) | 2.8k |
-| CoPaw | [agentscope-ai/CoPaw](https://github.com/agentscope-ai/CoPaw) | 2.2k |
-| ZeptoClaw | [qhkm/zeptoclaw](https://github.com/qhkm/zeptoclaw) | 394 |
-| EasyClaw | [gaoyangz77/easyclaw](https://github.com/gaoyangz77/easyclaw) | 102 |
+| Dự án     | Repository                                                              | Stars  |
+| --------- | ----------------------------------------------------------------------- | ------ |
+| OpenClaw  | [openclaw/openclaw](https://github.com/openclaw/openclaw)               | 240.5k |
+| NanoBot   | [HKUDS/nanobot](https://github.com/HKUDS/nanobot)                       | 26.9k  |
+| Zeroclaw  | [zeroclaw-labs/zeroclaw](https://github.com/zeroclaw-labs/zeroclaw)     | 21.2k  |
+| PicoClaw  | [sipeed/picoclaw](https://github.com/sipeed/picoclaw)                   | 21.1k  |
+| NanoClaw  | [qwibitai/nanoclaw](https://github.com/qwibitai/nanoclaw)               | 16.6k  |
+| IronClaw  | [nearai/ironclaw](https://github.com/nearai/ironclaw)                   | 3.9k   |
+| LobsterAI | [netease-youdao/LobsterAI](https://github.com/netease-youdao/LobsterAI) | 3.0k   |
+| TinyClaw  | [TinyAGI/tinyclaw](https://github.com/TinyAGI/tinyclaw)                 | 2.8k   |
+| CoPaw     | [agentscope-ai/CoPaw](https://github.com/agentscope-ai/CoPaw)           | 2.2k   |
+| ZeptoClaw | [qhkm/zeptoclaw](https://github.com/qhkm/zeptoclaw)                     | 394    |
+| EasyClaw  | [gaoyangz77/easyclaw](https://github.com/gaoyangz77/easyclaw)           | 102    |
 
 ### GitHub AI Trending
 
-Two data sources are fetched in parallel every day:
+Hai nguồn dữ liệu được lấy song song mỗi ngày:
 
-| Source | Details |
-|--------|---------|
-| [github.com/trending](https://github.com/trending?since=daily) | Today's trending repos — parsed from HTML; includes today's new star count |
-| GitHub Search API | Repos active in the last 7 days matching 6 AI topics: `llm`, `ai-agent`, `rag`, `vector-database`, `large-language-model`, `machine-learning` |
+| Nguồn                                                          | Chi tiết                                                                                                                                               |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [github.com/trending](https://github.com/trending?since=daily) | Các repo trending hôm nay — phân tích cú pháp từ HTML; bao gồm số star mới trong ngày                                                                  |
+| GitHub Search API                                              | Các repo hoạt động trong 7 ngày gần nhất khớp với 6 chủ đề AI: `llm`, `ai-agent`, `rag`, `vector-database`, `large-language-model`, `machine-learning` |
 
-The LLM filters out non-AI repos from the trending list, classifies the rest by dimension (AI infrastructure / agents / applications / models / RAG), and extracts trend signals.
+LLM lọc bỏ các repo không liên quan đến AI khỏi danh sách trending, phân loại phần còn lại theo chiều (AI infrastructure / agents / applications / models / RAG), và trích xuất các tín hiệu xu hướng.
 
 ### Hacker News
 
-Top AI stories from the last 24 hours, fetched via the [Algolia HN Search API](https://hn.algolia.com/api). Six queries run in parallel (`AI`, `LLM`, `Claude`, `OpenAI`, `Anthropic`, `machine learning`), results are deduplicated and ranked by points. The top 30 stories are passed to the LLM for analysis.
+Các câu chuyện AI hàng đầu trong 24 giờ qua, được lấy qua [Algolia HN Search API](https://hn.algolia.com/api). Sáu truy vấn chạy song song (`AI`, `LLM`, `Claude`, `OpenAI`, `Anthropic`, `machine learning`), kết quả được loại trùng và xếp hạng theo điểm. Top 30 câu chuyện được chuyển cho LLM để phân tích.
 
-### Official web content (sitemap-based)
+### Nội dung web chính thức (dựa trên sitemap)
 
-| Organization | Site | Tracked sections |
-|---|---|---|
-| Anthropic | [anthropic.com](https://www.anthropic.com) | `/news/`, `/research/`, `/engineering/`, `/learn/` |
-| OpenAI | [openai.com](https://openai.com) | research, publication, release, company, engineering, milestone, learn-guides, safety, product |
+| Tổ chức   | Trang web                                  | Các phần theo dõi                                                                              |
+| --------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| Anthropic | [anthropic.com](https://www.anthropic.com) | `/news/`, `/research/`, `/engineering/`, `/learn/`                                             |
+| OpenAI    | [openai.com](https://openai.com)           | research, publication, release, company, engineering, milestone, learn-guides, safety, product |
 
-New articles are detected by comparing sitemap `lastmod` timestamps against a persisted state file (`digests/web-state.json`). On the **first run**, up to 25 recent articles per site are fetched and a comprehensive overview report is generated. On subsequent runs, only new or updated URLs trigger a report; if nothing changed, the web report step is skipped entirely.
+Bài viết mới được phát hiện bằng cách so sánh timestamp `lastmod` của sitemap với file state được lưu trữ (`digests/web-state.json`). Ở **lần chạy đầu tiên**, tối đa 25 bài viết gần đây mỗi trang được lấy và một báo cáo tổng quan toàn diện được tạo ra. Ở các lần chạy tiếp theo, chỉ những URL mới hoặc đã cập nhật mới kích hoạt báo cáo; nếu không có gì thay đổi, bước báo cáo web sẽ bị bỏ qua hoàn toàn.
 
-## Features
+## Tính năng
 
-- Fetches issues, pull requests, and releases updated in the last 24 hours across all tracked repos
-- Tracks trending Claude Code Skills — sorted by community engagement, not recency
-- Generates a per-tool summary for each CLI repository and a cross-tool comparative analysis
-- Generates a deep OpenClaw project report plus a cross-ecosystem comparison against 10 peer projects
-- Scrapes official Anthropic and OpenAI web content via sitemaps; detects new articles incrementally
-- Monitors GitHub Trending daily + searches 6 AI topic tags; classifies repos by dimension and extracts trend signals
-- Fetches top-30 AI stories from Hacker News (last 24h, ranked by points); generates community sentiment report
-- Publishes GitHub Issues for each report type; commits Markdown files to `digests/YYYY-MM-DD/`
-- Runs on a daily schedule via GitHub Actions; supports manual triggering
-- All tracked repositories are configurable via `config.yml` — no code changes needed
+- Lấy issues, pull requests và releases được cập nhật trong 24 giờ qua trên tất cả các repo theo dõi
+- Theo dõi Claude Code Skills trending — được sắp xếp theo mức độ tham gia cộng đồng, không phải theo thời gian mới nhất
+- Tạo tóm tắt cho từng công cụ trong mỗi CLI repository và phân tích so sánh đa công cụ
+- Tạo báo cáo chuyên sâu về dự án OpenClaw cùng so sánh đa hệ sinh thái với 10 dự án liên quan
+- Thu thập nội dung web chính thức của Anthropic và OpenAI qua sitemap; phát hiện bài viết mới theo từng bước
+- Giám sát GitHub Trending hàng ngày + tìm kiếm 6 tag chủ đề AI; phân loại repo theo chiều và trích xuất tín hiệu xu hướng
+- Lấy top 30 câu chuyện AI từ Hacker News (24 giờ gần nhất, xếp hạng theo điểm); tạo báo cáo cảm xúc cộng đồng
+- Xuất bản GitHub Issues cho mỗi loại báo cáo; commit các file Markdown vào `digests/YYYY-MM-DD/`
+- Chạy theo lịch hàng ngày qua GitHub Actions; hỗ trợ kích hoạt thủ công
+- Tất cả các repository theo dõi có thể cấu hình qua `config.yml` — không cần thay đổi code
 
-## Setup
+## Cài đặt
 
-### 1. Fork this repository
+### 1. Fork repository này
 
-### 2. Customize `config.yml` (optional)
+### 2. Tùy chỉnh `config.yml` (tùy chọn)
 
-Edit `config.yml` in the repo root to add, remove, or replace the tracked repositories. The file is fully commented. No code changes are needed — the pipeline reads it on every run and falls back to built-in defaults if the file is absent.
+Chỉnh sửa `config.yml` ở thư mục gốc của repo để thêm, xóa hoặc thay thế các repository theo dõi. File được comment đầy đủ. Không cần thay đổi code — pipeline đọc nó trong mỗi lần chạy và dùng giá trị mặc định tích hợp nếu file vắng mặt.
 
 ```yaml
 # Add a new CLI tool
@@ -185,49 +187,50 @@ openclaw_peers:
     name: My Agent
 ```
 
-### 3. Add Secrets and Variables
+### 3. Thêm Secrets và Variables
 
-Go to **Settings → Secrets and variables → Actions** and add:
+Vào **Settings → Secrets and variables → Actions** và thêm:
 
-**Secrets** (sensitive values):
+**Secrets** (giá trị nhạy cảm):
 
-| Secret | Required | Description |
-|--------|----------|-------------|
-| `ANTHROPIC_API_KEY` | one of A/B | API key — works with both Anthropic and Kimi Code |
-| `ANTHROPIC_BASE_URL` | optional | API endpoint override. Set to `https://api.kimi.com/coding/` for Kimi Code; leave unset for Anthropic |
-| `OPENAI_API_KEY` | one of A/B | OpenAI-compatible API key. When set, takes precedence over Anthropic |
-| `OPENAI_BASE_URL` | optional | OpenAI-compatible endpoint override (e.g. `https://gen.pollinations.ai/v1`) |
-| `TELEGRAM_BOT_TOKEN` | optional | Telegram bot token from [@BotFather](https://t.me/BotFather). If set, a message is sent after each digest run |
-| `TELEGRAM_CHAT_ID` | optional | Telegram chat/channel/group ID to send notifications to |
+| Secret               | Bắt buộc      | Mô tả                                                                                                                  |
+| -------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `ANTHROPIC_API_KEY`  | một trong A/B | API key — dùng được với cả Anthropic và Kimi Code                                                                      |
+| `ANTHROPIC_BASE_URL` | tùy chọn      | Ghi đè endpoint API. Đặt thành `https://api.kimi.com/coding/` cho Kimi Code; bỏ trống cho Anthropic                    |
+| `OPENAI_API_KEY`     | một trong A/B | API key tương thích OpenAI. Khi được đặt, ưu tiên hơn Anthropic                                                        |
+| `OPENAI_BASE_URL`    | tùy chọn      | Ghi đè endpoint tương thích OpenAI (ví dụ `https://gen.pollinations.ai/v1`)                                            |
+| `TELEGRAM_BOT_TOKEN` | tùy chọn      | Token bot Telegram từ [@BotFather](https://t.me/BotFather). Nếu được đặt, tin nhắn sẽ được gửi sau mỗi lần chạy digest |
+| `TELEGRAM_CHAT_ID`   | tùy chọn      | ID chat/channel/group Telegram để gửi thông báo                                                                        |
 
-> Set **either** `ANTHROPIC_API_KEY` (Option A) **or** `OPENAI_API_KEY` (Option B). If both are set, OpenAI takes precedence.
+> Đặt **hoặc** `ANTHROPIC_API_KEY` (Tùy chọn A) **hoặc** `OPENAI_API_KEY` (Tùy chọn B). Nếu cả hai được đặt, OpenAI sẽ được ưu tiên.
 
-**Variables** (non-sensitive, under the **Variables** tab):
+**Variables** (không nhạy cảm, trong tab **Variables**):
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `OPENAI_MODEL` | `gpt-4o` | Model name for the OpenAI-compatible provider |
-| `DIGEST_LANGS` | `vi` | Comma-separated language codes to generate: `vi`, `zh`, `en` (e.g. `zh,en,vi` for all three) |
+| Variable       | Mặc định | Mô tả                                                                                          |
+| -------------- | -------- | ---------------------------------------------------------------------------------------------- |
+| `OPENAI_MODEL` | `gpt-4o` | Tên model cho provider tương thích OpenAI                                                      |
+| `DIGEST_LANGS` | `vi`     | Mã ngôn ngữ được phân cách bằng dấu phẩy để tạo: `vi`, `zh`, `en` (ví dụ `zh,en,vi` cho cả ba) |
 
-> `GITHUB_TOKEN` is provided automatically by GitHub Actions.
+> `GITHUB_TOKEN` được cung cấp tự động bởi GitHub Actions.
 
-**Setting up Telegram notifications** (optional):
-1. Message [@BotFather](https://t.me/BotFather) on Telegram, create a bot, and copy the token
-2. Add the bot to your channel/group, or start a DM with it
-3. Get the chat ID via [@userinfobot](https://t.me/userinfobot) or the [getUpdates](https://core.telegram.org/bots/api#getupdates) API
-4. Add `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` as repository secrets
+**Cài đặt thông báo Telegram** (tùy chọn):
 
-> If neither secret is set, the notification step is silently skipped.
+1. Nhắn tin cho [@BotFather](https://t.me/BotFather) trên Telegram, tạo bot và sao chép token
+2. Thêm bot vào channel/group của bạn, hoặc bắt đầu DM với nó
+3. Lấy chat ID qua [@userinfobot](https://t.me/userinfobot) hoặc API [getUpdates](https://core.telegram.org/bots/api#getupdates)
+4. Thêm `TELEGRAM_BOT_TOKEN` và `TELEGRAM_CHAT_ID` làm repository secrets
 
-### 3. Enable the workflow
+> Nếu không có secret nào được đặt, bước thông báo sẽ bị bỏ qua im lặng.
 
-Confirm the workflow is enabled in the **Actions** tab.
+### 3. Bật workflow
 
-To test immediately, go to **Actions → Daily Agents Radar → Run workflow**.
+Xác nhận workflow đã được bật trong tab **Actions**.
 
-> **First run note**: The web content step will fetch up to 50 articles (25 per site) and may take a few extra minutes. Subsequent runs are fast — only new articles are processed.
+Để kiểm tra ngay lập tức, vào **Actions → Daily Agents Radar → Run workflow**.
 
-## Running locally
+> **Lưu ý lần chạy đầu tiên**: Bước nội dung web sẽ lấy tối đa 50 bài viết (25 mỗi trang) và có thể mất thêm vài phút. Các lần chạy tiếp theo rất nhanh — chỉ các bài viết mới được xử lý.
+
+## Chạy cục bộ
 
 ```bash
 pnpm install
@@ -249,25 +252,26 @@ export DIGEST_LANGS=vi                          # optional; default: vi
 pnpm start
 ```
 
-## Output format
+## Định dạng đầu ra
 
-Files are written to `digests/YYYY-MM-DD/`:
+Các file được ghi vào `digests/YYYY-MM-DD/`:
 
-| File | Content | GitHub Issue label |
-|------|---------|-------------------|
-| `ai-cli.md` | CLI digest — cross-tool comparison + per-tool details | `digest` |
-| `ai-agents.md` | OpenClaw deep report + cross-ecosystem comparison + 10 peer details | `openclaw` |
-| `ai-web.md` | Official web content report (only written when new content exists) | `web` |
-| `ai-trending.md` | GitHub AI trending report — repos classified by dimension + trend signals (only written when data is available) | `trending` |
-| `ai-hn.md` | Hacker News AI community digest — top stories + sentiment analysis (only written when fetch succeeds) | `hn` |
+| File             | Nội dung                                                                                                 | Nhãn GitHub Issue |
+| ---------------- | -------------------------------------------------------------------------------------------------------- | ----------------- |
+| `ai-cli.md`      | Bản tin CLI — so sánh đa công cụ + chi tiết từng công cụ                                                 | `digest`          |
+| `ai-agents.md`   | Báo cáo chuyên sâu OpenClaw + so sánh đa hệ sinh thái + chi tiết 10 dự án liên quan                      | `openclaw`        |
+| `ai-web.md`      | Báo cáo nội dung web chính thức (chỉ ghi khi có nội dung mới)                                            | `web`             |
+| `ai-trending.md` | Báo cáo GitHub AI trending — repo được phân loại theo chiều + tín hiệu xu hướng (chỉ ghi khi có dữ liệu) | `trending`        |
+| `ai-hn.md`       | Bản tin cộng đồng AI Hacker News — câu chuyện hàng đầu + phân tích cảm xúc (chỉ ghi khi lấy thành công)  | `hn`              |
 
-A shared state file `digests/web-state.json` tracks which web URLs have been seen; it is committed alongside the daily digests.
+File state dùng chung `digests/web-state.json` theo dõi các URL web đã được thấy; nó được commit cùng với các bản tin hàng ngày.
 
-Each report is generated in both Chinese (`ai-cli.md`) and English (`ai-cli-en.md`). The Web UI sidebar shows ZH / EN toggle buttons for reports that have both variants.
+Mỗi báo cáo được tạo bằng cả tiếng Trung (`ai-cli.md`) và tiếng Anh (`ai-cli-en.md`). Thanh bên giao diện Web hiển thị các nút chuyển đổi ZH / EN cho các báo cáo có cả hai phiên bản.
 
 ---
 
-`ai-cli.md` / `ai-cli-en.md` structure:
+Cấu trúc `ai-cli.md` / `ai-cli-en.md`:
+
 ```
 ## Cross-Tool Comparison
   Ecosystem overview / Activity comparison table / Shared themes / Differentiation / Trend signals
@@ -285,7 +289,8 @@ Each report is generated in both Chinese (`ai-cli.md`) and English (`ai-cli-en.m
   <details> Qwen Code      — ...
 ```
 
-`ai-agents.md` / `ai-agents-en.md` structure:
+Cấu trúc `ai-agents.md` / `ai-agents-en.md`:
+
 ```
 Issues: N | PRs: N | Projects covered: 10
 
@@ -310,7 +315,8 @@ Issues: N | PRs: N | Projects covered: 10
   <details> CoPaw      — ...
 ```
 
-`ai-web.md` / `ai-web-en.md` structure:
+Cấu trúc `ai-web.md` / `ai-web-en.md`:
+
 ```
 Sources: anthropic.com (N articles) + openai.com (N articles)
 
@@ -322,7 +328,8 @@ Notable details
 [First full crawl also includes: Content landscape overview]
 ```
 
-`ai-trending.md` / `ai-trending-en.md` structure:
+Cấu trúc `ai-trending.md` / `ai-trending-en.md`:
+
 ```
 Sources: GitHub Trending + GitHub Search API
 
@@ -337,7 +344,8 @@ Trend signal analysis
 Community focus
 ```
 
-`ai-hn.md` / `ai-hn-en.md` structure:
+Cấu trúc `ai-hn.md` / `ai-hn-en.md`:
+
 ```
 Sources: Hacker News (top-30 AI stories, last 24h)
 
@@ -351,7 +359,8 @@ Community sentiment signals
 Worth reading
 ```
 
-`ai-weekly.md` / `ai-weekly-en.md` structure (generated every Monday):
+Cấu trúc `ai-weekly.md` / `ai-weekly-en.md` (được tạo mỗi thứ Hai):
+
 ```
 Coverage: YYYY-MM-DD ~ YYYY-MM-DD  (last 7 daily digests)
 
@@ -362,7 +371,8 @@ Community momentum
 Outlook
 ```
 
-`ai-monthly.md` / `ai-monthly-en.md` structure (generated on the 1st of each month):
+Cấu trúc `ai-monthly.md` / `ai-monthly-en.md` (được tạo vào ngày 1 mỗi tháng):
+
 ```
 Sources: N weekly reports  (or sampled daily reports if fewer than 2 weeklies available)
 
@@ -373,18 +383,18 @@ Top projects & releases
 Looking ahead
 ```
 
-Historical digests are stored in [`digests/`](./digests/). Published issues are tagged by type: [`digest`](../../issues?label=digest) · [`openclaw`](../../issues?label=openclaw) · [`web`](../../issues?label=web) · [`trending`](../../issues?label=trending) · [`hn`](../../issues?label=hn) · [`weekly`](../../issues?label=weekly) · [`monthly`](../../issues?label=monthly).
+Các bản tin lịch sử được lưu trong [`digests/`](./digests/). Issues đã xuất bản được gắn thẻ theo loại: [`digest`](../../issues?label=digest) · [`openclaw`](../../issues?label=openclaw) · [`web`](../../issues?label=web) · [`trending`](../../issues?label=trending) · [`hn`](../../issues?label=hn) · [`weekly`](../../issues?label=weekly) · [`monthly`](../../issues?label=monthly).
 
-## Schedule
+## Lịch chạy
 
-| Workflow | Cron | UTC | CST |
-|----------|------|-----|-----|
-| Daily digest | `0 0 * * *` | 00:00 daily | 08:00 daily |
-| Weekly rollup | `0 1 * * 1` | 01:00 Monday | 09:00 Monday |
-| Monthly rollup | `0 2 1 * *` | 02:00 on the 1st | 10:00 on the 1st |
+| Workflow            | Cron        | UTC             | CST             |
+| ------------------- | ----------- | --------------- | --------------- |
+| Bản tin hàng ngày   | `0 0 * * *` | 00:00 hàng ngày | 08:00 hàng ngày |
+| Tổng hợp hàng tuần  | `0 1 * * 1` | 01:00 thứ Hai   | 09:00 thứ Hai   |
+| Tổng hợp hàng tháng | `0 2 1 * *` | 02:00 ngày 1    | 10:00 ngày 1    |
 
-To change the schedule, edit the cron expressions in the corresponding workflow files under `.github/workflows/`.
+Để thay đổi lịch, chỉnh sửa các biểu thức cron trong các file workflow tương ứng trong `.github/workflows/`.
 
-## Star History
+## Lịch sử Star
 
 [![Star History Chart](https://api.star-history.com/svg?repos=compasify/agents-radar&type=Date)](https://star-history.com/#compasify/agents-radar&Date)
