@@ -549,7 +549,7 @@ window.addEventListener('popstate', () => {
     if (hash && dates.find(d => d.date === hash.date && d.reports.includes(hash.report))) {
       loadReport(hash.date, hash.report, false);
     } else if (first?.reports?.length) {
-      const r0 = first.reports[0];
+      const r0 = first.reports.find(r => r.endsWith('-vi')) || first.reports[0];
       history.replaceState(null, '', `#${first.date}/${r0}`);
       loadReport(first.date, r0, false);
     }
