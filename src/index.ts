@@ -36,7 +36,7 @@ import {
   buildTrendingPrompt,
   buildHnPrompt,
 } from "./prompts.ts";
-import { callLlm, saveFile, autoGenFooter, getDigestLangs, type Lang } from "./report.ts";
+import { callLlm, saveFile, autoGenFooter, getDigestLangs, issueTitle, type Lang } from "./report.ts";
 import { loadWebState, saveWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
@@ -62,6 +62,7 @@ function requireEnv(name: string): string {
   if (!value) throw new Error(`Missing required environment variable: ${name}`);
   return value;
 }
+
 
 // ---------------------------------------------------------------------------
 // Types
@@ -485,8 +486,9 @@ async function saveWebReport(
       console.log(`  Saved ${saveFile(webContent, dateStr, `ai-web${langSfx}.md`)}`);
 
       if (digestRepo && lang === getDigestLangs()[0]) {
+        const firstRunSuffix = isFirstRun ? (lang === 'zh' ? '（首次全量）' : lang === 'vi' ? ' (lần đầu)' : ' (initial full crawl)') : '';
         const webUrl = await createGitHubIssue(
-          `🌐 AI 官方内容追踪报告 ${dateStr}${isFirstRun ? "（首次全量）" : ""}`,
+          issueTitle('web', lang, `${dateStr}${firstRunSuffix}`),
           webContent,
           "web",
         );
@@ -534,7 +536,7 @@ async function saveTrendingReport(
   console.log(`  Saved ${saveFile(trendingContent, dateStr, fileName)}`);
 
   if (digestRepo && lang === getDigestLangs()[0]) {
-    const trendingUrl = await createGitHubIssue(`📈 AI 开源趋势日报 ${dateStr}`, trendingContent, "trending");
+    const trendingUrl = await createGitHubIssue(issueTitle('trending', lang, dateStr), trendingContent, "trending");
     console.log(`  Created trending issue: ${trendingUrl}`);
   }
 }
@@ -578,7 +580,7 @@ async function saveHnReport(
     console.log(`  Saved ${saveFile(hnContent, dateStr, fileName)}`);
 
     if (digestRepo && lang === getDigestLangs()[0]) {
-      const hnUrl = await createGitHubIssue(`📰 Hacker News AI 社区动态日报 ${dateStr}`, hnContent, "hn");
+      const hnUrl = await createGitHubIssue(issueTitle('hn', lang, dateStr), hnContent, "hn");
       console.log(`  Created HN issue: ${hnUrl}`);
     }
   } catch (err) {
@@ -716,11 +718,11 @@ async function main(): Promise<void> {
   // 5. Create GitHub issues (primary language only)
   if (digestRepo) {
     const { cliContent, openclawContent } = reportsByLang.get(primaryLang)!;
-    const cliUrl = await createGitHubIssue(`📊 AI CLI 工具社区动态日报 ${dateStr}`, cliContent, "digest");
+    const cliUrl = await createGitHubIssue(issueTitle('cli', primaryLang, dateStr), cliContent, "digest");
     console.log(`  Created CLI issue: ${cliUrl}`);
 
     const openclawUrl = await createGitHubIssue(
-      `🦞 OpenClaw 生态日报 ${dateStr}`,
+      issueTitle('openclaw', primaryLang, dateStr),
       openclawContent,
       "openclaw",
     );

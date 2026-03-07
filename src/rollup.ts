@@ -5,7 +5,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { callLlm, saveFile, autoGenFooter, getDigestLangs, type Lang } from "./report.ts";
+import { callLlm, saveFile, autoGenFooter, getDigestLangs, issueTitle, type Lang } from "./report.ts";
 import { buildWeeklyPrompt, buildMonthlyPrompt } from "./prompts.ts";
 import { createGitHubIssue } from "./github.ts";
 
@@ -126,7 +126,7 @@ export async function runWeeklyRollup(): Promise<void> {
     console.log(`  Saved ${saveFile(content, dateStr, fileName)}`);
 
     if (digestRepo && lang === primaryLang) {
-      const url = await createGitHubIssue(`📅 AI 工具生态周报 ${weekStr}`, content, "weekly");
+      const url = await createGitHubIssue(issueTitle('weekly', lang, weekStr), content, "weekly");
       console.log(`  Created weekly issue: ${url}`);
     }
   }
@@ -226,7 +226,7 @@ export async function runMonthlyRollup(): Promise<void> {
     console.log(`  Saved ${saveFile(content, dateStr, fileName)}`);
 
     if (digestRepo && lang === primaryLang) {
-      const url = await createGitHubIssue(`📆 AI 工具生态月报 ${monthStr}`, content, "monthly");
+      const url = await createGitHubIssue(issueTitle('monthly', lang, monthStr), content, "monthly");
       console.log(`  Created monthly issue: ${url}`);
     }
   }

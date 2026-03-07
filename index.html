@@ -247,11 +247,11 @@
   <div id="body">
     <div id="sidebar">
       <div id="mob-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
-        ☰ &nbsp;选择报告
+        ☰ &nbsp;Chọn báo cáo
       </div>
       <div class="side-label">REPORTS</div>
       <div class="search-wrap">
-        <input id="searchInput" type="search" placeholder="搜索全文，如 Claude">
+        <input id="searchInput" type="search" placeholder="Tìm kiếm, ví dụ Claude">
         <div id="searchStatus"></div>
       </div>
       <div id="nav"></div>
@@ -259,7 +259,7 @@
 
     <div id="cwrap">
       <div id="content">
-        <div class="msg"><div class="msg-icon">📡</div><div>正在加载…</div></div>
+        <div class="msg"><div class="msg-icon">📡</div><div>Đang tải…</div></div>
       </div>
     </div>
   </div>
@@ -284,19 +284,19 @@ function renderMarkdown(raw) {
 }
 
 const LABELS = {
-  'ai-cli':          'AI CLI 工具',
+  'ai-cli':          'Công cụ AI CLI',
   'ai-cli-en':       'AI CLI Tools',
   'ai-cli-vi':       'Công cụ AI CLI',
-  'ai-agents':       'AI Agents 生态',
+  'ai-agents':       'Hệ sinh thái AI Agents',
   'ai-agents-en':    'AI Agents Ecosystem',
   'ai-agents-vi':    'Hệ sinh thái AI Agents',
-  'ai-web':          'OpenAI & Anthropic 官网动态',
+  'ai-web':          'Cập nhật OpenAI & Anthropic',
   'ai-web-en':       'OpenAI & Anthropic Updates',
   'ai-web-vi':       'Cập nhật OpenAI & Anthropic',
-  'ai-trending':     'GitHub AI 趋势',
+  'ai-trending':     'Xu hướng AI GitHub',
   'ai-trending-en':  'GitHub AI Trends',
   'ai-trending-vi':  'Xu hướng AI GitHub',
-  'ai-hn':           'HN 社区动态',
+  'ai-hn':           'Cộng đồng HN',
   'ai-hn-en':        'HN Community Digest',
   'ai-hn-vi':        'Cộng đồng HN',
 };
@@ -357,9 +357,9 @@ function applyDateSearch(query) {
   if (!needle) {
     setSearchStatus('');
   } else if (!searchReady) {
-    setSearchStatus('正在建立索引…');
+    setSearchStatus('Đang tạo chỉ mục…');
   } else {
-    setSearchStatus(`匹配 ${hits} 天`);
+    setSearchStatus(`Khớp ${hits} ngày`);
   }
 }
 
@@ -386,7 +386,7 @@ async function buildSearchIndex(dates) {
 
 function initSearch(dates) {
   searchReady = false;
-  setSearchStatus('索引准备中…');
+  setSearchStatus('Đang chuẩn bị chỉ mục…');
 
   buildSearchIndex(dates).then((index) => {
     searchIndex = index;
@@ -439,7 +439,7 @@ async function loadReport(date, report, push = true) {
     const safe = renderMarkdown(raw);
     setContent(`<div class="md fade">${safe}</div>`);
   } catch (e) {
-    setContent(`<div class="msg"><div class="msg-icon">⚠️</div><div>加载失败：${e.message}</div></div>`);
+    setContent(`<div class="msg"><div class="msg-icon">⚠️</div><div>Tải thất bại: ${e.message}</div></div>`);
   }
 }
 
@@ -556,7 +556,7 @@ window.addEventListener('popstate', () => {
   } catch (e) {
     document.getElementById('nav').innerHTML =
       '<div class="msg" style="height:80px;font-size:10px">⚠️ ' + e.message + '</div>';
-    setContent('<div class="msg"><div class="msg-icon">📡</div><div>无法加载 manifest.json</div></div>');
+    setContent('<div class="msg"><div class="msg-icon">📡</div><div>Không thể tải manifest.json</div></div>');
   }
 })();
 </script>

@@ -181,3 +181,21 @@ export function getDigestLangs(): Lang[] {
     .filter((l) => VALID_LANGS.has(l));
   return langs.length > 0 ? langs : ["vi"];
 }
+
+// ---------------------------------------------------------------------------
+// Issue title map — language-aware GitHub Issue titles
+// ---------------------------------------------------------------------------
+
+const ISSUE_TITLES: Record<string, Record<Lang, string>> = {
+  cli:      { zh: '📊 AI CLI 工具社区动态日报', en: '📊 AI CLI Tools Daily Digest', vi: '📊 Bản tin hàng ngày công cụ AI CLI' },
+  openclaw: { zh: '🦞 OpenClaw 生态日报', en: '🦞 OpenClaw Ecosystem Daily Digest', vi: '🦞 Bản tin hàng ngày hệ sinh thái OpenClaw' },
+  web:      { zh: '🌐 AI 官方内容追踪报告', en: '🌐 AI Official Content Tracking Report', vi: '🌐 Báo cáo theo dõi nội dung AI chính thức' },
+  trending: { zh: '📈 AI 开源趋势日报', en: '📈 AI Open Source Trends Daily', vi: '📈 Bản tin xu hướng AI mã nguồn mở' },
+  hn:       { zh: '📰 Hacker News AI 社区动态日报', en: '📰 Hacker News AI Community Daily', vi: '📰 Bản tin cộng đồng AI Hacker News' },
+  weekly:   { zh: '📅 AI 工具生态周报', en: '📅 AI Ecosystem Weekly Report', vi: '📅 Bản tin tuần hệ sinh thái AI' },
+  monthly:  { zh: '📆 AI 工具生态月报', en: '📆 AI Ecosystem Monthly Report', vi: '📆 Bản tin tháng hệ sinh thái AI' },
+};
+
+export function issueTitle(key: string, lang: Lang, suffix: string): string {
+  return `${ISSUE_TITLES[key]?.[lang] ?? ISSUE_TITLES[key]?.zh ?? key} ${suffix}`;
+}
