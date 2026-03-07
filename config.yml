@@ -71,6 +71,9 @@ openclaw_peers:
   - id: tinyclaw
     repo: TinyAGI/tinyclaw
     name: TinyClaw
+  - id: moltis
+    repo: moltis-org/moltis
+    name: Moltis
   - id: copaw
     repo: agentscope-ai/CoPaw
     name: CoPaw
