@@ -15,12 +15,21 @@ pnpm format         # Prettier --write src
 pnpm format:check   # Prettier --check src
 ```
 
-Required env vars for local runs:
+Required env vars for local runs (set **one** LLM provider group):
 
 ```bash
 export GITHUB_TOKEN=ghp_xxxxx
+
+# Option A — OpenAI-compatible (takes precedence when OPENAI_API_KEY is set)
+export OPENAI_API_KEY=sk-xxxxx
+export OPENAI_BASE_URL=https://your-provider/v1  # optional
+export OPENAI_MODEL=gpt-4o                        # optional, default: gpt-4o
+
+# Option B — Anthropic (default when OPENAI_API_KEY is absent)
 export ANTHROPIC_API_KEY=sk-ant-xxxxx
 export ANTHROPIC_BASE_URL=https://api.kimi.com/coding/  # omit for Anthropic
+export ANTHROPIC_MODEL=claude-sonnet-4-6                # optional
+
 export DIGEST_REPO=owner/repo   # omit to skip GitHub issue creation
 ```
 

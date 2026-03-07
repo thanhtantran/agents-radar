@@ -1,10 +1,17 @@
 /**
  * agents-radar: daily digest for AI CLI tools and OpenClaw.
  *
- * Env vars:
- *   ANTHROPIC_API_KEY   - API key (Anthropic or Kimi Code)
- *   ANTHROPIC_BASE_URL  - Endpoint override (e.g. https://api.kimi.com/coding/)
- *   ANTHROPIC_MODEL     - Model name (default: claude-sonnet-4-6)
+ * LLM provider (set ONE group):
+ *   Option A — OpenAI-compatible:
+ *     OPENAI_API_KEY     - API key
+ *     OPENAI_BASE_URL    - Endpoint override (optional, e.g. http://localhost:11434/v1)
+ *     OPENAI_MODEL       - Model name (default: gpt-4o)
+ *   Option B — Anthropic (default when OPENAI_API_KEY is absent):
+ *     ANTHROPIC_API_KEY   - API key (Anthropic or Kimi Code)
+ *     ANTHROPIC_BASE_URL  - Endpoint override (e.g. https://api.kimi.com/coding/)
+ *     ANTHROPIC_MODEL     - Model name (default: claude-sonnet-4-6)
+ *
+ * Other env vars:
  *   GITHUB_TOKEN        - GitHub token for API access and issue creation
  *   DIGEST_REPO         - owner/repo where digest issues are posted (optional)
  */
@@ -29,7 +36,7 @@ import {
   buildTrendingPrompt,
   buildHnPrompt,
 } from "./prompts.ts";
-import { callLlm, saveFile, autoGenFooter } from "./report.ts";
+import { callLlm, saveFile, autoGenFooter, getDigestLangs, type Lang } from "./report.ts";
 import { loadWebState, saveWebState, fetchSiteContent, type WebFetchResult, type WebState } from "./web.ts";
 import { fetchTrendingData, type TrendingData } from "./trending.ts";
 import { fetchHnData, type HnData } from "./hn.ts";
@@ -143,7 +150,7 @@ async function generateSummaries(
   fetchedPeers: RepoFetch[],
   trendingData: TrendingData,
   dateStr: string,
-  lang: "zh" | "en" | "vi" = "zh",
+  lang: Lang = "zh",
 ): Promise<{
   cliDigests: RepoDigest[];
   openclawSummary: string;
@@ -275,7 +282,7 @@ function buildCliReportContent(
   utcStr: string,
   dateStr: string,
   footer: string,
-  lang: "zh" | "en" | "vi" = "zh",
+  lang: Lang = "zh",
 ): string {
   const repoLinks =
     cliDigests.map((d) => `- [${d.config.name}](https://github.com/${d.config.repo})`).join("\n") +
@@ -350,7 +357,7 @@ function buildOpenclawReportContent(
   utcStr: string,
   dateStr: string,
   footer: string,
-  lang: "zh" | "en" | "vi" = "zh",
+  lang: Lang = "zh",
 ): string {
   const { issues, prs } = fetchedOpenclaw;
 
@@ -424,7 +431,7 @@ async function saveWebReport(
   dateStr: string,
   digestRepo: string,
   footer: string,
-  lang: "zh" | "en" | "vi" = "zh",
+  lang: Lang = "zh",
 ): Promise<void> {
   const hasNewContent = webResults.some((r) => r.newItems.length > 0);
 
@@ -440,7 +447,7 @@ async function saveWebReport(
       const openaiNew = webResults.find((r) => r.site === "openai")?.newItems.length ?? 0;
       const openaiTotal = webResults.find((r) => r.site === "openai")?.totalDiscovered ?? 0;
 
-      const fileName = lang === "vi" ? "ai-web-vi.md" : lang === "en" ? "ai-web-en.md" : "ai-web.md";
+      const langSfx = lang === "zh" ? "" : `-${lang}`;
 
       const t =
         lang === "vi"
@@ -475,9 +482,9 @@ async function saveWebReport(
 
       const webContent = t.title + t.meta + t.sources + `---\n\n` + webSummary + footer;
 
-      console.log(`  Saved ${saveFile(webContent, dateStr, fileName)}`);
+      console.log(`  Saved ${saveFile(webContent, dateStr, `ai-web${langSfx}.md`)}`);
 
-      if (digestRepo && lang === "zh") {
+      if (digestRepo && lang === getDigestLangs()[0]) {
         const webUrl = await createGitHubIssue(
           `🌐 AI 官方内容追踪报告 ${dateStr}${isFirstRun ? "（首次全量）" : ""}`,
           webContent,
@@ -492,7 +499,7 @@ async function saveWebReport(
     console.log(`  [web/${lang}] No new content detected, skipping report.`);
   }
 
-  if (lang === "zh") {
+  if (lang === getDigestLangs()[0]) {
     saveWebState(webState);
     console.log("  [web] State saved.");
   }
@@ -505,7 +512,7 @@ async function saveTrendingReport(
   dateStr: string,
   digestRepo: string,
   footer: string,
-  lang: "zh" | "en" | "vi" = "zh",
+  lang: Lang = "zh",
 ): Promise<void> {
   const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
   if (!hasData) {
@@ -513,8 +520,8 @@ async function saveTrendingReport(
     return;
   }
 
-  const fileName =
-    lang === "vi" ? "ai-trending-vi.md" : lang === "en" ? "ai-trending-en.md" : "ai-trending.md";
+  const langSfx = lang === "zh" ? "" : `-${lang}`;
+  const fileName = `ai-trending${langSfx}.md` as const;
   const header =
     lang === "vi"
       ? `# Xu hướng AI Mã nguồn mở ${dateStr}\n\n> Nguồn: GitHub Trending + GitHub Search API | Thời gian tạo: ${utcStr} UTC\n\n---\n\n`
@@ -526,7 +533,7 @@ async function saveTrendingReport(
 
   console.log(`  Saved ${saveFile(trendingContent, dateStr, fileName)}`);
 
-  if (digestRepo && lang === "zh") {
+  if (digestRepo && lang === getDigestLangs()[0]) {
     const trendingUrl = await createGitHubIssue(`📈 AI 开源趋势日报 ${dateStr}`, trendingContent, "trending");
     console.log(`  Created trending issue: ${trendingUrl}`);
   }
@@ -538,7 +545,7 @@ async function saveHnReport(
   dateStr: string,
   digestRepo: string,
   footer: string,
-  lang: "zh" | "en" | "vi" = "zh",
+  lang: Lang = "zh",
 ): Promise<void> {
   if (!hnData.fetchSuccess) {
     console.log(`  [hn/${lang}] No data available, skipping report.`);
@@ -548,7 +555,8 @@ async function saveHnReport(
   console.log(`  [hn/${lang}] Calling LLM for HN report...`);
   try {
     const hnSummary = await callLlm(buildHnPrompt(hnData, dateStr, lang));
-    const fileName = lang === "vi" ? "ai-hn-vi.md" : lang === "en" ? "ai-hn-en.md" : "ai-hn.md";
+    const langSfx = lang === "zh" ? "" : `-${lang}`;
+    const fileName = `ai-hn${langSfx}.md` as const;
     const header =
       lang === "vi"
         ? `# Bản tin Cộng đồng AI Hacker News ${dateStr}\n\n` +
@@ -569,7 +577,7 @@ async function saveHnReport(
 
     console.log(`  Saved ${saveFile(hnContent, dateStr, fileName)}`);
 
-    if (digestRepo && lang === "zh") {
+    if (digestRepo && lang === getDigestLangs()[0]) {
       const hnUrl = await createGitHubIssue(`📰 Hacker News AI 社区动态日报 ${dateStr}`, hnContent, "hn");
       console.log(`  Created HN issue: ${hnUrl}`);
     }
@@ -584,7 +592,9 @@ async function saveHnReport(
 
 async function main(): Promise<void> {
   requireEnv("GITHUB_TOKEN");
-  requireEnv("ANTHROPIC_API_KEY");
+  if (!process.env["OPENAI_API_KEY"] && !process.env["ANTHROPIC_API_KEY"]) {
+    throw new Error("Missing required environment variable: set OPENAI_API_KEY or ANTHROPIC_API_KEY");
+  }
 
   const now = new Date();
   const since = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -605,150 +615,108 @@ async function main(): Promise<void> {
   const fetchedOpenclaw = fetched.find((f) => f.cfg.id === OPENCLAW.id)!;
   const fetchedPeers = fetched.filter((f) => peerIds.has(f.cfg.id));
 
-  // 2. Generate per-repo LLM summaries in parallel (zh + en + vi simultaneously)
-  console.log("  Generating summaries in ZH, EN and VI in parallel...");
-  const [zhSummaries, enSummaries, viSummaries] = await Promise.all([
-    generateSummaries(fetchedCli, fetchedOpenclaw, skillsData, fetchedPeers, trendingData, dateStr, "zh"),
-    generateSummaries(fetchedCli, fetchedOpenclaw, skillsData, fetchedPeers, trendingData, dateStr, "en"),
-    generateSummaries(fetchedCli, fetchedOpenclaw, skillsData, fetchedPeers, trendingData, dateStr, "vi"),
-  ]);
+  // 2. Generate per-repo LLM summaries in parallel
+  const langs = getDigestLangs();
+  const primaryLang = langs[0]!;
+  console.log(`  Generating summaries for languages: ${langs.join(", ").toUpperCase()}...`);
+  const summariesByLang = new Map(
+    await Promise.all(
+      langs.map(
+        async (lang) =>
+          [
+            lang,
+            await generateSummaries(
+              fetchedCli,
+              fetchedOpenclaw,
+              skillsData,
+              fetchedPeers,
+              trendingData,
+              dateStr,
+              lang,
+            ),
+          ] as const,
+      ),
+    ),
+  );
 
-  // 3. Generate cross-repo comparisons in parallel (zh + en + vi)
-  console.log("  Calling LLM for comparative analyses (ZH + EN + VI)...");
-  const openclawDigest: RepoDigest = {
-    config: OPENCLAW,
-    issues: fetchedOpenclaw.issues,
-    prs: fetchedOpenclaw.prs,
-    releases: fetchedOpenclaw.releases,
-    summary: zhSummaries.openclawSummary,
-  };
-  const enOpenclawDigest: RepoDigest = {
-    config: OPENCLAW,
-    issues: fetchedOpenclaw.issues,
-    prs: fetchedOpenclaw.prs,
-    releases: fetchedOpenclaw.releases,
-    summary: enSummaries.openclawSummary,
-  };
-  const viOpenclawDigest: RepoDigest = {
-    config: OPENCLAW,
-    issues: fetchedOpenclaw.issues,
-    prs: fetchedOpenclaw.prs,
-    releases: fetchedOpenclaw.releases,
-    summary: viSummaries.openclawSummary,
-  };
-  const [comparison, peersComparison, enComparison, enPeersComparison, viComparison, viPeersComparison] =
-    await Promise.all([
-      callLlm(buildComparisonPrompt(zhSummaries.cliDigests, dateStr, "zh")),
-      callLlm(buildPeersComparisonPrompt(openclawDigest, zhSummaries.peerDigests, dateStr, "zh")),
-      callLlm(buildComparisonPrompt(enSummaries.cliDigests, dateStr, "en")),
-      callLlm(buildPeersComparisonPrompt(enOpenclawDigest, enSummaries.peerDigests, dateStr, "en")),
-      callLlm(buildComparisonPrompt(viSummaries.cliDigests, dateStr, "vi")),
-      callLlm(buildPeersComparisonPrompt(viOpenclawDigest, viSummaries.peerDigests, dateStr, "vi")),
-    ]);
+  // 3. Generate cross-repo comparisons in parallel
+  console.log(`  Calling LLM for comparative analyses (${langs.join(", ").toUpperCase()})...`);
+  const comparisonResults = new Map(
+    await Promise.all(
+      langs.map(async (lang) => {
+        const s = summariesByLang.get(lang)!;
+        const openclawDig: RepoDigest = {
+          config: OPENCLAW,
+          issues: fetchedOpenclaw.issues,
+          prs: fetchedOpenclaw.prs,
+          releases: fetchedOpenclaw.releases,
+          summary: s.openclawSummary,
+        };
+        const [comp, peersComp] = await Promise.all([
+          callLlm(buildComparisonPrompt(s.cliDigests, dateStr, lang)),
+          callLlm(buildPeersComparisonPrompt(openclawDig, s.peerDigests, dateStr, lang)),
+        ]);
+        return [lang, { comparison: comp, peersComparison: peersComp }] as const;
+      }),
+    ),
+  );
 
-  const footer = autoGenFooter("zh");
-  const enFooter = autoGenFooter("en");
-  const viFooter = autoGenFooter("vi");
+  const langSuffix = (lang: Lang) => (lang === "zh" ? "" : `-${lang}`);
 
   // 4. Build + save all reports
-  const digestContent = buildCliReportContent(
-    zhSummaries.cliDigests,
-    zhSummaries.skillsSummary,
-    comparison,
-    utcStr,
-    dateStr,
-    footer,
-    "zh",
-  );
-  const openclawContent = buildOpenclawReportContent(
-    fetchedOpenclaw,
-    zhSummaries.peerDigests,
-    zhSummaries.openclawSummary,
-    peersComparison,
-    utcStr,
-    dateStr,
-    footer,
-    "zh",
-  );
-  const enDigestContent = buildCliReportContent(
-    enSummaries.cliDigests,
-    enSummaries.skillsSummary,
-    enComparison,
-    utcStr,
-    dateStr,
-    enFooter,
-    "en",
-  );
-  const enOpenclawContent = buildOpenclawReportContent(
-    fetchedOpenclaw,
-    enSummaries.peerDigests,
-    enSummaries.openclawSummary,
-    enPeersComparison,
-    utcStr,
-    dateStr,
-    enFooter,
-    "en",
-  );
-  const viDigestContent = buildCliReportContent(
-    viSummaries.cliDigests,
-    viSummaries.skillsSummary,
-    viComparison,
-    utcStr,
-    dateStr,
-    viFooter,
-    "vi",
-  );
-  const viOpenclawContent = buildOpenclawReportContent(
-    fetchedOpenclaw,
-    viSummaries.peerDigests,
-    viSummaries.openclawSummary,
-    viPeersComparison,
-    utcStr,
-    dateStr,
-    viFooter,
-    "vi",
-  );
-
-  console.log(`  Saved ${saveFile(digestContent, dateStr, "ai-cli.md")}`);
-  console.log(`  Saved ${saveFile(openclawContent, dateStr, "ai-agents.md")}`);
-  console.log(`  Saved ${saveFile(enDigestContent, dateStr, "ai-cli-en.md")}`);
-  console.log(`  Saved ${saveFile(enOpenclawContent, dateStr, "ai-agents-en.md")}`);
-  console.log(`  Saved ${saveFile(viDigestContent, dateStr, "ai-cli-vi.md")}`);
-  console.log(`  Saved ${saveFile(viOpenclawContent, dateStr, "ai-agents-vi.md")}`);
-
-  // Web report: zh saves state, en/vi skip state save
-  await saveWebReport(webResults, webState, utcStr, dateStr, digestRepo, footer, "zh");
-  await saveWebReport(webResults, webState, utcStr, dateStr, digestRepo, enFooter, "en");
-  await saveWebReport(webResults, webState, utcStr, dateStr, digestRepo, viFooter, "vi");
-
-  await Promise.all([
-    saveTrendingReport(trendingData, zhSummaries.trendingSummary, utcStr, dateStr, digestRepo, footer, "zh"),
-    saveTrendingReport(
-      trendingData,
-      enSummaries.trendingSummary,
+  const reportsByLang = new Map<Lang, { cliContent: string; openclawContent: string; footer: string }>();
+  for (const lang of langs) {
+    const s = summariesByLang.get(lang)!;
+    const c = comparisonResults.get(lang)!;
+    const footer = autoGenFooter(lang);
+    const cliContent = buildCliReportContent(
+      s.cliDigests,
+      s.skillsSummary,
+      c.comparison,
       utcStr,
       dateStr,
-      digestRepo,
-      enFooter,
-      "en",
-    ),
-    saveTrendingReport(
-      trendingData,
-      viSummaries.trendingSummary,
+      footer,
+      lang,
+    );
+    const openclawContent = buildOpenclawReportContent(
+      fetchedOpenclaw,
+      s.peerDigests,
+      s.openclawSummary,
+      c.peersComparison,
       utcStr,
       dateStr,
-      digestRepo,
-      viFooter,
-      "vi",
-    ),
-    saveHnReport(hnData, utcStr, dateStr, digestRepo, footer, "zh"),
-    saveHnReport(hnData, utcStr, dateStr, digestRepo, enFooter, "en"),
-    saveHnReport(hnData, utcStr, dateStr, digestRepo, viFooter, "vi"),
-  ]);
+      footer,
+      lang,
+    );
 
-  // 5. Create GitHub issues for CLI + OpenClaw (zh only)
+    console.log(`  Saved ${saveFile(cliContent, dateStr, `ai-cli${langSuffix(lang)}.md`)}`);
+    console.log(`  Saved ${saveFile(openclawContent, dateStr, `ai-agents${langSuffix(lang)}.md`)}`);
+
+    reportsByLang.set(lang, { cliContent, openclawContent, footer });
+  }
+
+  // Web report: only primary lang saves state
+  for (const lang of langs) {
+    const { footer } = reportsByLang.get(lang)!;
+    await saveWebReport(webResults, webState, utcStr, dateStr, digestRepo, footer, lang);
+  }
+
+  // Trending + HN reports in parallel
+  await Promise.all(
+    langs.flatMap((lang) => {
+      const s = summariesByLang.get(lang)!;
+      const { footer } = reportsByLang.get(lang)!;
+      return [
+        saveTrendingReport(trendingData, s.trendingSummary, utcStr, dateStr, digestRepo, footer, lang),
+        saveHnReport(hnData, utcStr, dateStr, digestRepo, footer, lang),
+      ];
+    }),
+  );
+
+  // 5. Create GitHub issues (primary language only)
   if (digestRepo) {
-    const cliUrl = await createGitHubIssue(`📊 AI CLI 工具社区动态日报 ${dateStr}`, digestContent, "digest");
+    const { cliContent, openclawContent } = reportsByLang.get(primaryLang)!;
+    const cliUrl = await createGitHubIssue(`📊 AI CLI 工具社区动态日报 ${dateStr}`, cliContent, "digest");
     console.log(`  Created CLI issue: ${cliUrl}`);
 
     const openclawUrl = await createGitHubIssue(

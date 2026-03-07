@@ -5,7 +5,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { callLlm, saveFile, autoGenFooter } from "./report.ts";
+import { callLlm, saveFile, autoGenFooter, getDigestLangs, type Lang } from "./report.ts";
 import { buildWeeklyPrompt, buildMonthlyPrompt } from "./prompts.ts";
 import { createGitHubIssue } from "./github.ts";
 
@@ -93,36 +93,42 @@ export async function runWeeklyRollup(): Promise<void> {
     `[weekly] Found ${Object.keys(dailyDigests).length} daily digests: ${Object.keys(dailyDigests).join(", ")}`,
   );
 
-  // Generate ZH and EN in parallel
-  console.log("[weekly] Calling LLM for ZH and EN weekly reports in parallel...");
-  const [zhSummary, enSummary] = await Promise.all([
-    callLlm(buildWeeklyPrompt(dailyDigests, weekStr, "zh"), 8192),
-    callLlm(buildWeeklyPrompt(dailyDigests, weekStr, "en"), 8192),
-  ]);
+  // Generate reports for all configured languages in parallel
+  const langs = getDigestLangs();
+  const primaryLang = langs[0]!;
+  const langSuffix = (lang: Lang) => (lang === "zh" ? "" : `-${lang}`);
 
-  const footer = autoGenFooter("zh");
-  const enFooter = autoGenFooter("en");
+  console.log(`[weekly] Calling LLM for ${langs.join(", ")} weekly reports in parallel...`);
+  const summaries = await Promise.all(
+    langs.map((lang) => callLlm(buildWeeklyPrompt(dailyDigests, weekStr, lang), 8192)),
+  );
 
-  const zhContent =
-    `# AI 工具生态周报 ${weekStr}\n\n` +
-    `> 覆盖日期: ${last7[last7.length - 1]} ~ ${last7[0]} | 生成时间: ${utcStr} UTC\n\n` +
-    `---\n\n` +
-    zhSummary +
-    footer;
+  const headerMap: Record<Lang, string> = {
+    zh:
+      `# AI 工具生态周报 ${weekStr}\n\n` +
+      `> 覆盖日期: ${last7[last7.length - 1]} ~ ${last7[0]} | 生成时间: ${utcStr} UTC\n\n` +
+      `---\n\n`,
+    en:
+      `# AI Tools Ecosystem Weekly Report ${weekStr}\n\n` +
+      `> Coverage: ${last7[last7.length - 1]} ~ ${last7[0]} | Generated: ${utcStr} UTC\n\n` +
+      `---\n\n`,
+    vi:
+      `# Báo cáo Tuần Hệ sinh thái Công cụ AI ${weekStr}\n\n` +
+      `> Phạm vi: ${last7[last7.length - 1]} ~ ${last7[0]} | Thời gian tạo: ${utcStr} UTC\n\n` +
+      `---\n\n`,
+  };
 
-  const enContent =
-    `# AI Tools Ecosystem Weekly Report ${weekStr}\n\n` +
-    `> Coverage: ${last7[last7.length - 1]} ~ ${last7[0]} | Generated: ${utcStr} UTC\n\n` +
-    `---\n\n` +
-    enSummary +
-    enFooter;
+  for (let i = 0; i < langs.length; i++) {
+    const lang = langs[i]!;
+    const footer = autoGenFooter(lang);
+    const content = headerMap[lang] + summaries[i] + footer;
+    const fileName = `ai-weekly${langSuffix(lang)}.md`;
+    console.log(`  Saved ${saveFile(content, dateStr, fileName)}`);
 
-  console.log(`  Saved ${saveFile(zhContent, dateStr, "ai-weekly.md")}`);
-  console.log(`  Saved ${saveFile(enContent, dateStr, "ai-weekly-en.md")}`);
-
-  if (digestRepo) {
-    const url = await createGitHubIssue(`📅 AI 工具生态周报 ${weekStr}`, zhContent, "weekly");
-    console.log(`  Created weekly issue: ${url}`);
+    if (digestRepo && lang === primaryLang) {
+      const url = await createGitHubIssue(`📅 AI 工具生态周报 ${weekStr}`, content, "weekly");
+      console.log(`  Created weekly issue: ${url}`);
+    }
   }
 
   console.log("[weekly] Done!");
@@ -151,13 +157,14 @@ export async function runMonthlyRollup(): Promise<void> {
   const weeklyDates = monthDates.filter((d) => fs.existsSync(path.join(DIGESTS_DIR, d, "ai-weekly.md")));
 
   let sourceDigests: Record<string, string>;
-  let sourceLabel: { zh: string; en: string };
+  let sourceLabel: Record<Lang, string>;
 
   if (weeklyDates.length >= 2) {
     // Use weekly reports
     sourceLabel = {
       zh: `${weeklyDates.length} 份周报`,
       en: `${weeklyDates.length} weekly reports`,
+      vi: `${weeklyDates.length} báo cáo tuần`,
     };
     sourceDigests = {};
     for (const date of weeklyDates) {
@@ -170,6 +177,7 @@ export async function runMonthlyRollup(): Promise<void> {
     sourceLabel = {
       zh: `${sampled.length} 份日报（每4日采样）`,
       en: `${sampled.length} daily reports (sampled every 4 days)`,
+      vi: `${sampled.length} báo cáo ngày (lấy mẫu mỗi 4 ngày)`,
     };
     sourceDigests = {};
     for (const date of sampled) {
@@ -185,36 +193,42 @@ export async function runMonthlyRollup(): Promise<void> {
 
   console.log(`[monthly] Source: ${sourceLabel.zh}`);
 
-  // Generate ZH and EN in parallel
-  console.log("[monthly] Calling LLM for ZH and EN monthly reports in parallel...");
-  const [zhSummary, enSummary] = await Promise.all([
-    callLlm(buildMonthlyPrompt(sourceDigests, monthStr, "zh"), 8192),
-    callLlm(buildMonthlyPrompt(sourceDigests, monthStr, "en"), 8192),
-  ]);
+  // Generate reports for all configured languages in parallel
+  const langs = getDigestLangs();
+  const primaryLang = langs[0]!;
+  const langSuffix = (lang: Lang) => (lang === "zh" ? "" : `-${lang}`);
 
-  const footer = autoGenFooter("zh");
-  const enFooter = autoGenFooter("en");
+  console.log(`[monthly] Calling LLM for ${langs.join(", ")} monthly reports in parallel...`);
+  const summaries = await Promise.all(
+    langs.map((lang) => callLlm(buildMonthlyPrompt(sourceDigests, monthStr, lang), 8192)),
+  );
 
-  const zhContent =
-    `# AI 工具生态月报 ${monthStr}\n\n` +
-    `> 数据来源: ${sourceLabel.zh} | 生成时间: ${utcStr} UTC\n\n` +
-    `---\n\n` +
-    zhSummary +
-    footer;
+  const headerMap: Record<Lang, string> = {
+    zh:
+      `# AI 工具生态月报 ${monthStr}\n\n` +
+      `> 数据来源: ${sourceLabel.zh} | 生成时间: ${utcStr} UTC\n\n` +
+      `---\n\n`,
+    en:
+      `# AI Tools Ecosystem Monthly Report ${monthStr}\n\n` +
+      `> Sources: ${sourceLabel.en} | Generated: ${utcStr} UTC\n\n` +
+      `---\n\n`,
+    vi:
+      `# Báo cáo Tháng Hệ sinh thái Công cụ AI ${monthStr}\n\n` +
+      `> Nguồn: ${sourceLabel.vi} | Thời gian tạo: ${utcStr} UTC\n\n` +
+      `---\n\n`,
+  };
 
-  const enContent =
-    `# AI Tools Ecosystem Monthly Report ${monthStr}\n\n` +
-    `> Sources: ${sourceLabel.en} | Generated: ${utcStr} UTC\n\n` +
-    `---\n\n` +
-    enSummary +
-    enFooter;
+  for (let i = 0; i < langs.length; i++) {
+    const lang = langs[i]!;
+    const footer = autoGenFooter(lang);
+    const content = headerMap[lang] + summaries[i] + footer;
+    const fileName = `ai-monthly${langSuffix(lang)}.md`;
+    console.log(`  Saved ${saveFile(content, dateStr, fileName)}`);
 
-  console.log(`  Saved ${saveFile(zhContent, dateStr, "ai-monthly.md")}`);
-  console.log(`  Saved ${saveFile(enContent, dateStr, "ai-monthly-en.md")}`);
-
-  if (digestRepo) {
-    const url = await createGitHubIssue(`📆 AI 工具生态月报 ${monthStr}`, zhContent, "monthly");
-    console.log(`  Created monthly issue: ${url}`);
+    if (digestRepo && lang === primaryLang) {
+      const url = await createGitHubIssue(`📆 AI 工具生态月报 ${monthStr}`, content, "monthly");
+      console.log(`  Created monthly issue: ${url}`);
+    }
   }
 
   console.log("[monthly] Done!");
