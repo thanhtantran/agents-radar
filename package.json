@@ -17,7 +17,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.3",
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "openai": "^6.27.0"
   },
   "devDependencies": {
     "@eslint/js": "^9",
