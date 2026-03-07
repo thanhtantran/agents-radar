@@ -6,13 +6,13 @@
 
 ## Web UI
 
-**[https://duanyytop.github.io/agents-radar](https://duanyytop.github.io/agents-radar)**
+**[https://compasify.github.io/agents-radar](https://compasify.github.io/agents-radar)**
 
 在线浏览所有历史简报，深色主题，无需登录。报告直接由本仓库的 Markdown 文件通过 GitHub Pages 渲染。每份报告支持中文 / 英文切换。
 
 ## RSS 订阅
 
-**[https://duanyytop.github.io/agents-radar/feed.xml](https://duanyytop.github.io/agents-radar/feed.xml)**
+**[https://compasify.github.io/agents-radar/feed.xml](https://compasify.github.io/agents-radar/feed.xml)**
 
 在任意 RSS 阅读器（Feedly、Reeder、NewsBlur 等）中订阅，每日自动推送新简报。Feed 包含最新 30 条报告（覆盖所有报告类型），与 `manifest.json` 同步更新。
 
@@ -185,16 +185,29 @@ openclaw_peers:
     name: My Agent
 ```
 
-### 3. 添加 Secrets
+### 3. 添加 Secrets 和 Variables
 
-进入 **Settings → Secrets and variables → Actions**，添加以下密钥：
+进入 **Settings → Secrets and variables → Actions**。
+
+**Secrets**（敏感信息，在 Secrets 标签页）：
 
 | Secret | 必填 | 说明 |
 |--------|------|------|
-| `ANTHROPIC_API_KEY` | ✅ | API 密钥，兼容 Anthropic 和 Kimi Code |
+| `ANTHROPIC_API_KEY` | A/B 二选一 | API 密钥，兼容 Anthropic 和 Kimi Code |
 | `ANTHROPIC_BASE_URL` | 可选 | API 地址覆盖。使用 Kimi Code 时设置为 `https://api.kimi.com/coding/`，使用 Anthropic 时留空 |
+| `OPENAI_API_KEY` | A/B 二选一 | OpenAI 兼容 API 密钥。设置后优先于 Anthropic |
+| `OPENAI_BASE_URL` | 可选 | OpenAI 兼容端点地址覆盖（如 `https://gen.pollinations.ai/v1`） |
 | `TELEGRAM_BOT_TOKEN` | 可选 | Telegram bot token，从 [@BotFather](https://t.me/BotFather) 获取。设置后每次 digest 完成自动推送通知 |
 | `TELEGRAM_CHAT_ID` | 可选 | 接收通知的 Telegram 频道 / 群组 / 用户 ID |
+
+> 设置 `ANTHROPIC_API_KEY`（方案 A）**或** `OPENAI_API_KEY`（方案 B）即可。两者都设置时，OpenAI 优先。
+
+**Variables**（非敏感信息，在 Variables 标签页）：
+
+| Variable | 默认值 | 说明 |
+|----------|--------|------|
+| `OPENAI_MODEL` | `gpt-4o` | OpenAI 兼容提供商的模型名称 |
+| `DIGEST_LANGS` | `vi` | 逗号分隔的语言代码：`vi`、`zh`、`en`（如 `zh,en,vi` 生成三种语言） |
 
 > `GITHUB_TOKEN` 由 GitHub Actions 自动提供，无需手动添加。
 
@@ -220,9 +233,18 @@ openclaw_peers:
 pnpm install
 
 export GITHUB_TOKEN=ghp_xxxxx
-export ANTHROPIC_BASE_URL=https://api.kimi.com/coding/
-export ANTHROPIC_API_KEY=sk-kimi-xxxxxxxx
+
+# 方案 A — OpenAI 兼容（设置 OPENAI_API_KEY 后优先使用）
+export OPENAI_API_KEY=sk-xxxxx
+export OPENAI_BASE_URL=https://your-provider/v1  # 可选
+export OPENAI_MODEL=gpt-4o                        # 可选，默认 gpt-4o
+
+# 方案 B — Anthropic（OPENAI_API_KEY 未设置时使用）
+export ANTHROPIC_API_KEY=sk-ant-xxxxx
+export ANTHROPIC_BASE_URL=https://api.kimi.com/coding/  # 可选
+
 export DIGEST_REPO=your-username/agents-radar  # 可选，留空则仅写入本地文件
+export DIGEST_LANGS=vi                          # 可选，默认 vi
 
 pnpm start
 ```
@@ -342,4 +364,4 @@ OpenAI 内容精选            (research / release / company / safety / ...)
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=duanyytop/agents-radar&type=Date)](https://star-history.com/#duanyytop/agents-radar&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=compasify/agents-radar&type=Date)](https://star-history.com/#compasify/agents-radar&Date)

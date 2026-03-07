@@ -13,7 +13,7 @@ import fs from "node:fs";
 
 const BOT_TOKEN = process.env["TELEGRAM_BOT_TOKEN"] ?? "";
 const CHAT_ID = process.env["TELEGRAM_CHAT_ID"] || "@agents_radar";
-const PAGES_URL = (process.env["PAGES_URL"] ?? "https://duanyytop.github.io/agents-radar").replace(/\/$/, "");
+const PAGES_URL = (process.env["PAGES_URL"] ?? "https://compasify.github.io/agents-radar").replace(/\/$/, "");
 
 const ZH_LABELS: Record<string, string> = {
   "ai-cli": "AI CLI 工具",

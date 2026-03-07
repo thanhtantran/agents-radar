@@ -4,7 +4,7 @@ import path from "path";
 const DIGESTS_DIR = "digests";
 const MANIFEST_PATH = "manifest.json";
 const FEED_PATH = "feed.xml";
-const SITE_URL = "https://duanyytop.github.io/agents-radar";
+const SITE_URL = "https://compasify.github.io/agents-radar";
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const REPORT_FILES = [
   "ai-cli",

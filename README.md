@@ -6,13 +6,13 @@ A GitHub Actions workflow that runs every morning at 08:00 CST. It tracks GitHub
 
 ## Web UI
 
-**[https://duanyytop.github.io/agents-radar](https://duanyytop.github.io/agents-radar)**
+**[https://compasify.github.io/agents-radar](https://compasify.github.io/agents-radar)**
 
 Browse all historical digests in a clean, dark-themed interface — no login required. Reports are rendered from the Markdown files in this repo via GitHub Pages.
 
 ## RSS Feed
 
-**[https://duanyytop.github.io/agents-radar/feed.xml](https://duanyytop.github.io/agents-radar/feed.xml)**
+**[https://compasify.github.io/agents-radar/feed.xml](https://compasify.github.io/agents-radar/feed.xml)**
 
 Subscribe in any RSS reader (Feedly, Reeder, NewsBlur, etc.) to receive new digests automatically. The feed includes the latest 30 reports across all report types, updated daily alongside `manifest.json`.
 
@@ -185,16 +185,29 @@ openclaw_peers:
     name: My Agent
 ```
 
-### 3. Add Secrets
+### 3. Add Secrets and Variables
 
 Go to **Settings → Secrets and variables → Actions** and add:
 
+**Secrets** (sensitive values):
+
 | Secret | Required | Description |
 |--------|----------|-------------|
-| `ANTHROPIC_API_KEY` | ✅ | API key — works with both Anthropic and Kimi Code |
+| `ANTHROPIC_API_KEY` | one of A/B | API key — works with both Anthropic and Kimi Code |
 | `ANTHROPIC_BASE_URL` | optional | API endpoint override. Set to `https://api.kimi.com/coding/` for Kimi Code; leave unset for Anthropic |
+| `OPENAI_API_KEY` | one of A/B | OpenAI-compatible API key. When set, takes precedence over Anthropic |
+| `OPENAI_BASE_URL` | optional | OpenAI-compatible endpoint override (e.g. `https://gen.pollinations.ai/v1`) |
 | `TELEGRAM_BOT_TOKEN` | optional | Telegram bot token from [@BotFather](https://t.me/BotFather). If set, a message is sent after each digest run |
 | `TELEGRAM_CHAT_ID` | optional | Telegram chat/channel/group ID to send notifications to |
+
+> Set **either** `ANTHROPIC_API_KEY` (Option A) **or** `OPENAI_API_KEY` (Option B). If both are set, OpenAI takes precedence.
+
+**Variables** (non-sensitive, under the **Variables** tab):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `OPENAI_MODEL` | `gpt-4o` | Model name for the OpenAI-compatible provider |
+| `DIGEST_LANGS` | `vi` | Comma-separated language codes to generate: `vi`, `zh`, `en` (e.g. `zh,en,vi` for all three) |
 
 > `GITHUB_TOKEN` is provided automatically by GitHub Actions.
 
@@ -220,9 +233,18 @@ To test immediately, go to **Actions → Daily Agents Radar → Run workflow**.
 pnpm install
 
 export GITHUB_TOKEN=ghp_xxxxx
-export ANTHROPIC_BASE_URL=https://api.kimi.com/coding/
-export ANTHROPIC_API_KEY=sk-kimi-xxxxxxxx
+
+# Option A — OpenAI-compatible (takes precedence when OPENAI_API_KEY is set)
+export OPENAI_API_KEY=sk-xxxxx
+export OPENAI_BASE_URL=https://your-provider/v1  # optional
+export OPENAI_MODEL=gpt-4o                        # optional, default: gpt-4o
+
+# Option B — Anthropic (default when OPENAI_API_KEY is absent)
+export ANTHROPIC_API_KEY=sk-ant-xxxxx
+export ANTHROPIC_BASE_URL=https://api.kimi.com/coding/  # optional
+
 export DIGEST_REPO=your-username/agents-radar  # optional; omit to only write files
+export DIGEST_LANGS=vi                          # optional; default: vi
 
 pnpm start
 ```
@@ -365,4 +387,4 @@ To change the schedule, edit the cron expressions in the corresponding workflow 
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=duanyytop/agents-radar&type=Date)](https://star-history.com/#duanyytop/agents-radar&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=compasify/agents-radar&type=Date)](https://star-history.com/#compasify/agents-radar&Date)
