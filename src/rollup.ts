@@ -126,7 +126,7 @@ export async function runWeeklyRollup(): Promise<void> {
     console.log(`  Saved ${saveFile(content, dateStr, fileName)}`);
 
     if (digestRepo && lang === primaryLang) {
-      const url = await createGitHubIssue(issueTitle('weekly', lang, weekStr), content, "weekly");
+      const url = await createGitHubIssue(issueTitle("weekly", lang, weekStr), content, "weekly");
       console.log(`  Created weekly issue: ${url}`);
     }
   }
@@ -226,7 +226,7 @@ export async function runMonthlyRollup(): Promise<void> {
     console.log(`  Saved ${saveFile(content, dateStr, fileName)}`);
 
     if (digestRepo && lang === primaryLang) {
-      const url = await createGitHubIssue(issueTitle('monthly', lang, monthStr), content, "monthly");
+      const url = await createGitHubIssue(issueTitle("monthly", lang, monthStr), content, "monthly");
       console.log(`  Created monthly issue: ${url}`);
     }
   }
