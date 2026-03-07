@@ -286,14 +286,19 @@ function renderMarkdown(raw) {
 const LABELS = {
   'ai-cli':          'AI CLI 工具',
   'ai-cli-en':       'AI CLI Tools',
+  'ai-cli-vi':       'Công cụ AI CLI',
   'ai-agents':       'AI Agents 生态',
   'ai-agents-en':    'AI Agents Ecosystem',
+  'ai-agents-vi':    'Hệ sinh thái AI Agents',
   'ai-web':          'OpenAI & Anthropic 官网动态',
   'ai-web-en':       'OpenAI & Anthropic Updates',
+  'ai-web-vi':       'Cập nhật OpenAI & Anthropic',
   'ai-trending':     'GitHub AI 趋势',
   'ai-trending-en':  'GitHub AI Trends',
+  'ai-trending-vi':  'Xu hướng AI GitHub',
   'ai-hn':           'HN 社区动态',
   'ai-hn-en':        'HN Community Digest',
+  'ai-hn-vi':        'Cộng đồng HN',
 };
 
 // ── Theme ──
@@ -458,14 +463,16 @@ function buildNav(dates) {
     const list = document.createElement('div');
     list.className = 'rpt-list';
 
-    // Filter out -en reports from base list, process as pairs
-    const baseReports = reports.filter(r => !r.endsWith('-en'));
+    // Filter out -en and -vi reports from base list, process as groups
+    const baseReports = reports.filter(r => !r.endsWith('-en') && !r.endsWith('-vi'));
     baseReports.forEach(r => {
       const enKey = r + '-en';
+      const viKey = r + '-vi';
       const hasEn = reports.includes(enKey);
+      const hasVi = reports.includes(viKey);
 
-      if (hasEn) {
-        // Render as a row with label + [ZH][EN] buttons
+      if (hasEn || hasVi) {
+        // Render as a row with label + language buttons
         const row = document.createElement('div');
         row.className = 'rpt-row';
 
@@ -483,18 +490,30 @@ function buildNav(dates) {
         zhBtn.dataset.key = `${date}/${r}`;
         zhBtn.textContent = 'ZH';
         zhBtn.onclick = () => loadReport(date, r);
+        btns.append(zhBtn);
 
-        const enBtn = document.createElement('button');
-        enBtn.className = 'lang-btn';
-        enBtn.dataset.key = `${date}/${enKey}`;
-        enBtn.textContent = 'EN';
-        enBtn.onclick = () => loadReport(date, enKey);
+        if (hasEn) {
+          const enBtn = document.createElement('button');
+          enBtn.className = 'lang-btn';
+          enBtn.dataset.key = `${date}/${enKey}`;
+          enBtn.textContent = 'EN';
+          enBtn.onclick = () => loadReport(date, enKey);
+          btns.append(enBtn);
+        }
 
-        btns.append(zhBtn, enBtn);
+        if (hasVi) {
+          const viBtn = document.createElement('button');
+          viBtn.className = 'lang-btn';
+          viBtn.dataset.key = `${date}/${viKey}`;
+          viBtn.textContent = 'VI';
+          viBtn.onclick = () => loadReport(date, viKey);
+          btns.append(viBtn);
+        }
+
         row.append(label, btns);
         list.appendChild(row);
       } else {
-        // No EN variant — render as current single button
+        // No variants — render as single button
         const btn = document.createElement('button');
         btn.className = 'rpt-btn';
         btn.dataset.key = `${date}/${r}`;

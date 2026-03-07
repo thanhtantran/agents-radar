@@ -143,7 +143,7 @@ async function generateSummaries(
   fetchedPeers: RepoFetch[],
   trendingData: TrendingData,
   dateStr: string,
-  lang: "zh" | "en" = "zh",
+  lang: "zh" | "en" | "vi" = "zh",
 ): Promise<{
   cliDigests: RepoDigest[];
   openclawSummary: string;
@@ -151,14 +151,36 @@ async function generateSummaries(
   peerDigests: RepoDigest[];
   trendingSummary: string;
 }> {
-  const noActivity = lang === "en" ? "No activity in the last 24 hours." : "过去24小时无活动。";
-  const summaryFailed = lang === "en" ? "⚠️ Summary generation failed." : "⚠️ 摘要生成失败。";
-  const skillsFailed = lang === "en" ? "⚠️ Skills summary generation failed." : "⚠️ Skills 摘要生成失败。";
+  const noActivity =
+    lang === "vi"
+      ? "Không có hoạt động trong 24 giờ qua."
+      : lang === "en"
+        ? "No activity in the last 24 hours."
+        : "过去24小时无活动。";
+  const summaryFailed =
+    lang === "vi"
+      ? "⚠️ Tạo tóm tắt thất bại."
+      : lang === "en"
+        ? "⚠️ Summary generation failed."
+        : "⚠️ 摘要生成失败。";
+  const skillsFailed =
+    lang === "vi"
+      ? "⚠️ Tạo tóm tắt Skills thất bại."
+      : lang === "en"
+        ? "⚠️ Skills summary generation failed."
+        : "⚠️ Skills 摘要生成失败。";
   const trendingNoData =
-    lang === "en"
-      ? "⚠️ Trending data unavailable, unable to generate report."
-      : "⚠️ 今日趋势数据获取失败，无法生成报告。";
-  const trendingFailed = lang === "en" ? "⚠️ Trending report generation failed." : "⚠️ 趋势报告生成失败。";
+    lang === "vi"
+      ? "⚠️ Dữ liệu xu hướng không khả dụng, không thể tạo báo cáo."
+      : lang === "en"
+        ? "⚠️ Trending data unavailable, unable to generate report."
+        : "⚠️ 今日趋势数据获取失败，无法生成报告。";
+  const trendingFailed =
+    lang === "vi"
+      ? "⚠️ Tạo báo cáo xu hướng thất bại."
+      : lang === "en"
+        ? "⚠️ Trending report generation failed."
+        : "⚠️ 趋势报告生成失败。";
 
   const [cliDigests, openclawSummary, skillsSummary, peerDigests, trendingSummary] = await Promise.all([
     Promise.all(
@@ -253,30 +275,39 @@ function buildCliReportContent(
   utcStr: string,
   dateStr: string,
   footer: string,
-  lang: "zh" | "en" = "zh",
+  lang: "zh" | "en" | "vi" = "zh",
 ): string {
   const repoLinks =
     cliDigests.map((d) => `- [${d.config.name}](https://github.com/${d.config.repo})`).join("\n") +
     `\n- [Claude Code Skills](https://github.com/${CLAUDE_SKILLS_REPO})`;
 
   const t =
-    lang === "en"
+    lang === "vi"
       ? {
-          title: `# AI CLI Tools Community Digest ${dateStr}\n\n`,
-          meta: `> Generated: ${utcStr} UTC | Tools covered: ${cliDigests.length}\n\n`,
-          skillsHeading: `## Claude Code Skills Highlights`,
-          skillsSource: `Source`,
-          comparison: `## Cross-Tool Comparison\n\n`,
-          detail: `## Per-Tool Reports\n\n`,
+          title: `# Bản tin Cộng đồng Công cụ AI CLI ${dateStr}\n\n`,
+          meta: `> Thời gian tạo: ${utcStr} UTC | Công cụ: ${cliDigests.length}\n\n`,
+          skillsHeading: `## Điểm nổi bật Claude Code Skills`,
+          skillsSource: `Nguồn dữ liệu`,
+          comparison: `## So sánh chéo\n\n`,
+          detail: `## Báo cáo chi tiết từng công cụ\n\n`,
         }
-      : {
-          title: `# AI CLI 工具社区动态日报 ${dateStr}\n\n`,
-          meta: `> 生成时间: ${utcStr} UTC | 覆盖工具: ${cliDigests.length} 个\n\n`,
-          skillsHeading: `## Claude Code Skills 社区热点`,
-          skillsSource: `数据来源`,
-          comparison: `## 横向对比\n\n`,
-          detail: `## 各工具详细报告\n\n`,
-        };
+      : lang === "en"
+        ? {
+            title: `# AI CLI Tools Community Digest ${dateStr}\n\n`,
+            meta: `> Generated: ${utcStr} UTC | Tools covered: ${cliDigests.length}\n\n`,
+            skillsHeading: `## Claude Code Skills Highlights`,
+            skillsSource: `Source`,
+            comparison: `## Cross-Tool Comparison\n\n`,
+            detail: `## Per-Tool Reports\n\n`,
+          }
+        : {
+            title: `# AI CLI 工具社区动态日报 ${dateStr}\n\n`,
+            meta: `> 生成时间: ${utcStr} UTC | 覆盖工具: ${cliDigests.length} 个\n\n`,
+            skillsHeading: `## Claude Code Skills 社区热点`,
+            skillsSource: `数据来源`,
+            comparison: `## 横向对比\n\n`,
+            detail: `## 各工具详细报告\n\n`,
+          };
 
   const skillsSection =
     `${t.skillsHeading}\n\n` +
@@ -319,7 +350,7 @@ function buildOpenclawReportContent(
   utcStr: string,
   dateStr: string,
   footer: string,
-  lang: "zh" | "en" = "zh",
+  lang: "zh" | "en" | "vi" = "zh",
 ): string {
   const { issues, prs } = fetchedOpenclaw;
 
@@ -341,21 +372,29 @@ function buildOpenclawReportContent(
     .join("\n\n");
 
   const t =
-    lang === "en"
+    lang === "vi"
       ? {
-          title: `# OpenClaw Ecosystem Digest ${dateStr}\n\n`,
-          meta: `> Issues: ${issues.length} | PRs: ${prs.length} | Projects covered: ${1 + OPENCLAW_PEERS.length} | Generated: ${utcStr} UTC\n\n`,
-          deepDive: `## OpenClaw Deep Dive\n\n`,
-          comparison: `## Cross-Ecosystem Comparison\n\n`,
-          peers: `## Peer Project Reports\n\n`,
+          title: `# Bản tin Hệ sinh thái OpenClaw ${dateStr}\n\n`,
+          meta: `> Issues: ${issues.length} | PRs: ${prs.length} | Dự án: ${1 + OPENCLAW_PEERS.length} | Thời gian tạo: ${utcStr} UTC\n\n`,
+          deepDive: `## Phân tích sâu OpenClaw\n\n`,
+          comparison: `## So sánh hệ sinh thái chéo\n\n`,
+          peers: `## Báo cáo các dự án cùng nhóm\n\n`,
         }
-      : {
-          title: `# OpenClaw 生态日报 ${dateStr}\n\n`,
-          meta: `> Issues: ${issues.length} | PRs: ${prs.length} | 覆盖项目: ${1 + OPENCLAW_PEERS.length} 个 | 生成时间: ${utcStr} UTC\n\n`,
-          deepDive: `## OpenClaw 项目深度报告\n\n`,
-          comparison: `## 横向生态对比\n\n`,
-          peers: `## 同赛道项目详细报告\n\n`,
-        };
+      : lang === "en"
+        ? {
+            title: `# OpenClaw Ecosystem Digest ${dateStr}\n\n`,
+            meta: `> Issues: ${issues.length} | PRs: ${prs.length} | Projects covered: ${1 + OPENCLAW_PEERS.length} | Generated: ${utcStr} UTC\n\n`,
+            deepDive: `## OpenClaw Deep Dive\n\n`,
+            comparison: `## Cross-Ecosystem Comparison\n\n`,
+            peers: `## Peer Project Reports\n\n`,
+          }
+        : {
+            title: `# OpenClaw 生态日报 ${dateStr}\n\n`,
+            meta: `> Issues: ${issues.length} | PRs: ${prs.length} | 覆盖项目: ${1 + OPENCLAW_PEERS.length} 个 | 生成时间: ${utcStr} UTC\n\n`,
+            deepDive: `## OpenClaw 项目深度报告\n\n`,
+            comparison: `## 横向生态对比\n\n`,
+            peers: `## 同赛道项目详细报告\n\n`,
+          };
 
   return (
     t.title +
@@ -385,7 +424,7 @@ async function saveWebReport(
   dateStr: string,
   digestRepo: string,
   footer: string,
-  lang: "zh" | "en" = "zh",
+  lang: "zh" | "en" | "vi" = "zh",
 ): Promise<void> {
   const hasNewContent = webResults.some((r) => r.newItems.length > 0);
 
@@ -401,28 +440,38 @@ async function saveWebReport(
       const openaiNew = webResults.find((r) => r.site === "openai")?.newItems.length ?? 0;
       const openaiTotal = webResults.find((r) => r.site === "openai")?.totalDiscovered ?? 0;
 
-      const fileName = lang === "en" ? "ai-web-en.md" : "ai-web.md";
+      const fileName = lang === "vi" ? "ai-web-vi.md" : lang === "en" ? "ai-web-en.md" : "ai-web.md";
 
       const t =
-        lang === "en"
+        lang === "vi"
           ? {
-              mode: isFirstRun ? "First full crawl" : "Today's update",
-              title: `# Official AI Content Report ${dateStr}\n\n`,
-              meta: `> ${isFirstRun ? "First full crawl" : "Today's update"} | New content: ${totalNew} articles | Generated: ${utcStr} UTC\n\n`,
+              mode: isFirstRun ? "Thu thập toàn bộ lần đầu" : "Cập nhật hôm nay",
+              title: `# Báo cáo Nội dung AI Chính thức ${dateStr}\n\n`,
+              meta: `> ${isFirstRun ? "Thu thập toàn bộ lần đầu" : "Cập nhật hôm nay"} | Nội dung mới: ${totalNew} bài | Thời gian tạo: ${utcStr} UTC\n\n`,
               sources:
-                `Sources:\n` +
-                `- Anthropic: [anthropic.com](https://www.anthropic.com) — ${anthropicNew} new articles (sitemap total: ${anthropicTotal})\n` +
-                `- OpenAI: [openai.com](https://openai.com) — ${openaiNew} new articles (sitemap total: ${openaiTotal})\n\n`,
+                `Nguồn dữ liệu:\n` +
+                `- Anthropic: [anthropic.com](https://www.anthropic.com) — ${anthropicNew} bài mới (sitemap tổng: ${anthropicTotal})\n` +
+                `- OpenAI: [openai.com](https://openai.com) — ${openaiNew} bài mới (sitemap tổng: ${openaiTotal})\n\n`,
             }
-          : {
-              mode: isFirstRun ? "首次全量" : "今日更新",
-              title: `# AI 官方内容追踪报告 ${dateStr}\n\n`,
-              meta: `> ${isFirstRun ? "首次全量" : "今日更新"} | 新增内容: ${totalNew} 篇 | 生成时间: ${utcStr} UTC\n\n`,
-              sources:
-                `数据来源:\n` +
-                `- Anthropic: [anthropic.com](https://www.anthropic.com) — 新增 ${anthropicNew} 篇（sitemap 共 ${anthropicTotal} 条）\n` +
-                `- OpenAI: [openai.com](https://openai.com) — 新增 ${openaiNew} 篇（sitemap 共 ${openaiTotal} 条）\n\n`,
-            };
+          : lang === "en"
+            ? {
+                mode: isFirstRun ? "First full crawl" : "Today's update",
+                title: `# Official AI Content Report ${dateStr}\n\n`,
+                meta: `> ${isFirstRun ? "First full crawl" : "Today's update"} | New content: ${totalNew} articles | Generated: ${utcStr} UTC\n\n`,
+                sources:
+                  `Sources:\n` +
+                  `- Anthropic: [anthropic.com](https://www.anthropic.com) — ${anthropicNew} new articles (sitemap total: ${anthropicTotal})\n` +
+                  `- OpenAI: [openai.com](https://openai.com) — ${openaiNew} new articles (sitemap total: ${openaiTotal})\n\n`,
+              }
+            : {
+                mode: isFirstRun ? "首次全量" : "今日更新",
+                title: `# AI 官方内容追踪报告 ${dateStr}\n\n`,
+                meta: `> ${isFirstRun ? "首次全量" : "今日更新"} | 新增内容: ${totalNew} 篇 | 生成时间: ${utcStr} UTC\n\n`,
+                sources:
+                  `数据来源:\n` +
+                  `- Anthropic: [anthropic.com](https://www.anthropic.com) — 新增 ${anthropicNew} 篇（sitemap 共 ${anthropicTotal} 条）\n` +
+                  `- OpenAI: [openai.com](https://openai.com) — 新增 ${openaiNew} 篇（sitemap 共 ${openaiTotal} 条）\n\n`,
+              };
 
       const webContent = t.title + t.meta + t.sources + `---\n\n` + webSummary + footer;
 
@@ -456,7 +505,7 @@ async function saveTrendingReport(
   dateStr: string,
   digestRepo: string,
   footer: string,
-  lang: "zh" | "en" = "zh",
+  lang: "zh" | "en" | "vi" = "zh",
 ): Promise<void> {
   const hasData = trendingData.trendingRepos.length > 0 || trendingData.searchRepos.length > 0;
   if (!hasData) {
@@ -464,11 +513,14 @@ async function saveTrendingReport(
     return;
   }
 
-  const fileName = lang === "en" ? "ai-trending-en.md" : "ai-trending.md";
+  const fileName =
+    lang === "vi" ? "ai-trending-vi.md" : lang === "en" ? "ai-trending-en.md" : "ai-trending.md";
   const header =
-    lang === "en"
-      ? `# AI Open Source Trends ${dateStr}\n\n> Sources: GitHub Trending + GitHub Search API | Generated: ${utcStr} UTC\n\n---\n\n`
-      : `# AI 开源趋势日报 ${dateStr}\n\n> 数据来源: GitHub Trending + GitHub Search API | 生成时间: ${utcStr} UTC\n\n---\n\n`;
+    lang === "vi"
+      ? `# Xu hướng AI Mã nguồn mở ${dateStr}\n\n> Nguồn: GitHub Trending + GitHub Search API | Thời gian tạo: ${utcStr} UTC\n\n---\n\n`
+      : lang === "en"
+        ? `# AI Open Source Trends ${dateStr}\n\n> Sources: GitHub Trending + GitHub Search API | Generated: ${utcStr} UTC\n\n---\n\n`
+        : `# AI 开源趋势日报 ${dateStr}\n\n> 数据来源: GitHub Trending + GitHub Search API | 生成时间: ${utcStr} UTC\n\n---\n\n`;
 
   const trendingContent = header + trendingSummary + footer;
 
@@ -486,7 +538,7 @@ async function saveHnReport(
   dateStr: string,
   digestRepo: string,
   footer: string,
-  lang: "zh" | "en" = "zh",
+  lang: "zh" | "en" | "vi" = "zh",
 ): Promise<void> {
   if (!hnData.fetchSuccess) {
     console.log(`  [hn/${lang}] No data available, skipping report.`);
@@ -496,17 +548,22 @@ async function saveHnReport(
   console.log(`  [hn/${lang}] Calling LLM for HN report...`);
   try {
     const hnSummary = await callLlm(buildHnPrompt(hnData, dateStr, lang));
-    const fileName = lang === "en" ? "ai-hn-en.md" : "ai-hn.md";
+    const fileName = lang === "vi" ? "ai-hn-vi.md" : lang === "en" ? "ai-hn-en.md" : "ai-hn.md";
     const header =
-      lang === "en"
-        ? `# Hacker News AI Community Digest ${dateStr}\n\n` +
-          `> Source: [Hacker News](https://news.ycombinator.com/) | ` +
-          `${hnData.stories.length} stories | Generated: ${utcStr} UTC\n\n` +
+      lang === "vi"
+        ? `# Bản tin Cộng đồng AI Hacker News ${dateStr}\n\n` +
+          `> Nguồn: [Hacker News](https://news.ycombinator.com/) | ` +
+          `${hnData.stories.length} bài viết | Thời gian tạo: ${utcStr} UTC\n\n` +
           `---\n\n`
-        : `# Hacker News AI 社区动态日报 ${dateStr}\n\n` +
-          `> 数据来源: [Hacker News](https://news.ycombinator.com/) | ` +
-          `共 ${hnData.stories.length} 条 | 生成时间: ${utcStr} UTC\n\n` +
-          `---\n\n`;
+        : lang === "en"
+          ? `# Hacker News AI Community Digest ${dateStr}\n\n` +
+            `> Source: [Hacker News](https://news.ycombinator.com/) | ` +
+            `${hnData.stories.length} stories | Generated: ${utcStr} UTC\n\n` +
+            `---\n\n`
+          : `# Hacker News AI 社区动态日报 ${dateStr}\n\n` +
+            `> 数据来源: [Hacker News](https://news.ycombinator.com/) | ` +
+            `共 ${hnData.stories.length} 条 | 生成时间: ${utcStr} UTC\n\n` +
+            `---\n\n`;
 
     const hnContent = header + hnSummary + footer;
 
@@ -548,15 +605,16 @@ async function main(): Promise<void> {
   const fetchedOpenclaw = fetched.find((f) => f.cfg.id === OPENCLAW.id)!;
   const fetchedPeers = fetched.filter((f) => peerIds.has(f.cfg.id));
 
-  // 2. Generate per-repo LLM summaries in parallel (zh + en simultaneously)
-  console.log("  Generating summaries in ZH and EN in parallel...");
-  const [zhSummaries, enSummaries] = await Promise.all([
+  // 2. Generate per-repo LLM summaries in parallel (zh + en + vi simultaneously)
+  console.log("  Generating summaries in ZH, EN and VI in parallel...");
+  const [zhSummaries, enSummaries, viSummaries] = await Promise.all([
     generateSummaries(fetchedCli, fetchedOpenclaw, skillsData, fetchedPeers, trendingData, dateStr, "zh"),
     generateSummaries(fetchedCli, fetchedOpenclaw, skillsData, fetchedPeers, trendingData, dateStr, "en"),
+    generateSummaries(fetchedCli, fetchedOpenclaw, skillsData, fetchedPeers, trendingData, dateStr, "vi"),
   ]);
 
-  // 3. Generate cross-repo comparisons in parallel (zh + en)
-  console.log("  Calling LLM for comparative analyses (ZH + EN)...");
+  // 3. Generate cross-repo comparisons in parallel (zh + en + vi)
+  console.log("  Calling LLM for comparative analyses (ZH + EN + VI)...");
   const openclawDigest: RepoDigest = {
     config: OPENCLAW,
     issues: fetchedOpenclaw.issues,
@@ -571,15 +629,26 @@ async function main(): Promise<void> {
     releases: fetchedOpenclaw.releases,
     summary: enSummaries.openclawSummary,
   };
-  const [comparison, peersComparison, enComparison, enPeersComparison] = await Promise.all([
-    callLlm(buildComparisonPrompt(zhSummaries.cliDigests, dateStr, "zh")),
-    callLlm(buildPeersComparisonPrompt(openclawDigest, zhSummaries.peerDigests, dateStr, "zh")),
-    callLlm(buildComparisonPrompt(enSummaries.cliDigests, dateStr, "en")),
-    callLlm(buildPeersComparisonPrompt(enOpenclawDigest, enSummaries.peerDigests, dateStr, "en")),
-  ]);
+  const viOpenclawDigest: RepoDigest = {
+    config: OPENCLAW,
+    issues: fetchedOpenclaw.issues,
+    prs: fetchedOpenclaw.prs,
+    releases: fetchedOpenclaw.releases,
+    summary: viSummaries.openclawSummary,
+  };
+  const [comparison, peersComparison, enComparison, enPeersComparison, viComparison, viPeersComparison] =
+    await Promise.all([
+      callLlm(buildComparisonPrompt(zhSummaries.cliDigests, dateStr, "zh")),
+      callLlm(buildPeersComparisonPrompt(openclawDigest, zhSummaries.peerDigests, dateStr, "zh")),
+      callLlm(buildComparisonPrompt(enSummaries.cliDigests, dateStr, "en")),
+      callLlm(buildPeersComparisonPrompt(enOpenclawDigest, enSummaries.peerDigests, dateStr, "en")),
+      callLlm(buildComparisonPrompt(viSummaries.cliDigests, dateStr, "vi")),
+      callLlm(buildPeersComparisonPrompt(viOpenclawDigest, viSummaries.peerDigests, dateStr, "vi")),
+    ]);
 
   const footer = autoGenFooter("zh");
   const enFooter = autoGenFooter("en");
+  const viFooter = autoGenFooter("vi");
 
   // 4. Build + save all reports
   const digestContent = buildCliReportContent(
@@ -620,15 +689,37 @@ async function main(): Promise<void> {
     enFooter,
     "en",
   );
+  const viDigestContent = buildCliReportContent(
+    viSummaries.cliDigests,
+    viSummaries.skillsSummary,
+    viComparison,
+    utcStr,
+    dateStr,
+    viFooter,
+    "vi",
+  );
+  const viOpenclawContent = buildOpenclawReportContent(
+    fetchedOpenclaw,
+    viSummaries.peerDigests,
+    viSummaries.openclawSummary,
+    viPeersComparison,
+    utcStr,
+    dateStr,
+    viFooter,
+    "vi",
+  );
 
   console.log(`  Saved ${saveFile(digestContent, dateStr, "ai-cli.md")}`);
   console.log(`  Saved ${saveFile(openclawContent, dateStr, "ai-agents.md")}`);
   console.log(`  Saved ${saveFile(enDigestContent, dateStr, "ai-cli-en.md")}`);
   console.log(`  Saved ${saveFile(enOpenclawContent, dateStr, "ai-agents-en.md")}`);
+  console.log(`  Saved ${saveFile(viDigestContent, dateStr, "ai-cli-vi.md")}`);
+  console.log(`  Saved ${saveFile(viOpenclawContent, dateStr, "ai-agents-vi.md")}`);
 
-  // Web report: zh saves state, en skips state save
+  // Web report: zh saves state, en/vi skip state save
   await saveWebReport(webResults, webState, utcStr, dateStr, digestRepo, footer, "zh");
   await saveWebReport(webResults, webState, utcStr, dateStr, digestRepo, enFooter, "en");
+  await saveWebReport(webResults, webState, utcStr, dateStr, digestRepo, viFooter, "vi");
 
   await Promise.all([
     saveTrendingReport(trendingData, zhSummaries.trendingSummary, utcStr, dateStr, digestRepo, footer, "zh"),
@@ -641,8 +732,18 @@ async function main(): Promise<void> {
       enFooter,
       "en",
     ),
+    saveTrendingReport(
+      trendingData,
+      viSummaries.trendingSummary,
+      utcStr,
+      dateStr,
+      digestRepo,
+      viFooter,
+      "vi",
+    ),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, footer, "zh"),
     saveHnReport(hnData, utcStr, dateStr, digestRepo, enFooter, "en"),
+    saveHnReport(hnData, utcStr, dateStr, digestRepo, viFooter, "vi"),
   ]);
 
   // 5. Create GitHub issues for CLI + OpenClaw (zh only)
