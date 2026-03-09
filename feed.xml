@@ -6,7 +6,7 @@
     <description>AI 开源生态每日简报 · Daily AI ecosystem digest</description>
     <language>zh-CN</language>
     <atom:link href="https://compasify.github.io/agents-radar/feed.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Mon, 09 Mar 2026 02:06:35 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 09 Mar 2026 03:29:00 +0000</lastBuildDate>
     <item>
       <title>Bản tin Công cụ AI CLI 2026-03-09</title>
       <link>https://compasify.github.io/agents-radar/#2026-03-09/ai-cli-vi</link>
@@ -41,6 +41,13 @@
       <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-09/ai-hn-vi</guid>
       <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
       <description>Bản tin Cộng đồng AI Hacker News 2026-03-09</description>
+    </item>
+    <item>
+      <title>Bản tin Tuần AI 2026-03-09</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-09/ai-weekly-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-09/ai-weekly-vi</guid>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Tuần AI 2026-03-09</description>
     </item>
     <item>
       <title>Bản tin Công cụ AI CLI 2026-03-08</title>
@@ -209,13 +216,6 @@
       <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-06/ai-agents-en</guid>
       <pubDate>Fri, 06 Mar 2026 00:00:00 +0000</pubDate>
       <description>AI Agents Ecosystem Digest 2026-03-06</description>
-    </item>
-    <item>
-      <title>AI 官方内容追踪报告 2026-03-06</title>
-      <link>https://compasify.github.io/agents-radar/#2026-03-06/ai-web</link>
-      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-06/ai-web</guid>
-      <pubDate>Fri, 06 Mar 2026 00:00:00 +0000</pubDate>
-      <description>AI 官方内容追踪报告 2026-03-06</description>
     </item>
   </channel>
 </rss>
