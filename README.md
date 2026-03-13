@@ -1,114 +1,19 @@
 # agents-radar
 
-Tiếng Việt | [中文](./README.zh.md) | [English](./README.en.md)
+Tiếng Việt | [English](./README.en.md)
 
 Một workflow GitHub Actions chạy mỗi sáng lúc 08:00 CST. Nó theo dõi hoạt động GitHub từ các công cụ AI CLI, OpenClaw và các dự án liên quan trong hệ sinh thái AI agent, thu thập tin tức và nghiên cứu chính thức từ Anthropic và OpenAI, đồng thời giám sát các repo AI trending trên GitHub hàng ngày — sau đó xuất bản bản tin hàng ngày đa ngôn ngữ dưới dạng GitHub Issues và các file Markdown được commit. Báo cáo tổng hợp hàng tuần và hàng tháng cũng được tạo tự động.
 
 ## Giao diện Web
 
-**[https://compasify.github.io/agents-radar](https://compasify.github.io/agents-radar)**
-
 Duyệt tất cả các bản tin lịch sử qua giao diện tối, sạch sẽ — không cần đăng nhập. Báo cáo được render từ các file Markdown trong repo này qua GitHub Pages.
 
 ## RSS Feed
 
-**[https://compasify.github.io/agents-radar/feed.xml](https://compasify.github.io/agents-radar/feed.xml)**
-
 Đăng ký qua bất kỳ RSS reader nào (Feedly, Reeder, NewsBlur, v.v.) để nhận bản tin mới tự động. Feed bao gồm 30 báo cáo mới nhất trên tất cả các loại, được cập nhật hàng ngày cùng với `manifest.json`.
 
-## MCP Server
-
-**`https://agents-radar-mcp.duanyytop.workers.dev`**
-
-Một [Model Context Protocol](https://modelcontextprotocol.io) server được host sẵn, cung cấp dữ liệu agents-radar dưới dạng các công cụ. Bất kỳ client nào tương thích MCP (Claude Desktop, OpenClaw, v.v.) đều có thể truy vấn các báo cáo hệ sinh thái AI mới nhất trực tiếp.
-
-**Các công cụ khả dụng:**
-
-| Công cụ        | Mô tả                                                     |
-| -------------- | --------------------------------------------------------- |
-| `list_reports` | Liệt kê các ngày và loại báo cáo có sẵn (N ngày gần nhất) |
-| `get_latest`   | Lấy báo cáo mới nhất của một loại nhất định               |
-| `get_report`   | Lấy báo cáo cụ thể theo ngày và loại                      |
-| `search`       | Tìm kiếm từ khóa trong các báo cáo gần đây                |
-
-**Cài đặt Claude Desktop** — thêm vào `~/Library/Application Support/Claude/claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "agents-radar": {
-      "url": "https://agents-radar-mcp.duanyytop.workers.dev"
-    }
-  }
-}
-```
-
-Khởi động lại Claude Desktop sau khi lưu. Bạn có thể hỏi Claude những câu như:
-
-- _"Có gì mới trong các công cụ AI CLI?"_ → gọi `get_latest`
-- _"Tìm kiếm các đề cập đến Claude Code tuần này"_ → gọi `search`
-- _"Cho tôi xem báo cáo AI trending ngày 2026-03-05"_ → gọi `get_report`
-
-**Cài đặt OpenClaw** — chạy lệnh sau:
-
-```bash
-openclaw mcp add --transport http agents-radar https://agents-radar-mcp.duanyytop.workers.dev
-```
-
-Hoặc thêm thủ công vào `~/.openclaw/openclaw.json`:
-
-```json
-{
-  "mcpServers": {
-    "agents-radar": {
-      "type": "http",
-      "url": "https://agents-radar-mcp.duanyytop.workers.dev"
-    }
-  }
-}
-```
-
-Bạn có thể hỏi OpenClaw những câu như:
-
-- _"Có gì mới trong các công cụ AI CLI?"_ → gọi `get_latest`
-- _"Tìm kiếm các đề cập đến Claude Code tuần này"_ → gọi `search`
-- _"Cho tôi xem báo cáo AI trending ngày 2026-03-05"_ → gọi `get_report`
-
-**Tự host** — triển khai instance của bạn từ thư mục `mcp/`:
-
-```bash
-cd mcp
-pnpm install
-wrangler deploy
-```
-
-## Kênh Telegram
-
-**[t.me/agents_radar](https://t.me/agents_radar)**
-
-Đăng ký để nhận thông báo bản tin hàng ngày trực tiếp trên Telegram. Mỗi tin nhắn liên kết đến tất cả báo cáo trong ngày (phiên bản ZH và EN) cùng với giao diện Web và RSS feed.
 
 ## Nguồn theo dõi
-
-### Công cụ AI CLI (GitHub)
-
-| Công cụ            | Repository                                                              |
-| ------------------ | ----------------------------------------------------------------------- |
-| Claude Code        | [anthropics/claude-code](https://github.com/anthropics/claude-code)     |
-| OpenAI Codex       | [openai/codex](https://github.com/openai/codex)                         |
-| Gemini CLI         | [google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) |
-| GitHub Copilot CLI | [github/copilot-cli](https://github.com/github/copilot-cli)             |
-| Kimi Code CLI      | [MoonshotAI/kimi-cli](https://github.com/MoonshotAI/kimi-cli)           |
-| OpenCode           | [anomalyco/opencode](https://github.com/anomalyco/opencode)             |
-| Qwen Code          | [QwenLM/qwen-code](https://github.com/QwenLM/qwen-code)                 |
-
-### Claude Code Skills (GitHub)
-
-| Nguồn              | Repository                                                |
-| ------------------ | --------------------------------------------------------- |
-| Claude Code Skills | [anthropics/skills](https://github.com/anthropics/skills) |
-
-PR và issue được lấy không có bộ lọc ngày và được sắp xếp theo mức độ phổ biến (số lượng comment), vì vậy báo cáo luôn phản ánh các skills được thảo luận nhiều nhất — không chỉ mới nhất.
 
 ### OpenClaw + Hệ sinh thái AI agent (GitHub)
 
