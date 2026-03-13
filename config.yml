@@ -29,6 +29,9 @@ openclaw_peers:
   - id: nanoclaw
     repo: qwibitai/nanoclaw
     name: NanoClaw
+  - id: nullclaw
+    repo: nullclaw/nullclaw
+    name: NullClaw
   - id: ironclaw
     repo: nearai/ironclaw
     name: IronClaw
