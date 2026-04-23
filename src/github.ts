@@ -73,9 +73,42 @@ function headers(): Record<string, string> {
 async function githubGet<T>(url: string, params: Record<string, string> = {}): Promise<T> {
   const u = new URL(url);
   for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v);
-  const resp = await fetch(u.toString(), { headers: headers() });
-  if (!resp.ok) throw new Error(`GitHub API error ${resp.status} (${url}): ${await resp.text()}`);
-  return resp.json() as Promise<T>;
+  
+  // Retry logic with exponential backoff
+  const maxRetries = 3;
+  let lastError: Error | null = null;
+  
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout
+      
+      const resp = await fetch(u.toString(), { 
+        headers: headers(),
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(`GitHub API error ${resp.status}: ${text}`);
+      }
+      
+      return resp.json() as Promise<T>;
+    } catch (err) {
+      lastError = err as Error;
+      const errMsg = err instanceof Error ? err.message : String(err);
+      
+      if (attempt < maxRetries - 1) {
+        const delay = Math.pow(2, attempt) * 2000; // 2s, 4s, 8s
+        console.log(`  Retry ${attempt + 1}/${maxRetries} after ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+  
+  throw lastError;
 }
 
 async function fetchItemPage(

@@ -76,20 +76,37 @@ async function fetchAllData(
   console.log(`  Tracking: ${allConfigs.map((r) => r.id).join(", ")}`);
 
   const [fetched, trendingData] = await Promise.all([
-    Promise.all(
-      allConfigs.map(async (cfg) => {
-        const [issuesRaw, prs, releases] = await Promise.all([
-          fetchRecentItems(cfg, "issues", since),
-          fetchRecentItems(cfg, "pulls", since),
-          fetchRecentReleases(cfg.repo, since),
-        ]);
-        const issues = issuesRaw.filter((i) => !i.pull_request);
-        console.log(
-          `  [${cfg.id}] issues: ${issues.length}, prs: ${prs.length}, releases: ${releases.length}`,
+    // Fetch repos sequentially in smaller batches to avoid overwhelming the connection
+    (async () => {
+      const results: RepoFetch[] = [];
+      const batchSize = 3; // Process 3 repos at a time
+      
+      for (let i = 0; i < allConfigs.length; i += batchSize) {
+        const batch = allConfigs.slice(i, i + batchSize);
+        const batchResults = await Promise.all(
+          batch.map(async (cfg) => {
+            const [issuesRaw, prs, releases] = await Promise.all([
+              fetchRecentItems(cfg, "issues", since),
+              fetchRecentItems(cfg, "pulls", since),
+              fetchRecentReleases(cfg.repo, since),
+            ]);
+            const issues = issuesRaw.filter((i) => !i.pull_request);
+            console.log(
+              `  [${cfg.id}] issues: ${issues.length}, prs: ${prs.length}, releases: ${releases.length}`,
+            );
+            return { cfg, issues, prs, releases };
+          }),
         );
-        return { cfg, issues, prs, releases };
-      }),
-    ),
+        results.push(...batchResults);
+        
+        // Small delay between batches
+        if (i + batchSize < allConfigs.length) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
+      
+      return results;
+    })(),
     fetchTrendingData().catch(
       (): TrendingData => ({
         trendingRepos: [],
