@@ -2,7 +2,7 @@
 
 ## [2.0.0] - 2026-04-22
 
-### 🎯 Thay đổi lớn
+### 🎯 Thay đổi từ mã nguồn ý tưởng
 
 #### Đơn giản hóa nguồn dữ liệu
 - ❌ **Đã xóa**: CLI tools tracking (Claude Code, Codex, Gemini CLI, etc.)
