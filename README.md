@@ -1,0 +1,475 @@
+# agents-radar
+
+[English](./README.en.md) | Tiếng Việt
+
+Một workflow GitHub Actions chạy hàng ngày để theo dõi và tạo báo cáo về:
+1. **Hệ sinh thái OpenClaw** và các dự án AI agent tương tự
+2. **AI nhúng**: Orange Pi, RKLLM, RKNPU và các dự án liên quan
+
+Báo cáo được tạo tự động bằng LLM (chạy local), lưu dưới dạng Markdown và xuất bản qua GitHub Pages.
+
+## 🌐 Giao diện Web
+
+**[https://thanhtantran.github.io/agents-radar](https://thanhtantran.github.io/agents-radar)**
+
+Duyệt tất cả các bản tin lịch sử qua giao diện tối, sạch sẽ — không cần đăng nhập. Báo cáo được render từ các file Markdown trong repo này qua GitHub Pages.
+
+## 📡 RSS Feed
+
+**[https://thanhtantran.github.io/agents-radar/feed.xml](https://thanhtantran.github.io/agents-radar/feed.xml)**
+
+Đăng ký qua bất kỳ RSS reader nào (Feedly, Reeder, NewsBlur, v.v.) để nhận bản tin mới tự động.
+
+## 📊 Nguồn theo dõi
+
+### 1. Hệ sinh thái OpenClaw & AI Agents
+
+OpenClaw được theo dõi như dự án tham chiếu chính. Các dự án liên quan trong lĩnh vực AI agent được theo dõi cùng để so sánh đa hệ sinh thái.
+
+| Dự án     | Repository                                                              | Mô tả |
+| --------- | ----------------------------------------------------------------------- | ----- |
+| OpenClaw  | [openclaw/openclaw](https://github.com/openclaw/openclaw)               | Dự án AI agent chính |
+| NanoBot   | [HKUDS/nanobot](https://github.com/HKUDS/nanobot)                       | AI agent framework |
+| Zeroclaw  | [zeroclaw-labs/zeroclaw](https://github.com/zeroclaw-labs/zeroclaw)     | Alternative agent |
+| PicoClaw  | [sipeed/picoclaw](https://github.com/sipeed/picoclaw)                   | Lightweight agent |
+| NanoClaw  | [qwibitai/nanoclaw](https://github.com/qwibitai/nanoclaw)               | Nano-scale agent |
+| IronClaw  | [nearai/ironclaw](https://github.com/nearai/ironclaw)                   | Robust agent |
+| LobsterAI | [netease-youdao/LobsterAI](https://github.com/netease-youdao/LobsterAI) | Youdao's agent |
+| TinyClaw  | [TinyAGI/tinyclaw](https://github.com/TinyAGI/tinyclaw)                 | Tiny agent |
+| CoPaw     | [agentscope-ai/CoPaw](https://github.com/agentscope-ai/CoPaw)           | Collaborative agent |
+| ZeptoClaw | [qhkm/zeptoclaw](https://github.com/qhkm/zeptoclaw)                     | Minimal agent |
+| EasyClaw  | [gaoyangz77/easyclaw](https://github.com/gaoyangz77/easyclaw)           | Easy-to-use agent |
+
+### 2. AI Nhúng (Orange Pi / RKLLM / RKNPU)
+
+Theo dõi các dự án liên quan đến AI trên phần cứng nhúng, đặc biệt là nền tảng Rockchip NPU.
+
+| Dự án              | Repository                                                                    | Mô tả |
+| ------------------ | ----------------------------------------------------------------------------- | ----- |
+| Orange Pi Build    | [orangepi-xunlong/orangepi-build](https://github.com/orangepi-xunlong/orangepi-build) | Hệ thống build cho Orange Pi |
+| RKNN Toolkit 2     | [rockchip-linux/rknn-toolkit2](https://github.com/rockchip-linux/rknn-toolkit2) | Toolkit cho Rockchip NPU |
+| RKNPU2             | [rockchip-linux/rknpu2](https://github.com/rockchip-linux/rknpu2)            | Driver và runtime cho NPU |
+
+### 3. GitHub Trending
+
+Hai nguồn dữ liệu được lấy song song mỗi ngày:
+
+| Nguồn                                                          | Chi tiết                                                                                                                                               |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [github.com/trending](https://github.com/trending?since=daily) | Các repo trending hôm nay — phân tích cú pháp từ HTML; bao gồm số star mới trong ngày                                                                  |
+| GitHub Search API                                              | Các repo hoạt động trong 7 ngày gần nhất khớp với các chủ đề: `llm`, `ai-agent`, `rag`, `orangepi`, `rkllm`, `rknpu` |
+
+LLM phân loại các repo theo chiều (AI Infrastructure / Agents / Applications / Models / RAG / Embedded AI) và trích xuất các tín hiệu xu hướng.
+
+## ✨ Tính năng
+
+- ✅ Lấy issues, pull requests và releases được cập nhật trong 24 giờ qua
+- ✅ Tạo tóm tắt chi tiết cho từng dự án
+- ✅ Phân tích so sánh đa dự án trong hệ sinh thái
+- ✅ Theo dõi GitHub Trending hàng ngày với phân loại thông minh
+- ✅ Tìm kiếm repo theo chủ đề (AI agents, embedded AI, NPU)
+- ✅ Xuất bản GitHub Issues cho mỗi loại báo cáo
+- ✅ Commit các file Markdown vào `digests/YYYY-MM-DD/`
+- ✅ Chạy theo lịch hàng ngày qua GitHub Actions
+- ✅ Hỗ trợ LLM local (không cần API key)
+- ✅ Thông báo qua Telegram (tùy chọn)
+- ✅ Cấu hình linh hoạt qua `config.yml`
+
+## 🚀 Cài đặt
+
+### 1. Fork repository này
+
+### 2. Tùy chỉnh `config.yml` (tùy chọn)
+
+Chỉnh sửa `config.yml` ở thư mục gốc của repo để thêm, xóa hoặc thay thế các repository theo dõi:
+
+```yaml
+# Thêm dự án AI agent mới
+openclaw_peers:
+  - id: my-agent
+    repo: owner/my-agent
+    name: My Agent
+
+# Thêm dự án embedded AI mới
+embedded_ai_repos:
+  - id: my-board
+    repo: owner/my-board
+    name: My AI Board
+```
+
+### 3. Cấu hình LLM Local
+
+Hệ thống sử dụng LLM local qua OpenAI-compatible API. Bạn có thể sử dụng:
+
+- **Ollama**: `http://localhost:11434/v1`
+- **LM Studio**: `http://localhost:1234/v1`
+- **vLLM**: `http://localhost:8000/v1`
+- **Text Generation WebUI**: `http://localhost:5000/v1`
+- **Hoặc bất kỳ server nào tương thích OpenAI API**
+
+**Khuyến nghị model**: 
+- Qwen2.5 7B/14B/32B
+- Llama 3.1 8B/70B
+- Mistral 7B/22B
+- Hoặc bất kỳ model nào hỗ trợ tiếng Việt tốt
+
+### 4. Thêm Secrets và Variables
+
+Vào **Settings → Secrets and variables → Actions** và thêm:
+
+#### **Secrets** (giá trị nhạy cảm):
+
+| Secret               | Bắt buộc | Mô tả                                                                                                                  |
+| -------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `GITHUB_TOKEN`       | ✅ Có    | Token tự động được cung cấp bởi GitHub Actions                                                                         |
+| `TELEGRAM_BOT_TOKEN` | ❌ Không | Token bot Telegram từ [@BotFather](https://t.me/BotFather). Nếu được đặt, tin nhắn sẽ được gửi sau mỗi lần chạy digest |
+| `TELEGRAM_CHAT_ID`   | ❌ Không | ID chat/channel/group Telegram để gửi thông báo                                                                        |
+
+#### **Variables** (không nhạy cảm, trong tab **Variables**):
+
+| Variable            | Mặc định                      | Mô tả                                                                                          |
+| ------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------- |
+| `OPENAI_BASE_URL`   | `http://localhost:20128/v1`   | Địa chỉ LLM local của bạn                                                                      |
+| `OPENAI_MODEL`      | `gpt-4o`                      | Tên model (tùy thuộc vào LLM server của bạn)                                                   |
+| `DIGEST_REPO`       | `thanhtantran/agents-radar`   | Repository để tạo GitHub Issues (format: `owner/repo`)                                         |
+
+**Cài đặt thông báo Telegram** (tùy chọn):
+
+1. Nhắn tin cho [@BotFather](https://t.me/BotFather) trên Telegram, tạo bot và sao chép token
+2. Thêm bot vào channel/group của bạn, hoặc bắt đầu DM với nó
+3. Lấy chat ID qua [@userinfobot](https://t.me/userinfobot) hoặc API [getUpdates](https://core.telegram.org/bots/api#getupdates)
+4. Thêm `TELEGRAM_BOT_TOKEN` và `TELEGRAM_CHAT_ID` làm repository secrets
+
+### 5. Bật workflow
+
+**Lưu ý quan trọng**: Vì hệ thống sử dụng LLM local, bạn có 2 lựa chọn:
+
+#### Option A: Chạy local với Cronjob (Khuyến nghị)
+
+Đây là cách đơn giản nhất vì LLM đã chạy trên máy của bạn:
+
+1. Setup cronjob để chạy tự động mỗi ngày
+2. Script sẽ tự động commit và push lên GitHub
+3. GitHub Pages sẽ tự động deploy
+
+Xem hướng dẫn: [docs/CRONJOB-SETUP.md](./docs/CRONJOB-SETUP.md)
+
+#### Option B: Sử dụng GitHub Actions (Cần setup thêm)
+
+Nếu muốn dùng GitHub Actions, bạn cần:
+
+1. Host LLM server public (qua ngrok, cloudflare tunnel, v.v.)
+2. Hoặc sử dụng cloud LLM (OpenAI, Anthropic, v.v.)
+3. Cập nhật `OPENAI_BASE_URL` trong GitHub secrets
+
+**Không khuyến nghị** vì phức tạp và tốn chi phí.
+
+### 6. Kiểm tra
+
+Để kiểm tra ngay lập tức:
+
+**Local:**
+```bash
+./scripts/run-daily.sh  # Linux/macOS
+scripts\run-daily.bat   # Windows
+```
+
+**GitHub Actions** (nếu đã setup):
+Vào **Actions → Daily Agents Radar → Run workflow**.
+
+## 💻 Chạy cục bộ
+
+### Yêu cầu
+
+- Node.js 18+
+- pnpm (hoặc npm/yarn)
+- LLM server đang chạy local (Ollama, LM Studio, v.v.)
+
+### Cài đặt
+
+```bash
+# Clone repo
+git clone https://github.com/thanhtantran/agents-radar.git
+cd agents-radar
+
+# Cài đặt dependencies
+pnpm install
+```
+
+### Cấu hình
+
+Tạo file `.env` hoặc export các biến môi trường:
+
+```bash
+# GitHub token (bắt buộc)
+export GITHUB_TOKEN=ghp_xxxxx
+
+# LLM local endpoint
+export OPENAI_BASE_URL=http://localhost:11434/v1  # Ollama
+export OPENAI_MODEL=qwen2.5:14b                    # Model name
+
+# Repository để tạo issues (tùy chọn)
+export DIGEST_REPO=thanhtantran/agents-radar
+
+# Telegram (tùy chọn)
+export TELEGRAM_BOT_TOKEN=123456:ABC-DEF...
+export TELEGRAM_CHAT_ID=@your_channel
+```
+
+### Chạy thủ công
+
+```bash
+# Tạo báo cáo hàng ngày
+pnpm start
+
+# Tạo manifest và RSS feed
+pnpm manifest
+
+# Gửi thông báo Telegram
+pnpm notify
+```
+
+### Tự động hóa với Cronjob
+
+Để chạy tự động mỗi ngày lúc 9h sáng:
+
+**Linux/macOS:**
+```bash
+# Cấp quyền thực thi
+chmod +x scripts/run-daily.sh
+
+# Test script
+./scripts/run-daily.sh
+
+# Thêm vào crontab
+crontab -e
+
+# Thêm dòng này (chạy lúc 9h sáng mỗi ngày)
+0 9 * * * cd /path/to/agents-radar && ./scripts/run-daily.sh
+```
+
+**Windows:**
+```cmd
+# Test script
+scripts\run-daily.bat
+
+# Sau đó setup Task Scheduler:
+# 1. Mở Task Scheduler
+# 2. Create Task
+# 3. Trigger: Daily at 9:00 AM
+# 4. Action: Start scripts\run-daily.bat
+```
+
+Xem hướng dẫn chi tiết: [docs/CRONJOB-SETUP.md](./docs/CRONJOB-SETUP.md)
+
+## 📁 Định dạng đầu ra
+
+Các file được ghi vào `digests/YYYY-MM-DD/`:
+
+| File                  | Nội dung                                                                                                 | GitHub Issue Label |
+| --------------------- | -------------------------------------------------------------------------------------------------------- | ------------------ |
+| `ai-agents-vi.md`     | Báo cáo chuyên sâu OpenClaw + so sánh đa hệ sinh thái + chi tiết các dự án liên quan                    | `openclaw`         |
+| `ai-embedded-vi.md`   | Báo cáo về Orange Pi, RKLLM, RKNPU và các dự án AI nhúng                                                | `embedded`         |
+| `ai-trending-vi.md`   | Báo cáo GitHub AI trending — repo được phân loại theo chiều + tín hiệu xu hướng (chỉ ghi khi có dữ liệu) | `trending`         |
+
+### Cấu trúc `ai-agents-vi.md`:
+
+```markdown
+# Bản tin Hệ sinh thái OpenClaw YYYY-MM-DD
+
+> Issues: N | PRs: N | Dự án: N | Thời gian tạo: UTC
+
+## Phân tích sâu OpenClaw
+  Tóm tắt hôm nay / Releases / Tiến độ dự án / Điểm nổi bật cộng đồng /
+  Ổn định & Bugs / Yêu cầu tính năng / Phản hồi người dùng / Backlog
+
+## So sánh hệ sinh thái chéo
+  Tổng quan / Bảng so sánh hoạt động / Vị thế OpenClaw /
+  Hướng kỹ thuật chung / Điểm khác biệt / Mức độ trưởng thành / Tín hiệu xu hướng
+
+## Báo cáo các dự án cùng nhóm
+  <details> Zeroclaw   — Tóm tắt / Releases / Tiến độ / ...
+  <details> EasyClaw   — ...
+  <details> LobsterAI  — ...
+  ...
+```
+
+### Cấu trúc `ai-embedded-vi.md`:
+
+```markdown
+# Bản tin AI Nhúng (Orange Pi / RKLLM / RKNPU) YYYY-MM-DD
+
+> Thời gian tạo: UTC | Dự án: N
+
+## So sánh chéo
+  Tổng quan hệ sinh thái / Bảng so sánh / Tích hợp phần cứng-phần mềm /
+  Hiệu năng NPU / Developer Experience / Use Cases / Xu hướng
+
+## Báo cáo chi tiết từng dự án
+  <details> Orange Pi Build System — Tóm tắt / Cập nhật phần cứng / ...
+  <details> RKNN Toolkit 2 — ...
+  <details> RKNPU2 — ...
+```
+
+### Cấu trúc `ai-trending-vi.md`:
+
+```markdown
+# Xu hướng AI Mã nguồn mở YYYY-MM-DD
+
+> Nguồn: GitHub Trending + GitHub Search API
+
+## Tóm tắt hôm nay
+
+## Top repos theo chiều
+  🤖 AI Agents          — agent frameworks / multi-agent / automation
+  🔧 AI Infrastructure  — frameworks / SDKs / inference engines / CLIs
+  🧠 Models & Training  — model weights / training frameworks / fine-tuning
+  📦 AI Applications    — vertical products / solutions
+  🔍 RAG & Knowledge    — vector databases / retrieval augmentation
+  🔌 Embedded AI        — NPU / edge AI / Orange Pi / RKLLM / RKNPU
+
+## Phân tích tín hiệu xu hướng
+
+## Tâm điểm cộng đồng
+```
+
+Các bản tin lịch sử được lưu trong [`digests/`](./digests/). Issues đã xuất bản được gắn thẻ theo loại: [`openclaw`](../../issues?label=openclaw) · [`embedded`](../../issues?label=embedded) · [`trending`](../../issues?label=trending).
+
+## ⏰ Lịch chạy
+
+### Cronjob (Local - Khuyến nghị)
+
+```bash
+# Chạy lúc 9h sáng mỗi ngày
+0 9 * * * cd /path/to/agents-radar && ./scripts/run-daily.sh
+```
+
+Xem hướng dẫn setup: [docs/CRONJOB-SETUP.md](./docs/CRONJOB-SETUP.md)
+
+### GitHub Actions (Nếu sử dụng)
+
+| Workflow          | Cron        | UTC             | CST             |
+| ----------------- | ----------- | --------------- | --------------- |
+| Bản tin hàng ngày | `0 0 * * *` | 00:00 hàng ngày | 08:00 hàng ngày |
+
+Để thay đổi lịch, chỉnh sửa biểu thức cron trong file workflow `.github/workflows/daily.yml`.
+
+## 🛠️ Kiến trúc kỹ thuật
+
+### Tech Stack
+
+- **Runtime**: Node.js + TypeScript
+- **Package Manager**: pnpm
+- **LLM**: OpenAI-compatible API (local)
+- **APIs**: GitHub REST API
+- **Deployment**: GitHub Actions + GitHub Pages
+
+### Quy trình hoạt động
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    GitHub Actions (Daily)                    │
+└─────────────────────────────────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│              1. Thu thập dữ liệu (Parallel)                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │ GitHub Repos │  │   Trending   │  │ Search API   │      │
+│  │ Issues/PRs   │  │   (HTML)     │  │  (6 topics)  │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+└─────────────────────────────────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│              2. Xử lý với LLM (Local)                        │
+│  • Tóm tắt từng repo (OpenClaw, peers, embedded AI)         │
+│  • So sánh chéo giữa các dự án                               │
+│  • Phân loại trending repos theo chiều                       │
+│  • Phân tích xu hướng và insights                            │
+└─────────────────────────────────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│              3. Tạo báo cáo (Markdown)                       │
+│  • ai-agents-vi.md    (OpenClaw ecosystem)                  │
+│  • ai-embedded-vi.md  (Orange Pi / RKLLM / RKNPU)           │
+│  • ai-trending-vi.md  (GitHub trending analysis)            │
+└─────────────────────────────────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│              4. Xuất bản                                     │
+│  • Commit files → digests/YYYY-MM-DD/                       │
+│  • Create GitHub Issues (với labels)                        │
+│  • Update manifest.json + feed.xml                          │
+│  • Deploy to GitHub Pages                                   │
+│  • Send Telegram notification (optional)                    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 🔧 Tùy chỉnh nâng cao
+
+### Thêm repository mới
+
+Chỉnh sửa `config.yml`:
+
+```yaml
+openclaw_peers:
+  - id: my-new-agent
+    repo: owner/repo-name
+    name: My New Agent
+    paginated: true  # Bật nếu repo có nhiều hoạt động
+
+embedded_ai_repos:
+  - id: my-board
+    repo: owner/board-repo
+    name: My AI Board
+```
+
+### Thay đổi giới hạn sampling
+
+Chỉnh sửa `src/prompts-new.ts`:
+
+```typescript
+const ISSUE_LIMIT = 50;  // Số issues tối đa
+const PR_LIMIT = 30;     // Số PRs tối đa
+```
+
+### Tùy chỉnh prompt
+
+Các prompt template nằm trong `src/prompts-new.ts`. Bạn có thể chỉnh sửa để thay đổi:
+- Cấu trúc báo cáo
+- Ngôn ngữ và tone
+- Các phần phân tích
+- Độ chi tiết
+
+### Thêm nguồn dữ liệu mới
+
+1. Tạo module fetch trong `src/` (ví dụ: `src/my-source.ts`)
+2. Thêm vào `fetchAllData()` trong `src/index.ts`
+3. Tạo prompt builder trong `src/prompts-new.ts`
+4. Thêm report builder và saver
+
+## 🤝 Đóng góp
+
+Contributions, issues và feature requests đều được chào đón!
+
+1. Fork repo
+2. Tạo branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
+
+## 📝 License
+
+MIT License - xem file [LICENSE](LICENSE) để biết thêm chi tiết.
+
+## 🙏 Credits
+
+- Dựa trên ý tưởng từ [compasify/agents-radar](https://github.com/compasify/agents-radar)
+- Được tùy chỉnh để tập trung vào OpenClaw ecosystem và embedded AI
+
+## 📧 Liên hệ
+
+Nếu bạn có câu hỏi hoặc đề xuất, vui lòng tạo issue hoặc liên hệ qua GitHub.
+
+---
+
+**⭐ Nếu project này hữu ích, hãy cho một star!**

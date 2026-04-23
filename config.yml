@@ -1,0 +1,69 @@
+# agents-radar configuration
+# Edit this file to customize which repositories are tracked.
+# Changes take effect on the next workflow run.
+
+# ── OpenClaw (primary focus project) ─────────────────────────────────────────
+# Tracked with a dedicated deep-dive report. Set paginated: true for high-volume repos.
+
+openclaw:
+  id: openclaw
+  repo: openclaw/openclaw
+  name: OpenClaw
+  paginated: true
+
+# ── OpenClaw peer projects ────────────────────────────────────────────────────
+# Tracked alongside OpenClaw for cross-ecosystem comparison.
+
+openclaw_peers:
+  - id: nanobot
+    repo: HKUDS/nanobot
+    name: NanoBot
+    paginated: true
+  - id: zeroclaw
+    repo: zeroclaw-labs/zeroclaw
+    name: Zeroclaw
+  - id: picoclaw
+    repo: sipeed/picoclaw
+    name: PicoClaw
+    paginated: true
+  - id: nanoclaw
+    repo: qwibitai/nanoclaw
+    name: NanoClaw
+  - id: nullclaw
+    repo: nullclaw/nullclaw
+    name: NullClaw
+  - id: ironclaw
+    repo: nearai/ironclaw
+    name: IronClaw
+  - id: lobsterai
+    repo: netease-youdao/LobsterAI
+    name: LobsterAI
+  - id: tinyclaw
+    repo: TinyAGI/tinyclaw
+    name: TinyClaw
+  - id: moltis
+    repo: moltis-org/moltis
+    name: Moltis
+  - id: copaw
+    repo: agentscope-ai/CoPaw
+    name: CoPaw
+  - id: zeptoclaw
+    repo: qhkm/zeptoclaw
+    name: ZeptoClaw
+  - id: easyclaw
+    repo: gaoyangz77/easyclaw
+    name: EasyClaw
+
+# ── Orange Pi / RKLLM / RKNPU projects ────────────────────────────────────────
+# Tracked for embedded AI and NPU-related developments.
+
+embedded_ai_repos:
+  - id: orangepi-5
+    repo: orangepi-xunlong/orangepi-build
+    name: Orange Pi Build System
+  - id: rknn-toolkit
+    repo: rockchip-linux/rknn-toolkit2
+    name: RKNN Toolkit 2
+  - id: rknpu2
+    repo: rockchip-linux/rknpu2
+    name: RKNPU2

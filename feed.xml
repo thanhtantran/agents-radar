@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>agents-radar</title>
+    <link>https://compasify.github.io/agents-radar</link>
+    <description>AI 开源生态每日简报 · Daily AI ecosystem digest</description>
+    <language>zh-CN</language>
+    <atom:link href="https://compasify.github.io/agents-radar/feed.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Fri, 13 Mar 2026 02:03:08 +0000</lastBuildDate>
+    <item>
+      <title>Bản tin Công cụ AI CLI 2026-03-13</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-13/ai-cli-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-13/ai-cli-vi</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Công cụ AI CLI 2026-03-13</description>
+    </item>
+    <item>
+      <title>Bản tin Hệ sinh thái AI Agents 2026-03-13</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-13/ai-agents-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-13/ai-agents-vi</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Hệ sinh thái AI Agents 2026-03-13</description>
+    </item>
+    <item>
+      <title>Báo cáo Nội dung AI Chính thức 2026-03-13</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-13/ai-web-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-13/ai-web-vi</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Báo cáo Nội dung AI Chính thức 2026-03-13</description>
+    </item>
+    <item>
+      <title>Xu hướng AI Mã nguồn mở 2026-03-13</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-13/ai-trending-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-13/ai-trending-vi</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Xu hướng AI Mã nguồn mở 2026-03-13</description>
+    </item>
+    <item>
+      <title>Bản tin Cộng đồng AI Hacker News 2026-03-13</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-13/ai-hn-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-13/ai-hn-vi</guid>
+      <pubDate>Fri, 13 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Cộng đồng AI Hacker News 2026-03-13</description>
+    </item>
+    <item>
+      <title>Bản tin Công cụ AI CLI 2026-03-12</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-12/ai-cli-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-12/ai-cli-vi</guid>
+      <pubDate>Thu, 12 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Công cụ AI CLI 2026-03-12</description>
+    </item>
+    <item>
+      <title>Bản tin Hệ sinh thái AI Agents 2026-03-12</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-12/ai-agents-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-12/ai-agents-vi</guid>
+      <pubDate>Thu, 12 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Hệ sinh thái AI Agents 2026-03-12</description>
+    </item>
+    <item>
+      <title>Báo cáo Nội dung AI Chính thức 2026-03-12</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-12/ai-web-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-12/ai-web-vi</guid>
+      <pubDate>Thu, 12 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Báo cáo Nội dung AI Chính thức 2026-03-12</description>
+    </item>
+    <item>
+      <title>Xu hướng AI Mã nguồn mở 2026-03-12</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-12/ai-trending-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-12/ai-trending-vi</guid>
+      <pubDate>Thu, 12 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Xu hướng AI Mã nguồn mở 2026-03-12</description>
+    </item>
+    <item>
+      <title>Bản tin Cộng đồng AI Hacker News 2026-03-12</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-12/ai-hn-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-12/ai-hn-vi</guid>
+      <pubDate>Thu, 12 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Cộng đồng AI Hacker News 2026-03-12</description>
+    </item>
+    <item>
+      <title>Bản tin Công cụ AI CLI 2026-03-11</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-11/ai-cli-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-11/ai-cli-vi</guid>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Công cụ AI CLI 2026-03-11</description>
+    </item>
+    <item>
+      <title>Bản tin Hệ sinh thái AI Agents 2026-03-11</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-11/ai-agents-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-11/ai-agents-vi</guid>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Hệ sinh thái AI Agents 2026-03-11</description>
+    </item>
+    <item>
+      <title>Báo cáo Nội dung AI Chính thức 2026-03-11</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-11/ai-web-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-11/ai-web-vi</guid>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Báo cáo Nội dung AI Chính thức 2026-03-11</description>
+    </item>
+    <item>
+      <title>Xu hướng AI Mã nguồn mở 2026-03-11</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-11/ai-trending-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-11/ai-trending-vi</guid>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Xu hướng AI Mã nguồn mở 2026-03-11</description>
+    </item>
+    <item>
+      <title>Bản tin Cộng đồng AI Hacker News 2026-03-11</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-11/ai-hn-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-11/ai-hn-vi</guid>
+      <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Cộng đồng AI Hacker News 2026-03-11</description>
+    </item>
+    <item>
+      <title>Bản tin Công cụ AI CLI 2026-03-10</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-10/ai-cli-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-10/ai-cli-vi</guid>
+      <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Công cụ AI CLI 2026-03-10</description>
+    </item>
+    <item>
+      <title>Bản tin Hệ sinh thái AI Agents 2026-03-10</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-10/ai-agents-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-10/ai-agents-vi</guid>
+      <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Hệ sinh thái AI Agents 2026-03-10</description>
+    </item>
+    <item>
+      <title>Báo cáo Nội dung AI Chính thức 2026-03-10</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-10/ai-web-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-10/ai-web-vi</guid>
+      <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Báo cáo Nội dung AI Chính thức 2026-03-10</description>
+    </item>
+    <item>
+      <title>Xu hướng AI Mã nguồn mở 2026-03-10</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-10/ai-trending-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-10/ai-trending-vi</guid>
+      <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Xu hướng AI Mã nguồn mở 2026-03-10</description>
+    </item>
+    <item>
+      <title>Bản tin Cộng đồng AI Hacker News 2026-03-10</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-10/ai-hn-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-10/ai-hn-vi</guid>
+      <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Cộng đồng AI Hacker News 2026-03-10</description>
+    </item>
+    <item>
+      <title>Bản tin Công cụ AI CLI 2026-03-09</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-09/ai-cli-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-09/ai-cli-vi</guid>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Công cụ AI CLI 2026-03-09</description>
+    </item>
+    <item>
+      <title>Bản tin Hệ sinh thái AI Agents 2026-03-09</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-09/ai-agents-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-09/ai-agents-vi</guid>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Hệ sinh thái AI Agents 2026-03-09</description>
+    </item>
+    <item>
+      <title>Báo cáo Nội dung AI Chính thức 2026-03-09</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-09/ai-web-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-09/ai-web-vi</guid>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Báo cáo Nội dung AI Chính thức 2026-03-09</description>
+    </item>
+    <item>
+      <title>Xu hướng AI Mã nguồn mở 2026-03-09</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-09/ai-trending-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-09/ai-trending-vi</guid>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Xu hướng AI Mã nguồn mở 2026-03-09</description>
+    </item>
+    <item>
+      <title>Bản tin Cộng đồng AI Hacker News 2026-03-09</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-09/ai-hn-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-09/ai-hn-vi</guid>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Cộng đồng AI Hacker News 2026-03-09</description>
+    </item>
+    <item>
+      <title>Bản tin Tuần AI 2026-03-09</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-09/ai-weekly-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-09/ai-weekly-vi</guid>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Tuần AI 2026-03-09</description>
+    </item>
+    <item>
+      <title>Bản tin Công cụ AI CLI 2026-03-08</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-08/ai-cli-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-08/ai-cli-vi</guid>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Công cụ AI CLI 2026-03-08</description>
+    </item>
+    <item>
+      <title>Bản tin Hệ sinh thái AI Agents 2026-03-08</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-08/ai-agents-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-08/ai-agents-vi</guid>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Bản tin Hệ sinh thái AI Agents 2026-03-08</description>
+    </item>
+    <item>
+      <title>Báo cáo Nội dung AI Chính thức 2026-03-08</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-08/ai-web-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-08/ai-web-vi</guid>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Báo cáo Nội dung AI Chính thức 2026-03-08</description>
+    </item>
+    <item>
+      <title>Xu hướng AI Mã nguồn mở 2026-03-08</title>
+      <link>https://compasify.github.io/agents-radar/#2026-03-08/ai-trending-vi</link>
+      <guid isPermaLink="true">https://compasify.github.io/agents-radar/#2026-03-08/ai-trending-vi</guid>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Xu hướng AI Mã nguồn mở 2026-03-08</description>
+    </item>
+  </channel>
+</rss>
