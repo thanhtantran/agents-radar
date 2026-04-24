@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="vi" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -133,17 +133,6 @@
     }
     .rpt-btn:hover { background: var(--bg-hover); color: var(--text); }
     .rpt-btn.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-bg); }
-    .rpt-row { display: flex; align-items: center; padding: 5px 14px 5px 26px; }
-    .rpt-label { flex: 1; font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .lang-btns { display: flex; gap: 3px; flex-shrink: 0; }
-    .lang-btn {
-      background: none; border: 1px solid var(--dim); color: var(--dim);
-      padding: 1px 5px; border-radius: 3px; cursor: pointer;
-      font-family: inherit; font-size: 9px; letter-spacing: 0.06em;
-      transition: border-color 0.1s, color 0.1s;
-    }
-    .lang-btn:hover { border-color: var(--muted); color: var(--muted); }
-    .lang-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
 
     /* ── Content ── */
     #cwrap { flex: 1; overflow-y: auto; }
@@ -284,21 +273,9 @@ function renderMarkdown(raw) {
 }
 
 const LABELS = {
-  'ai-cli':          'Công cụ AI CLI',
-  'ai-cli-en':       'AI CLI Tools',
-  'ai-cli-vi':       'Công cụ AI CLI',
-  'ai-agents':       'Hệ sinh thái AI Agents',
-  'ai-agents-en':    'AI Agents Ecosystem',
-  'ai-agents-vi':    'Hệ sinh thái AI Agents',
-  'ai-web':          'Cập nhật OpenAI & Anthropic',
-  'ai-web-en':       'OpenAI & Anthropic Updates',
-  'ai-web-vi':       'Cập nhật OpenAI & Anthropic',
-  'ai-trending':     'Xu hướng AI GitHub',
-  'ai-trending-en':  'GitHub AI Trends',
+  'ai-agents-vi':    'Hệ sinh thái OpenClaw & AI Agents',
+  'ai-embedded-vi':  'AI Nhúng (Orange Pi, RKLLM, RKNPU)',
   'ai-trending-vi':  'Xu hướng AI GitHub',
-  'ai-hn':           'Cộng đồng HN',
-  'ai-hn-en':        'HN Community Digest',
-  'ai-hn-vi':        'Cộng đồng HN',
 };
 
 // ── Theme ──
@@ -415,10 +392,9 @@ async function loadReport(date, report, push = true) {
 
   // Sync sidebar
   document.querySelectorAll('.rpt-btn').forEach(b => b.classList.toggle('active', b.dataset.key === key));
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.key === key));
   document.querySelectorAll('.date-hdr').forEach(h => {
     const grp = h.closest('.date-group');
-    const hasActive = grp.querySelector('.rpt-btn.active') || grp.querySelector('.lang-btn.active');
+    const hasActive = grp.querySelector('.rpt-btn.active');
     h.classList.toggle('lit', !!hasActive);
   });
   document.querySelectorAll('.date-group').forEach(g => {
@@ -463,64 +439,14 @@ function buildNav(dates) {
     const list = document.createElement('div');
     list.className = 'rpt-list';
 
-    // Filter out -en and -vi reports from base list, process as groups
-    const baseReports = reports.filter(r => !r.endsWith('-en') && !r.endsWith('-vi'));
-    baseReports.forEach(r => {
-      const enKey = r + '-en';
-      const viKey = r + '-vi';
-      const hasEn = reports.includes(enKey);
-      const hasVi = reports.includes(viKey);
-
-      if (hasEn || hasVi) {
-        // Render as a row with label + language buttons
-        const row = document.createElement('div');
-        row.className = 'rpt-row';
-
-        const label = document.createElement('span');
-        label.className = 'rpt-label';
-        const baseLabel = LABELS[r] || r;
-        label.textContent = baseLabel;
-        label.title = baseLabel;
-
-        const btns = document.createElement('div');
-        btns.className = 'lang-btns';
-
-        const zhBtn = document.createElement('button');
-        zhBtn.className = 'lang-btn';
-        zhBtn.dataset.key = `${date}/${r}`;
-        zhBtn.textContent = 'ZH';
-        zhBtn.onclick = () => loadReport(date, r);
-        btns.append(zhBtn);
-
-        if (hasEn) {
-          const enBtn = document.createElement('button');
-          enBtn.className = 'lang-btn';
-          enBtn.dataset.key = `${date}/${enKey}`;
-          enBtn.textContent = 'EN';
-          enBtn.onclick = () => loadReport(date, enKey);
-          btns.append(enBtn);
-        }
-
-        if (hasVi) {
-          const viBtn = document.createElement('button');
-          viBtn.className = 'lang-btn';
-          viBtn.dataset.key = `${date}/${viKey}`;
-          viBtn.textContent = 'VI';
-          viBtn.onclick = () => loadReport(date, viKey);
-          btns.append(viBtn);
-        }
-
-        row.append(label, btns);
-        list.appendChild(row);
-      } else {
-        // No variants — render as single button
-        const btn = document.createElement('button');
-        btn.className = 'rpt-btn';
-        btn.dataset.key = `${date}/${r}`;
-        btn.textContent = LABELS[r] || r;
-        btn.onclick = () => loadReport(date, r);
-        list.appendChild(btn);
-      }
+    // All reports are Vietnamese-only, render as simple buttons
+    reports.forEach(r => {
+      const btn = document.createElement('button');
+      btn.className = 'rpt-btn';
+      btn.dataset.key = `${date}/${r}`;
+      btn.textContent = LABELS[r] || r;
+      btn.onclick = () => loadReport(date, r);
+      list.appendChild(btn);
     });
 
     grp.append(hdr, list);
@@ -549,9 +475,8 @@ window.addEventListener('popstate', () => {
     if (hash && dates.find(d => d.date === hash.date && d.reports.includes(hash.report))) {
       loadReport(hash.date, hash.report, false);
     } else if (first?.reports?.length) {
-      const r0 = first.reports.find(r => r.endsWith('-vi')) || first.reports[0];
-      history.replaceState(null, '', `#${first.date}/${r0}`);
-      loadReport(first.date, r0, false);
+      history.replaceState(null, '', `#${first.date}/${first.reports[0]}`);
+      loadReport(first.date, first.reports[0], false);
     }
   } catch (e) {
     document.getElementById('nav').innerHTML =

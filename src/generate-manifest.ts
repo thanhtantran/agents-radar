@@ -7,52 +7,16 @@ const FEED_PATH = "feed.xml";
 const SITE_URL = "https://thanhtantran.github.io/agents-radar";
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const REPORT_FILES = [
-  "ai-cli",
-  "ai-cli-en",
-  "ai-cli-vi",
-  "ai-agents",
-  "ai-agents-en",
   "ai-agents-vi",
-  "ai-web",
-  "ai-web-en",
-  "ai-web-vi",
-  "ai-trending",
-  "ai-trending-en",
+  "ai-embedded-vi",
   "ai-trending-vi",
-  "ai-hn",
-  "ai-hn-en",
-  "ai-hn-vi",
-  "ai-weekly",
-  "ai-weekly-en",
-  "ai-weekly-vi",
-  "ai-monthly",
-  "ai-monthly-en",
-  "ai-monthly-vi",
 ] as const;
 const MAX_FEED_ITEMS = 30;
 
 const REPORT_LABELS: Record<string, string> = {
-  "ai-cli": "AI CLI 工具社区动态日报",
-  "ai-cli-en": "AI CLI Tools Digest",
-  "ai-cli-vi": "Bản tin Công cụ AI CLI",
-  "ai-agents": "AI Agents 生态日报",
-  "ai-agents-en": "AI Agents Ecosystem Digest",
-  "ai-agents-vi": "Bản tin Hệ sinh thái AI Agents",
-  "ai-web": "AI 官方内容追踪报告",
-  "ai-web-en": "Official AI Content Report",
-  "ai-web-vi": "Báo cáo Nội dung AI Chính thức",
-  "ai-trending": "AI 开源趋势日报",
-  "ai-trending-en": "AI Open Source Trends",
-  "ai-trending-vi": "Xu hướng AI Mã nguồn mở",
-  "ai-hn": "Hacker News AI 社区动态日报",
-  "ai-hn-en": "Hacker News AI Community Digest",
-  "ai-hn-vi": "Bản tin Cộng đồng AI Hacker News",
-  "ai-weekly": "AI 工具生态周报",
-  "ai-weekly-en": "AI Tools Weekly Digest",
-  "ai-weekly-vi": "Bản tin Tuần AI",
-  "ai-monthly": "AI 工具生态月报",
-  "ai-monthly-en": "AI Tools Monthly Digest",
-  "ai-monthly-vi": "Bản tin Tháng AI",
+  "ai-agents-vi": "Hệ sinh thái OpenClaw & AI Agents",
+  "ai-embedded-vi": "AI Nhúng (Orange Pi, RKLLM, RKNPU)",
+  "ai-trending-vi": "Xu hướng AI GitHub",
 };
 
 interface DateEntry {
@@ -136,8 +100,8 @@ const feedXml =
   `  <channel>\n` +
   `    <title>agents-radar</title>\n` +
   `    <link>${SITE_URL}</link>\n` +
-  `    <description>AI 开源生态每日简报 · Daily AI ecosystem digest</description>\n` +
-  `    <language>zh-CN</language>\n` +
+  `    <description>Bản tin hàng ngày về AI Agents và AI Nhúng</description>\n` +
+  `    <language>vi</language>\n` +
   `    <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>\n` +
   `    <lastBuildDate>${buildDate}</lastBuildDate>\n` +
   itemsXml +
