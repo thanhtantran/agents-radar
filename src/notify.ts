@@ -16,9 +16,9 @@ const CHAT_ID = process.env["TELEGRAM_CHAT_ID"] || "@agents_radar";
 const PAGES_URL = (process.env["PAGES_URL"] ?? "https://thanhtantran.github.io/agents-radar").replace(/\/$/, "");
 
 const VI_LABELS: Record<string, string> = {
-  "ai-agents": "🦞 Hệ sinh thái OpenClaw",
-  "ai-embedded": "🔌 AI Nhúng",
-  "ai-trending": "📈 GitHub Trending",
+  "ai-agents-vi": "🦞 Hệ sinh thái OpenClaw & AI Agents",
+  "ai-embedded-vi": "🔌 AI Nhúng (Orange Pi, RKLLM, RKNPU)",
+  "ai-trending-vi": "📈 Xu hướng AI GitHub",
 };
 
 async function sendTelegram(text: string): Promise<void> {
@@ -40,24 +40,16 @@ async function sendTelegram(text: string): Promise<void> {
 }
 
 function buildMessage(date: string, reports: string[]): string {
-  const baseReports = reports.filter((r) => !r.endsWith("-en"));
-  const isWeekly = baseReports.includes("ai-weekly");
-  const isMonthly = baseReports.includes("ai-monthly");
+  const lines: string[] = [`📊 <b>Báo cáo AI mới · ${date}</b>\n`];
 
-  const icon = isMonthly ? "📆" : isWeekly ? "📅" : "📡";
-  const suffix = isMonthly ? " 月报" : isWeekly ? " 周报" : "";
-  const lines: string[] = [`${icon} <b>agents-radar${suffix} · ${date}</b>\n`];
-
-  // Daily reports only (no weekly/monthly)
-  const ordered = baseReports.filter((r) => !r.includes("weekly") && !r.includes("monthly"));
-
-  for (const r of ordered) {
+  // All reports are Vietnamese-only
+  for (const r of reports) {
     const viLabel = VI_LABELS[r] ?? r;
     const viUrl = `${PAGES_URL}/#${date}/${r}`;
-    lines.push(`• <a href="${viUrl}">${viLabel}</a>`);
+    lines.push(`✅ <a href="${viUrl}">${viLabel}</a>`);
   }
 
-  lines.push(`\n<a href="${PAGES_URL}">🌐 Web UI</a>  ·  <a href="${PAGES_URL}/feed.xml">⊕ RSS</a>`);
+  lines.push(`\n<a href="${PAGES_URL}">🌐 Xem tất cả</a>  ·  <a href="${PAGES_URL}/feed.xml">📡 RSS</a>`);
   return lines.join("\n");
 }
 

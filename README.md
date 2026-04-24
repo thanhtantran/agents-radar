@@ -113,38 +113,48 @@ Hệ thống sử dụng LLM local qua OpenAI-compatible API. Bạn có thể s�
 - Mistral 7B/22B
 - Hoặc bất kỳ model nào hỗ trợ tiếng Việt tốt
 
-### 4. Thêm Secrets và Variables
+### 4. Cấu hình file .env
 
-Vào **Settings → Secrets and variables → Actions** và thêm:
+Tạo file `.env` trong thư mục gốc của project (copy từ `.env.example`):
 
-#### **Secrets** (giá trị nhạy cảm):
+```bash
+cp .env.example .env
+```
 
-| Secret               | Bắt buộc | Mô tả                                                                                                                  |
-| -------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `GITHUB_TOKEN`       | ✅ Có    | Token tự động được cung cấp bởi GitHub Actions                                                                         |
-| `TELEGRAM_BOT_TOKEN` | ❌ Không | Token bot Telegram từ [@BotFather](https://t.me/BotFather). Nếu được đặt, tin nhắn sẽ được gửi sau mỗi lần chạy digest |
-| `TELEGRAM_CHAT_ID`   | ❌ Không | ID chat/channel/group Telegram để gửi thông báo                                                                        |
+Sau đó chỉnh sửa file `.env`:
 
-#### **Variables** (không nhạy cảm, trong tab **Variables**):
+```bash
+# GitHub Token (bắt buộc)
+GITHUB_TOKEN=ghp_your_github_token_here
 
-| Variable            | Mặc định                      | Mô tả                                                                                          |
-| ------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------- |
-| `OPENAI_BASE_URL`   | `http://localhost:20128/v1`   | Địa chỉ LLM local của bạn                                                                      |
-| `OPENAI_MODEL`      | `gpt-4o`                      | Tên model (tùy thuộc vào LLM server của bạn)                                                   |
-| `DIGEST_REPO`       | `thanhtantran/agents-radar`   | Repository để tạo GitHub Issues (format: `owner/repo`)                                         |
+# LLM Local Endpoint (bắt buộc)
+OPENAI_BASE_URL=http://localhost:20128/v1
+OPENAI_MODEL=qwen2.5:14b
+
+# Repository để tạo GitHub Issues (tùy chọn)
+DIGEST_REPO=thanhtantran/agents-radar
+
+# Telegram Notifications (tùy chọn - xem TELEGRAM-QUICKSTART.md)
+TELEGRAM_BOT_TOKEN=1234567890:ABCdefGHIjklMNOpqrsTUVwxyz
+TELEGRAM_CHAT_ID=123456789
+
+# GitHub Pages URL (tùy chọn)
+PAGES_URL=https://thanhtantran.github.io/agents-radar
+```
 
 **Cài đặt thông báo Telegram** (tùy chọn):
 
-1. Nhắn tin cho [@BotFather](https://t.me/BotFather) trên Telegram, tạo bot và sao chép token
-2. Thêm bot vào channel/group của bạn, hoặc bắt đầu DM với nó
-3. Lấy chat ID qua [@userinfobot](https://t.me/userinfobot) hoặc API [getUpdates](https://core.telegram.org/bots/api#getupdates)
-4. Thêm `TELEGRAM_BOT_TOKEN` và `TELEGRAM_CHAT_ID` làm repository secrets
+Xem hướng dẫn nhanh tại: **[TELEGRAM-QUICKSTART.md](./TELEGRAM-QUICKSTART.md)**
 
-### 5. Bật workflow
+Hoặc hướng dẫn chi tiết tại: **[docs/TELEGRAM-SETUP.md](./docs/TELEGRAM-SETUP.md)**
 
-**Lưu ý quan trọng**: Vì hệ thống sử dụng LLM local, bạn có 2 lựa chọn:
+Tóm tắt:
+1. Tạo bot qua [@BotFather](https://t.me/BotFather) → Lấy Bot Token
+2. Lấy Chat ID qua [@userinfobot](https://t.me/userinfobot)
+3. Thêm vào file `.env`
+4. Test: `pnpm notify`
 
-#### Option A: Chạy local với Cronjob (Khuyến nghị)
+### 5. Chạy local với Cronjob (Khuyến nghị)
 
 Đây là cách đơn giản nhất vì LLM đã chạy trên máy của bạn:
 
