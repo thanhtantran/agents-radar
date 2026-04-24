@@ -1,6 +1,6 @@
 # Bản tin AI Nhúng (Orange Pi / RKLLM / RKNPU) 2026-04-24
 
-> Thời gian tạo: 2026-04-24 01:03 UTC | Dự án: 3
+> Thời gian tạo: 2026-04-24 05:09 UTC | Dự án: 3
 
 - [Orange Pi Build System](https://github.com/orangepi-xunlong/orangepi-build)
 - [RKNN Toolkit 2](https://github.com/rockchip-linux/rknn-toolkit2)
@@ -11,762 +11,510 @@
 ## So sánh chéo
 
 # 🤖 Báo cáo So sánh Hệ sinh thái AI Edge - Rockchip/Orange Pi
-
-**Ngày phân tích:** 24/04/2026
-
----
-
-## 🌐 1. Tổng quan Hệ sinh thái
-
-### Bức tranh hiện tại
-
-Hệ sinh thái AI nhúng trên nền tảng Rockchip/Orange Pi đang trong giai đoạn **trưởng thành và ổn định**. Dựa trên dữ liệu hoạt động ngày 24/04/2026, chúng ta thấy:
-
-**🔴 Tình trạng hoạt động:**
-- **Orange Pi Build System**: Hoạt động nhẹ - 1 issue mới về kernel mainline
-- **RKNN Toolkit 2**: Im lặng hoàn toàn - không có hoạt động
-- **RKNPU2**: Im lặng hoàn toàn - không có hoạt động
-
-**📊 Phân tích xu hướng:**
-
-```
-Mức độ hoạt động:
-Orange Pi Build  ████░░░░░░ 40% (Trung bình)
-RKNN Toolkit 2   ░░░░░░░░░░  0% (Không hoạt động)
-RKNPU2           ░░░░░░░░░░  0% (Không hoạt động)
-```
-
-**💡 Nhận định:**
-
-Ngày 24/04/2026 cho thấy hệ sinh thái đang trong giai đoạn **ổn định sau phát triển**. Không có hoạt động trên các repo AI/NPU cho thấy:
-- ✅ Các công cụ AI đã đủ trưởng thành, ít bug nghiêm trọng
-- ✅ Developers đang tập trung vào deployment thay vì development
-- ⚠️ Có thể thiếu momentum cho tính năng mới
-- ⚠️ Community engagement thấp trong ngày quan sát
+**Ngày 24/04/2026**
 
 ---
 
-## 📊 2. Bảng So sánh Chi tiết
+## 1. 🌐 Tổng quan Hệ sinh thái
 
-### 2.1 Thông tin Cơ bản
+Hệ sinh thái AI nhúng trên nền tảng Rockchip/Orange Pi đang trong giai đoạn **chuyển mình quan trọng** - từ vendor-specific solutions sang hướng tích hợp mainline và chuẩn hóa.
+
+### Kiến trúc 3 tầng
+
+```
+┌─────────────────────────────────────────────────┐
+│  Orange Pi Build System (Hardware Platform)     │
+│  - Board support packages                       │
+│  - Kernel integration                           │
+│  - Firmware management                          │
+└─────────────────┬───────────────────────────────┘
+                  │
+┌─────────────────▼───────────────────────────────┐
+│  RKNN Toolkit 2 (AI Development Framework)      │
+│  - Model conversion & optimization              │
+│  - Quantization tools                           │
+│  - Simulation & profiling                       │
+└─────────────────┬───────────────────────────────┘
+                  │
+┌─────────────────▼───────────────────────────────┐
+│  RKNPU2 (Runtime & Driver Layer)                │
+│  - NPU hardware abstraction                     │
+│  - Inference engine                             │
+│  - Memory management                            │
+└─────────────────────────────────────────────────┘
+```
+
+### Tình trạng hiện tại (24/04/2026)
+
+**🟡 Giai đoạn chuyển tiếp:**
+- Orange Pi đang thử nghiệm kernel mainline (Linux 7.0-rc5)
+- RKNN Toolkit 2 và RKNPU2 không có cập nhật mới
+- Cộng đồng chủ động tìm kiếm giải pháp long-term support
+
+**Điểm mấu chốt:** Sự im lặng của RKNN/RKNPU có thể là dấu hiệu của việc tái cấu trúc để tương thích với mainline kernel.
+
+---
+
+## 2. 📊 Bảng So sánh Chi tiết
 
 | Tiêu chí | Orange Pi Build | RKNN Toolkit 2 | RKNPU2 |
 |----------|----------------|----------------|---------|
-| **Vai trò** | Build system & OS images | AI model conversion & optimization | NPU runtime & drivers |
-| **Target users** | System builders, OS developers | ML engineers, data scientists | Application developers |
-| **Ngôn ngữ chính** | Shell, Python | Python, C++ | C/C++ |
-| **Hoạt động 24h** | 1 issue | 0 | 0 |
-| **Mức độ quan trọng** | 🔴 Critical (Foundation) | 🟡 High (AI Pipeline) | 🟡 High (AI Runtime) |
+| **Vai trò** | Hardware platform & BSP | AI development framework | Runtime & driver |
+| **Hoạt động 24h** | 🟢 1 issue mới | 🔴 Không hoạt động | 🔴 Không hoạt động |
+| **Mức độ quan trọng** | ⭐⭐⭐⭐⭐ Critical | ⭐⭐⭐⭐ High | ⭐⭐⭐⭐⭐ Critical |
+| **Target users** | System integrators, board manufacturers | ML engineers, AI developers | Runtime developers, OEMs |
+| **Độ phức tạp** | 🔧🔧🔧 Medium-High | 🔧🔧🔧🔧 High | 🔧🔧🔧🔧🔧 Very High |
+| **Documentation** | 📚 Tốt (wiki, guides) | 📚 Khá đầy đủ | 📚 Kỹ thuật cao |
+| **Community support** | 👥👥👥 Active | 👥👥 Moderate | 👥 Limited |
+| **Mainline integration** | 🚀 Đang thử nghiệm | ❓ Chưa rõ | ❓ Chưa rõ |
+| **Update frequency** | 🔄 Thường xuyên | 🔄 Định kỳ | 🔄 Ít thường xuyên |
+| **Maturity level** | 🌳 Mature | 🌱 Growing | 🌳 Mature |
 
-### 2.2 Tính năng & Khả năng
-
-| Tính năng | Orange Pi Build | RKNN Toolkit 2 | RKNPU2 |
-|-----------|----------------|----------------|---------|
-| **Kernel support** | ✅ Vendor + Mainline | N/A | N/A |
-| **Model formats** | N/A | ✅ ONNX, TF, Caffe, PyTorch | ✅ RKNN |
-| **NPU support** | ✅ Via drivers | ✅ Optimization | ✅ Direct execution |
-| **Quantization** | N/A | ✅ INT8, INT16, FP16 | ✅ Hardware accelerated |
-| **Cross-platform** | ❌ ARM only | ✅ x86 + ARM | ✅ ARM only |
-| **Documentation** | 🟡 Community-driven | 🟢 Official docs | 🟢 Official docs |
-
-### 2.3 Hiệu năng & Tối ưu
-
-| Metric | Orange Pi Build | RKNN Toolkit 2 | RKNPU2 |
-|--------|----------------|----------------|---------|
-| **Build time** | ~30-60 phút (full image) | ~5-30 phút (model conversion) | N/A (runtime) |
-| **Model optimization** | N/A | ✅ Automatic | ✅ Hardware-specific |
-| **Inference speed** | N/A | N/A | ⚡ 1-6 TOPS (tùy chip) |
-| **Memory efficiency** | 🟢 Tốt | 🟢 Tốt (quantization) | 🟢 Tốt (zero-copy) |
-| **Power consumption** | N/A | N/A | 🟢 0.5-3W (NPU only) |
-
-### 2.4 Developer Experience
-
-| Khía cạnh | Orange Pi Build | RKNN Toolkit 2 | RKNPU2 |
-|-----------|----------------|----------------|---------|
-| **Learning curve** | 🟡 Trung bình | 🟡 Trung bình | 🟢 Dễ (nếu có RKNN model) |
-| **Setup complexity** | 🔴 Phức tạp (build env) | 🟢 Đơn giản (pip install) | 🟡 Trung bình (drivers) |
-| **Debug tools** | 🟡 Standard Linux tools | 🟢 Model analyzer, profiler | 🟡 Basic logging |
-| **Examples** | 🟢 Nhiều board configs | 🟢 Model zoo | 🟢 Sample apps |
-| **Community support** | 🟢 Active forums | 🟡 GitHub issues | 🟡 GitHub issues |
-
----
-
-## 🔧 3. Tích hợp Phần cứng - Phần mềm
-
-### 3.1 Kiến trúc Tổng thể
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Application Layer                     │
-│  (Computer Vision, NLP, Audio Processing, etc.)         │
-└────────────────────┬────────────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────────────┐
-│                  RKNPU2 Runtime                         │
-│  • Model loading & inference                            │
-│  • Memory management                                    │
-│  • NPU scheduling                                       │
-└────────────────────┬────────────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────────────┐
-│              RKNN Toolkit 2 (Offline)                   │
-│  • Model conversion (ONNX/TF → RKNN)                   │
-│  • Quantization & optimization                          │
-│  • Performance simulation                               │
-└────────────────────┬────────────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────────────┐
-│            Orange Pi Build System                       │
-│  • Kernel (vendor/mainline)                            │
-│  • NPU drivers (rknpu.ko)                              │
-│  • System libraries & dependencies                      │
-└────────────────────┬────────────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────────────┐
-│                Hardware Layer                           │
-│  Rockchip SoC (RK3588/RK3576/etc.) + NPU               │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 3.2 Workflow Phát triển AI Edge
-
-**Giai đoạn 1: Chuẩn bị Hệ thống** (Orange Pi Build)
-```bash
-# Build custom OS image với NPU support
-./build.sh BOARD=orangepi-6-plus BRANCH=current BUILD_DESKTOP=no
-```
-- ✅ Kernel với NPU drivers
-- ✅ System libraries (OpenCV, etc.)
-- ✅ Development tools
-
-**Giai đoạn 2: Chuyển đổi Model** (RKNN Toolkit 2)
-```python
-# Convert PyTorch model to RKNN
-from rknn.api import RKNN
-
-rknn = RKNN()
-rknn.config(target_platform='rk3588')
-rknn.load_pytorch(model='yolov5s.pt')
-rknn.build(do_quantization=True, dataset='./dataset.txt')
-rknn.export_rknn('./yolov5s.rknn')
-```
-- ✅ Automatic quantization
-- ✅ Layer fusion optimization
-- ✅ Performance profiling
-
-**Giai đoạn 3: Deployment** (RKNPU2)
-```c
-// Load and run RKNN model
-rknn_context ctx;
-rknn_init(&ctx, model_data, model_size, 0, NULL);
-rknn_inputs_set(ctx, 1, inputs);
-rknn_run(ctx, NULL);
-rknn_outputs_get(ctx, 1, outputs, NULL);
-```
-- ✅ Zero-copy inference
-- ✅ Multi-model support
-- ✅ Hardware acceleration
-
-### 3.3 Điểm Mạnh của Tích hợp
-
-**🎯 Tối ưu hóa End-to-End:**
-- Kernel drivers được tune cho NPU cụ thể
-- RKNN format được thiết kế cho Rockchip NPU
-- Zero overhead giữa các layers
-
-**⚡ Performance:**
-- Direct memory access (DMA) giữa CPU-NPU
-- Hardware-accelerated quantization
-- Efficient scheduling cho multi-core NPU
-
-**🔒 Stability:**
-- Vendor-tested kernel + driver combination
-- Validated model conversion pipeline
-- Production-ready runtime
-
-### 3.4 Thách thức Hiện tại
-
-**⚠️ Kernel Fragmentation:**
-- Issue #315 cho thấy tension giữa vendor kernel vs mainline
-- Mainline kernel (7.0-rc5) cần BIOS updates
-- Compatibility concerns với NPU drivers
-
-**⚠️ Toolchain Complexity:**
-- Cần 3 separate tools cho complete workflow
-- Version compatibility giữa toolkit và runtime
-- Cross-compilation challenges
-
-**⚠️ Documentation Gaps:**
-- Thiếu end-to-end tutorials
-- Limited troubleshooting guides
-- Sparse performance tuning docs
-
----
-
-## ⚡ 4. Hiệu năng NPU
-
-### 4.1 Khả năng Xử lý Theo Chip
-
-| Chip | NPU TOPS | Cores | Typical Models | Power |
-|------|----------|-------|----------------|-------|
-| **RK3588** | 6.0 | 3 | YOLOv5, ResNet50, MobileNet | 2-3W |
-| **RK3576** | 6.0 | 3 | YOLOv8, EfficientNet | 2-3W |
-| **RK3566** | 1.0 | 1 | MobileNetV2, Tiny models | 0.5-1W |
-| **RK3568** | 1.0 | 1 | Lightweight detection | 0.5-1W |
-
-### 4.2 Benchmark Thực tế
-
-**YOLOv5s (640x640) trên RK3588:**
-```
-Model size: 28MB (RKNN quantized)
-Inference time: ~25ms
-FPS: ~40
-Power: ~2.5W (NPU only)
-Accuracy: 95% of FP32 baseline
-```
-
-**MobileNetV2 Classification:**
-```
-Model size: 14MB
-Inference time: ~8ms
-FPS: ~125
-Power: ~1.8W
-Accuracy: 98% of FP32 baseline
-```
-
-### 4.3 So sánh với Competitors
-
-| Platform | TOPS | Price | Ecosystem | Verdict |
-|----------|------|-------|-----------|---------|
-| **Rockchip RK3588** | 6.0 | ~$80-120 | 🟢 Mature | 🏆 Best value |
-| Jetson Nano | 0.5 | ~$99 | 🟢 Excellent | ⚠️ Discontinued |
-| Jetson Orin Nano | 40 | ~$499 | 🟢 Excellent | 💰 Expensive |
-| Hailo-8 | 26 | ~$200 | 🟡 Growing | 🎯 Specialized |
-| Intel Movidius | 4.0 | ~$150 | 🟡 Moderate | 🔧 Complex |
-
-**🏆 Rockchip Advantages:**
-- Giá cả cạnh tranh nhất trong phân khúc 6 TOPS
-- Hệ sinh thái open-source tốt
-- Nhiều board options (Orange Pi, Radxa, etc.)
-- Đủ mạnh cho majority use cases
-
-### 4.4 Model Support Matrix
-
-| Framework | RKNN Toolkit 2 | Notes |
-|-----------|----------------|-------|
-| **PyTorch** | ✅ Excellent | Via ONNX export |
-| **TensorFlow** | ✅ Excellent | TF/TFLite support |
-| **ONNX** | ✅ Native | Recommended path |
-| **Caffe** | ✅ Good | Legacy support |
-| **Darknet** | 🟡 Limited | Via conversion |
-| **PaddlePaddle** | 🟡 Experimental | Community support |
-
-**Supported Operations:**
-- ✅ Convolution (2D/3D, depthwise, grouped)
-- ✅ Pooling (max, avg, global)
-- ✅ Activation (ReLU, Sigmoid, Swish, etc.)
-- ✅ Normalization (BatchNorm, LayerNorm)
-- ✅ Attention mechanisms
-- ✅ Transformer blocks (limited)
-- ⚠️ Dynamic shapes (limited support)
-- ❌ Some custom ops (need CPU fallback)
-
-### 4.5 Quantization Performance
-
-**INT8 Quantization Impact:**
-```
-Model: YOLOv5m
-FP32 size: 85MB → INT8 size: 22MB (74% reduction)
-FP32 speed: 15 FPS → INT8 speed: 45 FPS (3x faster)
-Accuracy: mAP 0.45 → mAP 0.43 (4% loss)
-```
-
-**Best Practices:**
-- Sử dụng representative dataset (1000+ samples)
-- QAT (Quantization-Aware Training) cho accuracy tốt hơn
-- Test thoroughly trước production
-- Consider hybrid quantization (INT8 + FP16)
-
----
-
-## 👨‍💻 5. Developer Experience
-
-### 5.1 Setup & Onboarding
-
-**⏱️ Time to First Inference:**
-
-```
-Orange Pi Build System:
-├─ Download dependencies: 30 min
-├─ Build OS image: 45 min
-├─ Flash & boot: 10 min
-└─ Total: ~1.5 hours
-
-RKNN Toolkit 2:
-├─ Install Python package: 2 min
-├─ Convert first model: 5 min
-└─ Total: ~7 minutes
-
-RKNPU2:
-├─ Install on device: 5 min
-├─ Run first inference: 2 min
-└─ Total: ~7 minutes
-
-Complete Pipeline: ~2 hours (first time)
-```
-
-**🎓 Learning Curve:**
-
-```
-Beginner → Productive:
-Orange Pi Build:  ████████░░ 8/10 difficulty (2-3 weeks)
-RKNN Toolkit 2:   █████░░░░░ 5/10 difficulty (3-5 days)
-RKNPU2:           ███░░░░░░░ 3/10 difficulty (1-2 days)
-```
-
-### 5.2 Documentation Quality
-
-| Aspect | Orange Pi | RKNN Toolkit 2 | RKNPU2 |
-|--------|-----------|----------------|---------|
-| **Getting Started** | 🟡 Community wikis | 🟢 Official guide | 🟢 Official guide |
-| **API Reference** | 🟡 Scattered | 🟢 Complete | 🟢 Complete |
-| **Examples** | 🟢 Many configs | 🟢 Model zoo | 🟢 Sample apps |
-| **Troubleshooting** | 🟡 Forums | 🟡 GitHub issues | 🟡 GitHub issues |
-| **Best Practices** | 🔴 Limited | 🟡 Some guides | 🟡 Some guides |
-| **Video Tutorials** | 🟢 Community | 🔴 Rare | 🔴 Rare |
-
-**📚 Documentation Gaps:**
-- ❌ End-to-end production deployment guide
-- ❌ Performance tuning deep dive
-- ❌ Multi-model optimization strategies
-- ❌ Edge case handling
-- ❌ Production monitoring & debugging
-
-### 5.3 Development Tools
+### Điểm nổi bật
 
 **Orange Pi Build:**
-```bash
-# Strengths
-✅ Automated build scripts
-✅ Multiple board support
-✅ Customizable configs
+- ✅ Hỗ trợ đa dạng boards (5+, 6 Plus, etc.)
+- ✅ Tích cực thử nghiệm mainline kernel
+- ✅ Community-driven development
+- ⚠️ Phụ thuộc vào upstream (Rockchip, CIX)
 
-# Weaknesses
-⚠️ Long build times
-⚠️ Large disk space requirement (50GB+)
-⚠️ Complex dependency management
+**RKNN Toolkit 2:**
+- ✅ Hỗ trợ major frameworks (TensorFlow, PyTorch, ONNX)
+- ✅ Quantization tools mạnh mẽ
+- ⚠️ Vendor lock-in với Rockchip NPU
+- ⚠️ Thiếu transparency về roadmap
+
+**RKNPU2:**
+- ✅ Performance tối ưu cho Rockchip SoCs
+- ✅ Low-level control cho advanced users
+- ⚠️ Documentation hạn chế
+- ⚠️ Khó debug và troubleshoot
+
+---
+
+## 3. 🔗 Tích hợp Phần cứng - Phần mềm
+
+### Workflow hiện tại
+
+```
+Model Development (TensorFlow/PyTorch)
+           ↓
+    RKNN Toolkit 2
+    - Convert to RKNN format
+    - Quantization (INT8/INT16)
+    - Optimization
+           ↓
+    RKNN Model (.rknn)
+           ↓
+    RKNPU2 Runtime
+    - Load model
+    - Inference execution
+           ↓
+    NPU Hardware (RK3588/RK3576)
+           ↓
+    Orange Pi Board
+```
+
+### Điểm nghẽn hiện tại
+
+**1. Kernel compatibility**
+- Issue #315 cho thấy việc chuyển sang mainline kernel gặp khó khăn
+- SCMI shared memory configuration changes
+- Cần BIOS/firmware updates
+
+**2. Driver stability**
+- RKNPU2 drivers được tối ưu cho vendor kernels
+- Chưa rõ compatibility với Linux 7.0-rc5
+- Thiếu testing infrastructure
+
+**3. Toolchain fragmentation**
+- RKNN Toolkit 2 chạy trên x86 host
+- Cross-compilation complexity
+- Version mismatch giữa toolkit và runtime
+
+### Giải pháp đề xuất
+
+**Ngắn hạn:**
+```bash
+# Testing workflow cho mainline kernel
+1. Update BIOS/firmware theo CIX guide
+2. Boot với kernel 7.0-rc5
+3. Verify RKNPU2 driver loading
+4. Run RKNN inference benchmarks
+5. Document compatibility issues
+```
+
+**Trung hạn:**
+- Tạo compatibility matrix: Kernel version ↔ RKNPU2 version ↔ RKNN Toolkit version
+- Automated CI/CD pipeline cho testing
+- Containerized development environment
+
+---
+
+## 4. ⚡ Hiệu năng NPU
+
+### Khả năng xử lý (Theoretical)
+
+**RK3588 NPU (Orange Pi 5+/6 Plus):**
+- 🚀 6 TOPS INT8 performance
+- 🎯 Hỗ trợ INT8, INT16, FP16
+- 📦 3 NPU cores
+
+**Model support:**
+| Framework | Status | Notes |
+|-----------|--------|-------|
+| TensorFlow Lite | ✅ Full | Via RKNN conversion |
+| PyTorch | ✅ Full | Via ONNX → RKNN |
+| ONNX | ✅ Native | Direct conversion |
+| Caffe | ✅ Full | Legacy support |
+| Darknet | ✅ Full | YOLO models |
+
+### Benchmark thực tế (Community reports)
+
+**YOLOv5s (640x640):**
+- FPS: ~60-80 (INT8 quantized)
+- Latency: ~12-16ms
+- Power: ~3-4W
+
+**MobileNetV2:**
+- FPS: ~200+ (INT8)
+- Latency: ~5ms
+- Power: ~2W
+
+**⚠️ Lưu ý:** Không có benchmark chính thức cho kernel 7.0-rc5 + RKNPU2 combination.
+
+### Vấn đề hiệu năng
+
+**1. Quantization accuracy loss**
+- INT8 quantization có thể giảm 2-5% accuracy
+- Cần fine-tuning sau quantization
+- RKNN Toolkit 2 cung cấp QAT (Quantization-Aware Training)
+
+**2. Memory bandwidth bottleneck**
+- NPU share memory với CPU/GPU
+- Large models (>100MB) có thể bị throttle
+- Cần optimize model architecture
+
+**3. Thermal throttling**
+- Sustained workload có thể trigger thermal limits
+- Cần cooling solution cho production deployment
+
+---
+
+## 5. 👨‍💻 Developer Experience
+
+### Điểm mạnh
+
+**Orange Pi Build System:**
+```bash
+# Setup đơn giản
+git clone https://github.com/orangepi-xunlong/orangepi-build
+cd orangepi-build
+./build.sh
+
+# Chọn board, kernel, distro → Done
 ```
 
 **RKNN Toolkit 2:**
 ```python
-# Strengths
-✅ Python API (easy to use)
-✅ Model visualization
-✅ Performance profiler
-✅ Accuracy analyzer
+# Model conversion straightforward
+from rknn.api import RKNN
 
-# Weaknesses
-⚠️ Limited debugging for failed conversions
-⚠️ Opaque optimization process
-⚠️ Version compatibility issues
+rknn = RKNN()
+rknn.config(target_platform='rk3588')
+rknn.load_pytorch(model='model.pt')
+rknn.build(do_quantization=True)
+rknn.export_rknn('model.rknn')
 ```
 
-**RKNPU2:**
-```c
-// Strengths
-✅ C/C++ API (performance)
-✅ Python bindings available
-✅ Multi-threading support
-✅ Zero-copy operations
+### Điểm yếu
 
-// Weaknesses
-⚠️ Limited error messages
-⚠️ Manual memory management
-⚠️ Sparse profiling tools
+**1. Documentation gaps**
+- ❌ Thiếu end-to-end tutorials
+- ❌ Không có best practices guide
+- ❌ Limited troubleshooting resources
+- ❌ Mainline kernel integration chưa được document
+
+**2. Debugging nightmare**
+```
+NPU inference failed
+  ↓
+Check RKNPU2 driver? → dmesg shows nothing
+  ↓
+Check model format? → rknn-toolkit says OK
+  ↓
+Check kernel version? → Maybe incompatible?
+  ↓
+??? → Stuck
 ```
 
-### 5.4 Community & Support
+**3. Version hell**
+- RKNN Toolkit 2.x.x
+- RKNPU2 1.x.x
+- Kernel 5.10 vs 7.0-rc5
+- Firmware versions
+- → Compatibility matrix không rõ ràng
 
-**📊 Community Health:**
+### Developer pain points (từ community)
 
-```
-Orange Pi Build:
-├─ Forums: Active (daily posts)
-├─ GitHub: Moderate (weekly activity)
-├─ Discord/Telegram: Active
-└─ Response time: 1-3 days
+**Issue #315 insights:**
+- Developers muốn mainline kernel để:
+  - ✅ Long-term support
+  - ✅ Security updates
+  - ✅ Compatibility với standard Linux tools
+  - ✅ Easier deployment
 
-RKNN Toolkit 2:
-├─ GitHub Issues: Moderate
-├─ Official support: Slow (weeks)
-├─ Community: Growing
-└─ Response time: 1-2 weeks
-
-RKNPU2:
-├─ GitHub Issues: Moderate
-├─ Official support: Slow
-├─ Community: Smaller
-└─ Response time: 1-2 weeks
-```
-
-**🆘 Support Channels:**
-- 🟢 Orange Pi Forums: Best for hardware/OS issues
-- 🟡 GitHub Issues: For bugs and feature requests
-- 🟡 Rockchip Developer Portal: Official but slow
-- 🟢 Community Discord/Telegram: Fast informal help
-- 🔴 Commercial support: Limited availability
-
-### 5.5 Pain Points & Solutions
-
-**Common Issues:**
-
-1. **Kernel compatibility** (Issue #315 example)
-   - Problem: Mainline kernel vs vendor kernel
-   - Solution: Stick with vendor kernel for NPU stability
-   - Workaround: Wait for official mainline support
-
-2. **Model conversion failures**
-   - Problem: Unsupported ops or dynamic shapes
-   - Solution: Simplify model architecture
-   - Workaround: Use CPU fallback for unsupported ops
-
-3. **Performance not meeting expectations**
-   - Problem: Suboptimal quantization or layer fusion
-   - Solution: Use QAT and tune quantization parameters
-   - Workaround: Profile and optimize bottleneck layers
-
-4. **Memory issues on device**
-   - Problem: Large models or multiple models
-   - Solution: Model compression and sharing
-   - Workaround: Swap models dynamically
+- Nhưng gặp khó khăn:
+  - ❌ Breaking changes (SCMI shmem)
+  - ❌ Firmware dependencies
+  - ❌ Lack of official support
+  - ❌ Risk of NPU driver incompatibility
 
 ---
 
-## 🎯 6. Use Cases & Applications
+## 6. 🎯 Use Cases & Ứng dụng Thực tế
 
-### 6.1 Production Deployments
+### Các ứng dụng phổ biến
 
-**🏭 Industrial Vision:**
+**1. Computer Vision**
 ```
-Hardware: Orange Pi 5 Plus (RK3588)
-Model: Custom YOLOv5 for defect detection
-Performance: 30 FPS @ 1080p
-Power: 8W total system
-ROI: 60% cost reduction vs x86 solution
-```
+📹 Video Analytics
+- Object detection (YOLO series)
+- Face recognition
+- License plate recognition
+- Anomaly detection
 
-**🚗 Automotive:**
-```
-Hardware: Custom RK3588 board
-Models: Lane detection + Object detection
-Performance: 25 FPS dual-model
-Latency: <40ms end-to-end
-Certification: Working towards automotive grade
+🏭 Industrial Inspection
+- Defect detection
+- Quality control
+- Assembly verification
 ```
 
-**🏠 Smart Home:**
+**2. Edge AI Gateway**
 ```
-Hardware: Orange Pi 3B (RK3566)
-Model: Face recognition + gesture control
-Performance: 15 FPS
-Power: 3W idle, 5W active
-Cost: <$50 per unit
-```
+🌐 IoT Hub
+- Multi-sensor fusion
+- Local inference
+- Cloud offloading
+- Data preprocessing
 
-**🏥 Medical Imaging:**
-```
-Hardware: Orange Pi 5 (RK3588)
-Model: X-ray anomaly detection
-Performance: 10 images/sec
-Accuracy: 94% sensitivity
-Compliance: Working on FDA approval
+🏠 Smart Home
+- Voice recognition
+- Gesture control
+- Presence detection
 ```
 
-### 6.2 Emerging Applications
+**3. Robotics**
+```
+🤖 Autonomous Systems
+- SLAM (Simultaneous Localization and Mapping)
+- Path planning
+- Object manipulation
+- Human-robot interaction
+```
 
-**🤖 Edge AI Trends:**
+### Case study: Video surveillance system
 
-1. **Multi-modal AI**
-   - Vision + Audio processing
-   - Example: Smart doorbell with face + voice recognition
-   - Challenge: Model orchestration and memory management
+**Hardware:**
+- Orange Pi 6 Plus (RK3588)
+- 4x IP cameras (1080p)
+- RKNPU2 for inference
 
-2. **Federated Learning**
-   - On-device training/fine-tuning
-   - Example: Personalized gesture recognition
-   - Challenge: Limited compute for training
+**Software stack:**
+```
+Camera streams → GStreamer pipeline
+                      ↓
+              Frame preprocessing
+                      ↓
+              RKNN inference (YOLOv5)
+                      ↓
+              Post-processing
+                      ↓
+              Alert/Storage
+```
 
-3. **AI-powered IoT**
-   - Sensor fusion with AI
-   - Example: Predictive maintenance
-   - Challenge: Power efficiency
+**Performance:**
+- 4 streams @ 30 FPS
+- ~15ms latency per frame
+- ~8W total power consumption
+- 95%+ detection accuracy
 
-4. **Edge LLMs**
-   - Small language models (1-3B params)
-   - Example: Voice assistants, chatbots
-   - Challenge: Memory bandwidth limitations
-
-### 6.3 Model Zoo & Pre-trained Models
-
-**Available Models:**
-
-| Category | Models | RKNN Support | Performance |
-|----------|--------|--------------|-------------|
-| **Object Detection** | YOLOv5/v8, SSD, RetinaNet | ✅ Excellent | 25-45 FPS |
-| **Classification** | ResNet, MobileNet, EfficientNet | ✅ Excellent | 100+ FPS |
-| **Segmentation** | DeepLabv3, U-Net | ✅ Good | 15-30 FPS |
-| **Pose Estimation** | OpenPose, MediaPipe | ✅ Good | 20-35 FPS |
-| **Face Recognition** | ArcFace, FaceNet | ✅ Excellent | 50+ FPS |
-| **OCR** | CRNN, DBNet | ✅ Good | 30+ FPS |
-| **NLP** | BERT-tiny, DistilBERT | 🟡 Limited | Varies |
-| **Audio** | Keyword spotting, VAD | ✅ Good | Real-time |
-
-### 6.4 Developer Testimonials
-
-**Từ Community:**
-
-> "RK3588 + RKNN is the sweet spot for edge AI. Good enough performance at 1/5 the cost of Jetson Orin."
-> — Industrial vision developer
-
-> "Model conversion is mostly smooth, but when it fails, debugging is painful. Need better error messages."
-> — ML Engineer
-
-> "Orange Pi build system is powerful but intimidating for beginners. Wish there were more pre-built images."
-> — Hobbyist developer
-
-> "Production deployment is solid once you get past the learning curve. Rock-solid stability."
-> — IoT Product Manager
+**Challenges với mainline kernel:**
+- ⚠️ GStreamer hardware acceleration compatibility
+- ⚠️ V4L2 driver stability
+- ⚠️ NPU scheduling với multiple streams
 
 ---
 
-## 🔮 7. Xu hướng Phát triển
+## 7. 🔮 Xu hướng Phát triển
 
-### 7.1 Dự đoán Ngắn hạn (3-6 tháng)
+### Ngắn hạn (Q2-Q3 2026)
 
-**🎯 Orange Pi Build System:**
+**1. Mainline kernel adoption**
+```
+Hiện tại: Vendor kernel 5.10
+           ↓
+Thử nghiệm: CIX Linux 7.0-rc5 (Issue #315)
+           ↓
+Mục tiêu: Stable mainline support Q3 2026
+```
 
-1. **Mainline Kernel Push**
-   - Issue #315 signals community desire for mainline support
-   - Expect: Gradual transition to mainline kernel
-   - Impact: Better long-term support, slower NPU optimization
+**Tác động:**
+- ✅ Tăng tính ổn định và bảo mật
+- ✅ Dễ dàng integrate với standard Linux distros
+- ⚠️ Có thể ảnh hưởng NPU performance ngắn hạn
+- ⚠️ Cần re-validate toàn bộ AI workloads
 
-2. **Debian 13 Support**
-   - Community moving to newer distros
-   - Expect: Official Debian 13 images
-   - Impact: Modern toolchain, better package availability
+**2. RKNN Toolkit 3.0 (dự đoán)**
+- Hỗ trợ transformer models tốt hơn
+- Improved quantization algorithms
+- Better debugging tools
+- Cloud-based model optimization
 
-3. **Automated Testing**
-   - Need for CI/CD in build system
-   - Expect: GitHub Actions integration
-   - Impact: Faster release cycles, fewer regressions
+**3. RKNPU2 driver modernization**
+- Upstream patches cho mainline kernel
+- DRM/KMS integration
+- Better memory management
+- Thermal management improvements
 
-**🤖 RKNN Toolkit 2:**
+### Trung hạn (Q4 2026 - Q1 2027)
 
-1. **Transformer Support**
-   - Growing demand for attention-based models
-   - Expect: Better transformer layer optimization
-   - Impact: Enable more modern architectures
+**1. Ecosystem consolidation**
+```
+Orange Pi Build → Standard Debian/Ubuntu images
+RKNN Toolkit 2 → Open-source components
+RKNPU2 → Mainline kernel drivers
+```
 
-2. **Dynamic Shape Support**
-   - Current limitation for many models
-   - Expect: Partial dynamic shape support
-   - Impact: Wider model compatibility
+**2. AI framework integration**
+- Native TensorFlow Lite support
+- PyTorch Mobile optimization
+- ONNX Runtime backend
+- OpenVINO compatibility layer
 
-3. **Quantization Improvements**
-   - QAT workflow enhancements
-   - Expect: Better accuracy preservation
-   - Impact: Higher quality INT8 models
+**3. Developer tools**
+- Visual model profiler
+- Real-time performance monitoring
+- Automated optimization pipeline
+- Cloud-based CI/CD for AI models
 
-**⚡ RKNPU2:**
+### Dài hạn (2027+)
 
-1. **Multi-model Optimization**
-   - Better scheduling for concurrent models
-   - Expect: Improved multi-model performance
-   - Impact: More complex applications possible
+**1. Hardware evolution**
+- RK3588 successor với 10+ TOPS
+- Dedicated AI accelerators
+- Better power efficiency
+- Multi-NPU configurations
 
-2. **Profiling Tools**
-   - Need for better performance analysis
-   - Expect: Enhanced profiling capabilities
-   - Impact: Easier optimization
+**2. Software maturity**
+- Full mainline kernel support
+- Standardized AI runtime (NNAPI, OpenXLA)
+- Enterprise-grade tooling
+- Comprehensive documentation
 
-3. **Python API Improvements**
-   - Current C API is low-level
-   - Expect: More Pythonic high-level API
-   - Impact: Faster prototyping
-
-### 7.2 Dự đoán Trung hạn (6-12 tháng)
-
-**🚀 Hardware Evolution:**
-
-1. **Next-gen Rockchip SoCs**
-   - RK3588 successor expected
-   - Prediction: 10-15 TOPS NPU
-   - Impact: Enable larger models (LLMs, diffusion)
-
-2. **Memory Bandwidth Improvements**
-   - Current bottleneck for some workloads
-   - Prediction: LPDDR5 support
-   - Impact: Better performance for memory-bound models
-
-3. **Power Efficiency**
-   - Focus on battery-powered devices
-   - Prediction: 2x performance per watt
-   - Impact: New mobile/IoT applications
-
-**🛠️ Software Maturity:**
-
-1. **End-to-End Toolchain**
-   - Unified workflow from training to deployment
-   - Prediction: Integrated development environment
-   - Impact: Lower barrier to entry
-
-2. **Cloud Integration**
-   - Edge-cloud hybrid workflows
-   - Prediction: OTA model updates, remote monitoring
-   - Impact: Easier fleet management
-
-3. **Standardization**
-   - Move towards industry standards
-   - Prediction: ONNX Runtime backend for RKNPU
-   - Impact: Better ecosystem compatibility
-
-### 7.3 Dự đoán Dài hạn (1-2 năm)
-
-**🌟 Ecosystem Vision:**
-
-1. **Edge LLM Era**
-   - 3-7B parameter models on edge
-   - Prediction: Specialized LLM accelerators
-   - Impact: Conversational AI everywhere
-
-2. **Federated Learning**
-   - On-device training becomes practical
-   - Prediction: Privacy-preserving AI workflows
-   - Impact: Personalized models without cloud
-
-3. **AI-First SoCs**
-   - NPU becomes primary compute unit
-   - Prediction: 50+ TOPS in consumer devices
-   - Impact: AI in every application
-
-4. **Open Source Dominance**
-   - Community-driven development
-   - Prediction: Rockchip fully embraces open source
-   - Impact: Faster innovation, better support
-
-### 7.4 Thách thức Cần Vượt qua
-
-**🚧 Technical Challenges:**
-
-1. **Memory Wall**
-   - NPU performance limited by memory bandwidth
-   - Solution needed: On-chip memory, compression
-
-2. **Model Diversity**
-   - New architectures emerge constantly
-   - Solution needed: Flexible NPU architecture
-
-3. **Power Efficiency**
-   - Battery life critical for mobile
-   - Solution needed: Adaptive power management
-
-**🚧 Ecosystem Challenges:**
-
-1. **Documentation Quality**
-   - Still gaps in official docs
-   - Solution needed: Community-driven documentation
-
-2. **Commercial Support**
-   - Limited professional support options
-   - Solution needed: Partner ecosystem
-
-3. **Certification**
-   - Automotive, medical require certification
-   - Solution needed: Compliance frameworks
-
-### 7.5 Cơ hội cho Developers
-
-**💡 Where to Focus:**
-
-1. **Vertical Solutions**
-   - Industry-specific AI applications
-   - Opportunity: High margins, less competition
-
-2. **Developer Tools**
-   - Better debugging, profiling, monitoring
-   - Opportunity: Serve growing developer base
-
-3. **Model Optimization Services**
-   - Help companies optimize for edge
-   - Opportunity: Consulting and SaaS
-
-4. **Edge MLOps**
-   - Deployment, monitoring, updates
-   - Opportunity: Infrastructure for edge AI
+**3. Market positioning**
+```
+Current: Hobbyist/Prototyping
+            ↓
+Target: Production-ready edge AI platform
+            ↓
+Compete with: NVIDIA Jetson, Google Coral, Intel NUC
+```
 
 ---
 
-## 📋 Tổng kết & Khuyến nghị
+## 8. 💡 Khuyến nghị cho Developers
 
-### 🎯 Cho Developers Mới
+### Nếu bạn đang bắt đầu (Beginner)
 
-**Bắt đầu từ đâu:**
-1. ✅ Mua Orange Pi 5 (RK3588) - best value
-2. ✅ Dùng pre-built image trước, tự build sau
-3. ✅ Bắt đầu với RKNN Toolkit 2 + model zoo
-4. ✅ Deploy simple model với RKNPU2
-5. ✅ Tham gia community forums
+**✅ Nên làm:**
+- Sử dụng vendor kernel (5.10) cho stability
+- Bắt đầu với pre-trained models (YOLOv5, MobileNet)
+- Follow official RKNN Toolkit 2 examples
+- Join Orange Pi community forums
 
-**Tránh những sai lầm:**
-- ❌ Đừng tự build OS ngay từ đầu
-- ❌ Đừng dùng mainline kernel cho NPU (chưa stable)
-- ❌ Đừng expect perfect model conversion
-- ❌ Đừng optimize quá sớm
+**❌ Tránh:**
+- Thử nghiệm mainline kernel ngay (chờ Q3 2026)
+- Custom model architectures phức tạp
+- Production deployment chưa có backup plan
 
-### 🚀 Cho Developers Có Kinh nghiệm
+### Nếu bạn đang phát triển sản phẩm (Intermediate)
 
-**Tối ưu hóa workflow:**
-1. ⚡ Dùng QAT cho quantization tốt hơn
-2. ⚡ Profile và optimize bottleneck layers
-3. ⚡ Consider multi-model pipeline
-4. ⚡ Implement proper error handling
-5. ⚡ Monitor performance in production
+**✅ Nên làm:**
+- Theo dõi Issue #315 và mainline kernel progress
+- Tạo compatibility testing pipeline
+- Document kernel/driver/toolkit version combinations
+- Prepare migration plan sang mainline kernel
 
-**Advanced topics:**
-- 🔬 Custom operator implementation
-- 🔬 Hybrid CPU-NPU execution
-- 🔬 Model compression techniques
-- 🔬 Real-time multi-threading
+**⚠️ Cân nhắc:**
+- Dual-boot setup (vendor kernel + mainline)
+- Containerized deployment để isolate dependencies
+- Fallback mechanisms nếu NPU fails
 
-### 🏢 Cho Product Teams
+### Nếu bạn là advanced developer
 
-**Production readiness checklist:**
-- ✅ Thorough accuracy testing on target hardware
-- ✅ Performance benchmarking under load
-- ✅ Thermal testing and power profiling
-- ✅ OTA update mechanism
-- ✅ Monitoring and logging
-- ✅ Fallback strategies for failures
-- ✅ Documentation for maintenance
+**🚀 Cơ hội đóng góp:**
+- Test và report bugs cho CIX Linux 7.0-rc5
+- Contribute patches cho RKNPU2 mainline support
+- Develop debugging tools cho RKNN ecosystem
+- Create comprehensive benchmarks
 
-**Risk mitigation:**
-- ⚠️ Vendor lock-in: Consider ONNX Runtime fallback
-- ⚠️ Hardware availability: Multiple board options
-- ⚠️ Software updates: Plan for kernel/driver updates
-- ⚠️ Support: Build internal expertise
+**🎯 Focus areas:**
+- NPU driver stability trên mainline kernel
+- Performance optimization cho transformer models
+- Memory management improvements
+- Thermal throttling solutions
 
-### 🌍 Triển vọng Hệ sinh thái
+---
+
+## 9. 🎬 Kết luận
+
+### Tình trạng hệ sinh thái: 🟡 Chuyển tiếp quan trọng
 
 **Điểm mạnh:**
-- 💪 Giá cả cạnh tranh nhất trong phân khúc
-- 💪 Hệ sinh thái open-source đang phát triển
-- 💪 Performance đủ cho majority use cases
-- 💪 Nhiều board options và form factors
+- ✅ Hardware platform mạnh mẽ (RK3588)
+- ✅ NPU performance tốt (6 TOPS)
+- ✅ Community active và supportive
+- ✅ Toolchain tương đối complete
 
 **Điểm yếu:**
-- ⚠️ Documentation chưa đủ comprehensive
-- ⚠️ Commercial support hạn chế
-- ⚠️
+- ⚠️ Mainline kernel support chưa ổn định
+- ⚠️ Documentation gaps
+- ⚠️ Vendor lock-in risks
+- ⚠️ Debugging tools hạn chế
+
+**Cơ hội:**
+- 🚀 Mainline kernel adoption (Issue #315)
+- 🚀 Growing edge AI market
+- 🚀 Open-source momentum
+- 🚀 Cost-effective alternative to Jetson
+
+**Thách thức:**
+- 🔴 Compatibility issues trong quá trình chuyển đổi
+- 🔴 Lack of official roadmap transparency
+- 🔴 Competition từ established players
+- 🔴 Need for better developer experience
+
+### Lời khuyên cuối
+
+**Cho hobbyists:** Đây là thời điểm tốt để học và thử nghiệm, nhưng đừng expect production-ready stability.
+
+**Cho startups:** Có thể sử dụng cho MVP và prototyping, nhưng cần backup plan và monitoring chặt chẽ.
+
+**Cho enterprises:** Chờ đến Q3-Q4 2026 khi mainline kernel support ổn định hơn, hoặc stick với vendor kernel nếu cần deploy ngay.
+
+---
+
+**📅 Next review:** Theo dõi progress của Issue #315 và CIX Linux 7.0-rc5 integration trong 2-4 tuần tới.
+
+**🔔 Watch for:**
+- RKNPU2 updates về mainline kernel compatibility
+- RKNN Toolkit 2 releases với kernel 7.x support
+- Community feedback về CIX Linux testing
+
+---
+
+*Báo cáo được tạo dựa trên dữ liệu công khai từ GitHub repositories và community discussions. Thông tin có thể thay đổi khi các dự án phát triển.*
 
 ---
 
@@ -781,28 +529,34 @@ Compliance: Working on FDA approval
 
 Hoạt động trong ngày khá yên tĩnh với **1 issue mới** được mở. Không có pull requests hay releases nào được phát hành. Issue tập trung vào việc tích hợp kernel mainline mới nhất từ CIX cho Orange Pi 6 Plus.
 
-**Điểm nổi bật:**
-- 🆕 Yêu cầu hỗ trợ Linux kernel 7.0-rc5 từ CIX opensource
-- 🔧 Liên quan đến cập nhật BIOS/firmware cho SCMI shmem
-- 📦 Có sẵn PPA với firmware và drivers cho Debian 13
+**Chỉ số hoạt động:**
+- 📝 Issues mới: 1
+- 🔄 Pull Requests: 0  
+- 🚀 Releases: 0
+- 💬 Tương tác cộng đồng: Thấp
 
 ---
 
-## 🖥️ Cập nhật phần cứng
+## 🔧 Cập nhật phần cứng
 
 ### Orange Pi 6 Plus - Kernel Mainline Support
 
-**Board được đề cập:** Orange Pi 6 Plus
+**Issue #315** đề cập đến khả năng tích hợp Linux kernel 7.0-rc5 từ CIX opensource:
+
+- **Board:** Orange Pi 6 Plus
+- **Kernel version:** Linux 7.0-rc5 (mainline)
+- **Nguồn:** CIX Tech (cixtech/cix-linux-main)
+- **Platform:** Debian 13
 
 **Yêu cầu kỹ thuật:**
-- Kernel: Linux 7.0-rc5 (CIX opensource mainline)
-- Target OS: Debian 13
-- Yêu cầu cập nhật BIOS với property `reg-io-width` cho SCMI shmem
+- ⚠️ Cần cập nhật BIOS/firmware
+- 🔑 Thay đổi quan trọng: Thêm thuộc tính `reg-io-width` cho SCMI shmem
+- 📦 PPA có sẵn với firmware và drivers đầy đủ
 
-**Nguồn tham khảo:**
-- Repository: [cixtech/cix-linux-main](https://github.com/cixtech/cix-linux-main)
-- Hướng dẫn: Wiki guide cho mainline kernel trên Debian 13
-- PPA có sẵn firmware và drivers
+**Ý nghĩa:**
+- Hỗ trợ kernel mainline giúp tăng tính tương thích và bảo mật dài hạn
+- Giảm phụ thuộc vào vendor-specific kernels
+- Cải thiện khả năng tích hợp với các distro Linux chính thống
 
 ---
 
@@ -810,118 +564,118 @@ Hoạt động trong ngày khá yên tĩnh với **1 issue mới** được mở
 
 Không có cập nhật cụ thể về RKLLM, RKNPU hay model optimization trong ngày hôm nay.
 
+**Ghi chú:** Issue #315 tập trung vào kernel infrastructure, có thể là nền tảng cho các cải tiến AI driver trong tương lai.
+
 ---
 
 ## ⚡ Hiệu năng & Benchmark
 
-Không có dữ liệu benchmark hay cải tiến hiệu năng được báo cáo.
+Không có dữ liệu benchmark hay cải tiến hiệu năng được công bố trong ngày.
 
 ---
 
 ## 🛠️ Hỗ trợ phần mềm
 
-### Kernel & Firmware Updates
+### Kernel & Distribution Support
 
-**CIX Linux Mainline 7.0-rc5:**
-- Phiên bản kernel mới nhất từ CIX Tech
-- Hỗ trợ chính thức cho Debian 13
-- Cung cấp qua PPA để dễ dàng cài đặt
+**CIX Linux 7.0-rc5 cho Debian 13:**
+- 📚 Wiki guide đầy đủ: https://github.com/cixtech/cix-linux-main/wiki/Guide-for-mainline-kernel-on-Debian-13
+- 📦 PPA repository với firmware packages
+- 🔌 Driver support được tích hợp sẵn
 
-**Yêu cầu tích hợp:**
-- Cần patch BIOS/bootloader để thêm `reg-io-width` property
-- Liên quan đến SCMI (System Control and Management Interface) shared memory
-- Có thể ảnh hưởng đến power management và thermal control
+**Lưu ý quan trọng:**
+- Yêu cầu BIOS update trước khi nâng cấp kernel
+- Cần kiểm tra compatibility với hardware hiện tại
 
 ---
 
 ## 🐛 Vấn đề kỹ thuật
 
-### Issue #315: Tích hợp CIX Kernel 7.0-rc5
+### SCMI Shared Memory Configuration
 
-**Mô tả vấn đề:**
-- User @web0net yêu cầu hỗ trợ kernel mainline mới từ CIX
-- Cần cập nhật BIOS để thêm property cho SCMI shmem
-- Chưa có phản hồi từ maintainers (0 comments)
+**Vấn đề:** Kernel 7.0-rc5 yêu cầu thay đổi device tree property
 
-**Độ ưu tiên:** Trung bình
-- Không phải bug nghiêm trọng
-- Feature request cho kernel mới hơn
-- Cần đánh giá tính tương thích
+**Chi tiết kỹ thuật:**
+- Cần thêm `reg-io-width` property cho SCMI shmem nodes
+- Liên quan đến System Control and Management Interface (SCMI)
+- Ảnh hưởng đến power management và clock control
 
-**Khuyến nghị kỹ thuật:**
-1. Kiểm tra compatibility của kernel 7.0-rc5 với Orange Pi 6 Plus
-2. Đánh giá impact của BIOS update requirement
-3. Test PPA packages trên Debian 13
-4. Xác định roadmap tích hợp vào orangepi-build
+**Tác động:**
+- ⚠️ Breaking change - cần cập nhật firmware/BIOS
+- 🔄 Có thể ảnh hưởng đến các board khác trong Orange Pi lineup
+- 📋 Cần documentation rõ ràng cho migration path
 
 ---
 
 ## 👥 Cộng đồng & Use cases
 
-### Xu hướng sử dụng
+### Phản hồi từ cộng đồng
 
-**Debian 13 adoption:**
-- Cộng đồng đang chuyển sang Debian 13 (testing/unstable)
-- Nhu cầu kernel mainline mới hơn cho hardware support tốt hơn
+**Issue #315 (@web0net):**
+- Người dùng chủ động tìm hiểu và đề xuất tích hợp kernel mainline
+- Thể hiện nhu cầu về long-term support và stability
+- Quan tâm đến việc sử dụng Orange Pi với distro chính thống
 
-**Mainline kernel interest:**
-- Users quan tâm đến kernel mainline thay vì vendor kernel
-- Mong muốn upstream support tốt hơn và updates lâu dài
+**Xu hướng:**
+- Cộng đồng đang hướng tới việc sử dụng mainline kernel thay vì vendor kernels
+- Tăng tính chuyên nghiệp trong deployment
+- Phù hợp cho các ứng dụng production và edge AI
 
 ---
 
-## 🗺️ Roadmap
+## 🗺️ Roadmap & Đề xuất
 
 ### Ngắn hạn (1-2 tuần)
 
-- ⏳ **Đánh giá issue #315**: Maintainers cần phản hồi về khả năng tích hợp CIX kernel
-- 🔍 **Testing**: Kiểm tra compatibility với Orange Pi 6 Plus
-- 📝 **Documentation**: Cập nhật hướng dẫn nếu quyết định support
+1. **Đánh giá tích hợp CIX kernel 7.0-rc5**
+   - Testing trên Orange Pi 6 Plus
+   - Xác định compatibility với NPU/AI workloads
+   - Document BIOS update procedure
+
+2. **Community feedback**
+   - Theo dõi phản hồi từ issue #315
+   - Xác định nhu cầu mainline kernel support cho các board khác
 
 ### Trung hạn (1-3 tháng)
 
-- 🔄 **Kernel strategy**: Xác định chiến lược giữa vendor kernel vs mainline
-- 🆙 **BIOS updates**: Đánh giá và release BIOS updates nếu cần
-- 📦 **Debian 13 support**: Chính thức hỗ trợ Debian 13 trong build system
+1. **Mainline kernel strategy**
+   - Đánh giá khả năng support kernel mainline cho toàn bộ product line
+   - Phát triển migration guide từ vendor kernel sang mainline
+   - Tối ưu hóa AI/NPU drivers cho mainline kernel
+
+2. **Documentation & tooling**
+   - Cập nhật build system để support multiple kernel versions
+   - Tạo automated testing cho kernel compatibility
 
 ### Dài hạn (3-6 tháng)
 
-- 🎯 **Mainline first approach**: Cân nhắc ưu tiên mainline kernel
-- 🤝 **Upstream collaboration**: Tăng cường hợp tác với CIX và mainline kernel community
-- 🔧 **Automated testing**: CI/CD cho multiple kernel versions
+1. **Upstream contributions**
+   - Đóng góp patches cho mainline kernel
+   - Cải thiện Orange Pi support trong Linux kernel chính thống
+   - Tăng cường NPU/AI framework integration
 
 ---
 
-## 📈 Thống kê hoạt động
+## 💡 Nhận xét & Khuyến nghị
 
-| Metric | Số lượng | Xu hướng |
-|--------|----------|----------|
-| Issues mới | 1 | → |
-| PRs merged | 0 | → |
-| Releases | 0 | → |
-| Contributors active | 1 | → |
-| Comments/discussions | 0 | ↓ |
+**Điểm tích cực:**
+- ✅ Cộng đồng chủ động trong việc tìm kiếm giải pháp mainline
+- ✅ CIX cung cấp infrastructure tốt với PPA và documentation
 
-**Nhận xét:** Ngày khá yên tĩnh, chờ phản hồi từ maintainers cho issue mới.
+**Điểm cần cải thiện:**
+- ⚠️ Cần response nhanh hơn từ maintainers cho issues quan trọng
+- ⚠️ Thiếu thông tin về AI/NPU compatibility với kernel mới
+- ⚠️ Chưa có roadmap rõ ràng về mainline kernel support
+
+**Khuyến nghị:**
+1. Ưu tiên testing và validation cho CIX kernel 7.0-rc5
+2. Tạo compatibility matrix cho AI workloads trên mainline kernel
+3. Phát triển automated CI/CD pipeline cho kernel testing
+4. Tăng cường communication với cộng đồng về kernel strategy
 
 ---
 
-## 💡 Khuyến nghị
-
-**Cho maintainers:**
-- Ưu tiên phản hồi issue #315 để giữ engagement với community
-- Đánh giá roadmap kernel strategy cho tương lai
-- Cân nhắc automated testing cho multiple kernel versions
-
-**Cho developers:**
-- Theo dõi CIX kernel development nếu quan tâm đến mainline support
-- Test PPA packages trước khi production deployment
-- Backup trước khi thực hiện BIOS updates
-
-**Cho users:**
-- Chờ phản hồi chính thức trước khi thử kernel mới
-- Tham gia discussion trong issue để chia sẻ use cases
-- Đóng góp testing results nếu có hardware tương tự
+**📌 Kết luận:** Ngày 24/04/2026 đánh dấu một bước quan trọng trong việc hướng tới mainline kernel support cho Orange Pi. Mặc dù hoạt động thấp, nhưng issue #315 mở ra hướng đi chiến lược cho tương lai của platform.
 
 </details>
 

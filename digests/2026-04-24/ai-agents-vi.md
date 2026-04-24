@@ -1,6 +1,6 @@
 # Bản tin Hệ sinh thái OpenClaw 2026-04-24
 
-> Issues: 199 | PRs: 500 | Dự án: 13 | Thời gian tạo: 2026-04-24 01:03 UTC
+> Issues: 311 | PRs: 500 | Dự án: 13 | Thời gian tạo: 2026-04-24 05:09 UTC
 
 - [OpenClaw](https://github.com/openclaw/openclaw)
 - [NanoBot](https://github.com/HKUDS/nanobot)
@@ -20,696 +20,750 @@
 
 ## Phân tích sâu OpenClaw
 
-# Báo cáo phân tích OpenClaw - 24/04/2026
+# Báo cáo Phân tích OpenClaw - Ngày 24/04/2026
 
-## 📊 Tóm tắt hôm nay
+## 1. 📊 Tóm tắt hôm nay
 
-OpenClaw đang trải qua giai đoạn ổn định hóa sau bản phát hành v2026.4.22, với trọng tâm vào việc sửa lỗi hệ thống plugin, cải thiện khả năng tương tác với các nhà cung cấp AI, và tăng cường tính ổn định của gateway. Cộng đồng đang tích cực báo cáo các vấn đề về tích hợp image generation, timeout configuration, và memory management.
+Hôm nay OpenClaw có hoạt động phát triển cực kỳ sôi động với **30+ Pull Requests mới** được tạo, tập trung vào việc cải thiện kiến trúc plugin, tích hợp identity verification, và sửa lỗi các kênh giao tiếp. Đáng chú ý là các PR về **plugin activation plan**, **Discord identity links**, và **VoiceClaw realtime gateway**. Cộng đồng đang gặp nhiều vấn đề với việc cài đặt phiên bản 4.8 do thiếu dependencies (`@buape/carbon`, `grammy`, `@whiskeysockets/baileys`).
 
----
+## 2. 🚀 Releases
 
-## 🚀 Releases
-
-### **v2026.4.22** (Phát hành: 23/04/2026)
+### v2026.4.22 (Phát hành: 23/04/2026)
 
 **Tính năng chính:**
 
-- **🎨 xAI Integration mở rộng**: Hỗ trợ đầy đủ image generation (`grok-imagine-image`, `grok-imagine-image-pro`), text-to-speech với 6 giọng nói live, speech-to-text (`grok-stt`), và realtime transcription cho Voice Call
-- **🎙️ Voice Call Streaming**: Thêm transcription streaming cho Deepgram, ElevenLabs, và Mistral (bổ sung cho OpenAI và xAI hiện có)
-- **🔧 Plugin Runtime Dependencies**: Cải thiện cơ chế cài đặt dependencies cho plugins
+- **🎨 xAI Integration mở rộng**: 
+  - Hỗ trợ tạo ảnh với `grok-imagine-image` và `grok-imagine-image-pro`
+  - Text-to-speech với 6 giọng nói xAI, hỗ trợ MP3/WAV/PCM/G.711
+  - Speech-to-text với `grok-stt` và realtime transcription cho Voice Call
 
-**Ý nghĩa:**
-- Mở rộng đáng kể khả năng multimodal của OpenClaw
-- Tăng cường tính cạnh tranh với các nền tảng AI agent khác
-- Cải thiện trải nghiệm voice interaction
+- **🎙️ Voice Call Streaming**: Thêm transcription streaming cho Deepgram, ElevenLabs, và Mistral
 
----
+**Ý nghĩa**: Đây là bước tiến quan trọng trong việc biến OpenClaw thành nền tảng đa phương thức (multimodal), mở rộng khả năng xử lý âm thanh và hình ảnh ngoài văn bản thuần túy.
 
-## 📈 Tiến độ dự án
+## 3. 🔧 Tiến độ dự án
 
-### **Pull Requests nổi bật:**
+### Pull Requests quan trọng đang active:
 
-#### 🔥 Đang được xử lý tích cực:
+**Kiến trúc & Plugin System:**
 
-1. **#70852 - Fix bundled plugin runtime-dep install** (size: S)
-   - Sửa lỗi nghiêm trọng: 18 bundled plugins fail với `EUNSUPPORTEDPROTOCOL: "workspace:*"` trên Docker image v2026.4.22
-   - **Impact**: Blocking issue cho production deployments
+- **#70943** - Expose activation plan reasons: Cải thiện khả năng debug và hiểu rõ cơ chế kích hoạt plugin
+- **#70930** - Move Bonjour discovery vào bundled plugin: Tái cấu trúc để giảm dependencies core
+- **#70767** - Doctor auto-enable Codex khi OpenAI được bật: Cải thiện trải nghiệm onboarding
 
-2. **#70831 - Fix timeout propagation** (size: S)
-   - Local LLM requests bị kill ở 60s dù config `timeoutSeconds: 900`
-   - Root cause: Timeout không được propagate đến guarded dispatchers
-   - **Impact**: Ảnh hưởng đến khả năng sử dụng local LLM models
+**Identity & Security:**
 
-3. **#70765 - Google Meet participant plugin** (size: XL)
-   - Thêm plugin tích hợp Google Meet với OAuth PKCE, realtime support
-   - Bổ sung DTMF support cho Twilio dial-in flows
-   - **Impact**: Mở rộng khả năng collaboration của OpenClaw
+- **#70944** - Discord identity links: Cho phép resolve Discord user ID thành canonical principal name
+- **#49971** (126 comments) - RFC về Native Agent Identity & Trust Verification: Đề xuất tích hợp ERC-8004, W3C DID/VC cho agent authentication
 
-4. **#67668 - OpenRouter image generation** (size: L)
-   - Thêm image generation provider cho OpenRouter
-   - Hỗ trợ `modalities: ["image", "text"]` qua OpenAI-compatible endpoint
-   - **Impact**: Giải quyết issue #55066 với 8 upvotes
+**Voice & Realtime:**
 
-#### 🎯 Xu hướng phát triển:
+- **#70938** - VoiceClaw realtime brain gateway: WebSocket path mới cho Gemini Live integration
+- **#10356** - Typecast TTS provider: Thêm emotion presets và audio tuning cho Asian languages
 
-- **Plugin ecosystem**: Tập trung vào việc ổn định hóa plugin loading và dependency management
-- **Multimodal capabilities**: Mở rộng hỗ trợ image generation/understanding across providers
-- **Voice/realtime**: Đầu tư mạnh vào voice conversation và streaming transcription
-- **Provider compatibility**: Cải thiện tương thích với OpenRouter, local LLMs, và custom providers
+**Channels & Communication:**
 
----
+- **#70947** - Webchat non-image attachments: Hỗ trợ PDF, documents trong Control UI
+- **#70864** - Scoped mention pattern policy: Cải thiện mention handling across channels
 
-## 💬 Điểm nổi bật cộng đồng
+### Xu hướng phát triển:
 
-### **Issues có nhiều tương tác:**
+1. **Modularization**: Tách các tính năng thành plugins độc lập (Bonjour, Codex)
+2. **Identity Management**: Xây dựng hệ thống identity verification chuẩn Web3
+3. **Multimodal Expansion**: Tăng cường khả năng xử lý voice, image, documents
+4. **Developer Experience**: Cải thiện tooling (doctor, config validation)
 
-1. **#7200 - Real-time Voice Conversation Support** (22 comments, 23 👍)
-   - Feature request: Native bidirectional streaming audio qua Twilio/WebRTC
-   - Phản ánh nhu cầu mạnh mẽ về phone-like interactions
+## 4. 🌟 Điểm nổi bật cộng đồng
 
-2. **#68735 - LLM request failed regression** (12 comments, 5 👍)
-   - Regression từ 2026.4.14 → 2026.4.15 với `github-copilot/gpt-5-mini`
-   - Provider rejected request schema/tool payload
-   - **Trạng thái**: OPEN, cần attention
+### Issues có nhiều tương tác:
 
-3. **#18598 - macOS Sequoia CSV download bug** (14 comments)
-   - Chrome isolated profile không thể download CSV
-   - Filename hiển thị sai, entry unclickable
-   - **Trạng thái**: OPEN, marked as stale
+**#49971 - Agent Identity RFC (126 comments)** 🔥
+- Đề xuất tích hợp blockchain-based identity cho agents
+- Tranh luận sôi nổi về privacy, decentralization, và practical implementation
+- Có thể định hình kiến trúc bảo mật dài hạn của OpenClaw
 
-### **Vấn đề người dùng quan tâm:**
+**#39651 - "Chỉ nói không làm" (32 comments)**
+- Người dùng Trung Quốc báo cáo agent không thực thi lệnh tạo file
+- Vấn đề permissions với Ollama local deployment
+- Phản ánh thách thức với local model integration
 
-- **Image generation reliability**: Nhiều issues về provider registration, SSRF blocking, timeout
-- **Model switching**: Context window overflow khi switch models (#58957)
-- **Memory management**: Gateway RSS regression từ 400MB → 700MB+ trên 2026.4.15 (#70717)
+**#62994 & #62272 - Cannot find module '@buape/carbon' (30 & 17 comments)**
+- Lỗi cài đặt phổ biến với v4.8
+- Ảnh hưởng nhiều người dùng Windows và Linux
+- Đã được fix trong các PR gần đây
 
----
+## 5. 🐛 Ổn định & Bugs
 
-## 🐛 Ổn định & Bugs
+### Vấn đề nghiêm trọng đã được xử lý:
 
-### **Critical Issues:**
+**Dependency Hell (v4.8):**
+- ❌ Missing `@buape/carbon`, `grammy`, `@whiskeysockets/baileys`
+- ✅ **#70948** - Strip dev deps from packaged metadata
+- ✅ **#70632** - Fix bundled runtime dependencies
 
-1. **#70844 - Docker image plugin failure** (NEW, 2 comments)
-   - 18 bundled plugins fail với `workspace:*` dependency error
-   - Blocking production Docker deployments
-   - **Fix**: PR #70852 đang được review
+**Channel Stability:**
+- ❌ **#58339** - Discord false-positive stale-socket restarts (63 unnecessary restarts)
+- ❌ **#38832** - Telegram never updates lastEventAt
+- ✅ **#70705** - Fix synthesis tab clipping in UI
 
-2. **#70423 - Gemini image generation timeout** (4 comments, CLOSED)
-   - Headers Timeout Error dù API responds <20s
-   - Root cause: Per-request undici Agent không inherit timeouts
-   - **Status**: Fixed
+**Model Provider Issues:**
+- ❌ **#66633** - openai-codex fails with Cloudflare 403 after 4.14 upgrade
+- ❌ **#62045** - gpt-5.1-codex-mini regression in 4.5
+- ✅ Rollback mechanisms working
 
-3. **#70346 - Windows setup wizard crash** (7 comments, 3 👍, CLOSED)
-   - Fresh install crashes với `Cannot find module '@larksuiteoapi/node-sdk'`
-   - Xảy ra ngay cả khi Feishu never enabled
-   - **Status**: Fixed
+### Pattern nhận diện:
 
-### **Recurring Patterns:**
+1. **Packaging issues**: npm global install trên Windows/Linux thiếu bundled deps
+2. **Health monitoring**: False positives với idle channels (Discord, Telegram, iMessage)
+3. **Provider compatibility**: Cloudflare bot detection, Codex transport paths
 
-- **Plugin loading failures**: Multiple issues về plugin config validation, runtime deps
-- **Provider compatibility**: OpenRouter, Codex, local LLMs gặp vấn đề với schema/timeout
-- **Image tool reliability**: SSRF blocking, provider registration, model resolution
-- **Memory leaks**: Gateway RSS tăng không kiểm soát trên một số versions
+## 6. 💡 Yêu cầu tính năng
 
----
+### Đề xuất nổi bật:
 
-## ✨ Yêu cầu tính năng
+**#28106 - Agent-to-Agent Task Delegation Protocol** 🌐
+- Tạo "agent economy" phi tập trung
+- Agents có thể discover và delegate tasks cho nhau
+- Tiềm năng tạo marketplace cho specialized agents
 
-### **Đang được thảo luận:**
+**#22438 - Tiered Bootstrap File Loading**
+- Progressive context control để tiết kiệm tokens
+- Load files theo tiers thay vì all-at-once
+- Quan trọng cho large workspaces
 
-1. **#7200 - Real-time Voice Conversation** (23 👍)
-   - Bidirectional streaming audio
-   - Twilio/WebRTC integration
-   - **Priority**: HIGH (based on community interest)
+**#39604 - Allow Private Network Access**
+- Opt-in `tools.web.fetch.allowPrivateNetwork`
+- Cho phép fetch từ localhost/internal networks
+- Cần cho development và enterprise deployments
 
-2. **#68596 - Configurable streaming watchdog timeout** (6 comments, 4 👍)
-   - Cho phép config timeout cho reasoning models (kimi-k2.5, DeepSeek-R1)
-   - Hiện tại hard-coded 30s quá ngắn
-   - **Status**: OPEN
+**#53805 - DeepInfra Provider Support**
+- Unified API cho hundreds of models
+- Top provider trên OpenRouter
+- Competitive pricing
 
-3. **#56349 - Unbypassable outbound policy enforcement** (5 comments)
-   - Pre-send validation/modification boundary
-   - Đảm bảo mọi outbound message đi qua policy check
-   - **Use case**: Enterprise compliance, content filtering
+## 7. 👥 Phản hồi người dùng
 
-4. **#55914 - Shareable invite codes for mobile pairing** (2 comments)
-   - Alternative to QR code pairing
-   - `openclaw invite` command generates short code
-   - **Use case**: Easier mobile onboarding
+### Tích cực:
 
-### **Image generation expansion:**
+- ✅ Cộng đồng đánh giá cao tốc độ fix bugs (nhiều issues closed trong ngày)
+- ✅ Documentation improvements được chú trọng
+- ✅ Multi-language support (Chinese, Vietnamese users active)
 
-- **#55066 - OpenRouter image generation** (8 👍, CLOSED via PR #67668)
-- **#57574 - MiniMax image generation** (2 👍, 2 comments, CLOSED)
-- Multiple requests cho custom provider image support
+### Tiêu cực:
 
----
+- ⚠️ **#63129** - Phản hồi gay gắt về Feishu integration ("污染openclaw", "造屎")
+- ⚠️ Frustration với breaking changes giữa các versions
+- ⚠️ Windows users gặp nhiều vấn đề hơn Linux/Mac
 
-## 👥 Phản hồi người dùng
+### Pain points chính:
 
-### **Positive feedback:**
+1. **Installation complexity**: Đặc biệt với npm global packages
+2. **Model provider stability**: Frequent timeouts, rate limits
+3. **Documentation gaps**: Thiếu guides cho advanced configurations
+4. **Local model support**: Ollama integration chưa smooth
 
-- Đánh giá cao việc mở rộng xAI integration trong v2026.4.22
-- Community active trong việc report bugs và contribute fixes
-- Documentation improvements được welcome
+## 8. 📋 Backlog & Roadmap
 
-### **Pain points:**
+### Đang trong pipeline:
 
-1. **Setup complexity**: Windows users gặp nhiều vấn đề với fresh install
-2. **Provider configuration**: Confusion về model registration, imageModel config
-3. **Timeout management**: Không rõ ràng về timeout hierarchy (global vs provider vs model)
-4. **Memory usage**: Gateway RSS tăng đột biến trên một số versions gây lo ngại
+**Short-term (1-2 tuần):**
+- 🔄 Stabilize v4.8 packaging và dependencies
+- 🔄 Complete identity links cho tất cả channels
+- 🔄 VoiceClaw realtime gateway merge
+- 🔄 Webchat file attachments support
 
-### **Feature requests patterns:**
+**Mid-term (1-2 tháng):**
+- 🔮 Agent Identity & Trust Verification (RFC #49971)
+- 🔮 Agent-to-Agent delegation protocol
+- 🔮 DeepInfra provider integration
+- 🔮 Tiered context loading
 
-- **Voice/realtime**: Nhu cầu mạnh về phone-like interactions
-- **Enterprise features**: Policy enforcement, compliance, audit trails
-- **Mobile experience**: Easier pairing, better mobile UI
-- **Local LLM support**: Cải thiện compatibility với self-hosted models
+**Long-term (3-6 tháng):**
+- 🌟 Decentralized agent economy
+- 🌟 Advanced memory/dreaming improvements
+- 🌟 Enterprise-grade security features
+- 🌟 Plugin marketplace
 
----
+### Priorities rõ ràng:
 
-## 🗓️ Backlog & Roadmap
-
-### **Immediate priorities (dựa trên PR activity):**
-
-1. **Plugin system stabilization**
-   - Fix Docker image plugin loading (#70852)
-   - Improve config validation (#70811)
-   - Better error messages for plugin failures
-
-2. **Provider compatibility**
-   - OpenRouter image generation (PR #67668)
-   - Local LLM timeout fixes (PR #70831)
-   - Model catalog improvements
-
-3. **Memory & performance**
-   - Investigate gateway RSS regression (#70717)
-   - Optimize context management
-   - Improve streaming efficiency
-
-### **Medium-term (based on community requests):**
-
-1. **Voice & realtime**
-   - Real-time voice conversation (#7200)
-   - Google Meet integration (PR #70765)
-   - Expand streaming transcription providers
-
-2. **Image capabilities**
-   - More image generation providers
-   - Better image understanding routing
-   - SSRF policy improvements
-
-3. **Enterprise features**
-   - Outbound policy enforcement (#56349)
-   - Better audit trails
-   - Compliance tooling
-
-### **Long-term vision (inferred):**
-
-- **Multi-modal AI agent platform**: Text, voice, image, video
-- **Enterprise-ready**: Security, compliance, scalability
-- **Provider-agnostic**: Support for any LLM/AI provider
-- **Developer-friendly**: Easy plugin development, clear APIs
+1. **Stability first**: Fix packaging và channel health monitoring
+2. **Identity layer**: Xây dựng foundation cho agent trust
+3. **Developer experience**: Improve tooling, docs, error messages
+4. **Ecosystem growth**: More providers, channels, plugins
 
 ---
 
-## 📌 Kết luận
-
-OpenClaw đang trong giai đoạn **consolidation** sau một đợt phát triển tính năng mạnh mẽ. Team đang tập trung vào:
-
-- ✅ Ổn định hóa plugin ecosystem
-- ✅ Cải thiện provider compatibility
-- ✅ Fix critical bugs ảnh hưởng production
-- ✅ Mở rộng multimodal capabilities
-
-**Điểm mạnh**: Community engagement cao, release cadence nhanh, responsive maintainers
-
-**Thách thức**: Memory management, plugin loading reliability, provider configuration complexity
-
-**Outlook**: Tích cực - project đang mature với focus rõ ràng vào stability và enterprise readiness.
+**Kết luận**: OpenClaw đang trong giai đoạn phát triển mạnh mẽ với focus vào **modularization**, **identity management**, và **multimodal capabilities**. Tuy nhiên, team cần ưu tiên giải quyết các vấn đề packaging và stability trước khi push thêm features mới. Cộng đồng rất active nhưng cần better communication về breaking changes và migration paths.
 
 ---
 
 ## So sánh hệ sinh thái chéo
 
-# 📊 Báo cáo So sánh Hệ sinh thái AI Agent - 24/04/2026
+# 📊 Báo cáo So sánh Hệ sinh thái AI Agent - Ngày 24/04/2026
 
-## 1. 🌐 Tổng quan hệ sinh thái
+## 1. 🌐 Tổng quan Hệ sinh thái
 
-Hệ sinh thái AI agent đang trải qua giai đoạn **consolidation và maturation** với các dự án lớn tập trung vào **stability, security, và enterprise readiness**. Ngày 24/04/2026 chứng kiến hoạt động cực kỳ sôi động với **tổng cộng 247 PRs** và **152 issues** được xử lý trên 12 dự án chính.
+Hệ sinh thái AI agent đang trong giai đoạn **bùng nổ phát triển** với sự xuất hiện của nhiều dự án đa dạng về quy mô và định hướng. Trong 24 giờ qua, toàn bộ hệ sinh thái ghi nhận:
+
+- **🔥 200+ Pull Requests** được tạo/merge
+- **📝 100+ Issues** được mở/cập nhật  
+- **🚀 8 Releases** chính thức từ 5 dự án
+- **👥 Hàng trăm contributors** đang active
 
 ### Phân khúc thị trường rõ ràng:
 
-- **🏢 Enterprise-focused**: OpenClaw, IronClaw, Moltis
-- **🤖 Edge/IoT**: ZeptoClaw, PicoClaw  
-- **🌏 Asia-Pacific**: CoPaw (QwenPaw), LobsterAI, NanoBot
-- **🔬 Research/Experimental**: NullClaw, TinyClaw
-- **🚀 Rapid Development**: NanoClaw, Zeroclaw
+**🏢 Enterprise-focused:**
+- **OpenClaw**: Nền tảng mở, plugin ecosystem mạnh
+- **IronClaw**: Focus vào coding agents, mission framework
+- **Moltis**: Multi-agent orchestration, skills-based
+
+**🚀 Rapid Development:**
+- **NanoBot**: Velocity cao, nightly builds
+- **LobsterAI**: 30 PRs/ngày, performance optimization
+- **CoPaw**: 2 releases/ngày, desktop experience
+
+**🔬 Specialized:**
+- **PicoClaw**: Embedded/IoT, ARM support
+- **NanoClaw**: Security-first, blockchain identity
+- **Zeroclaw**: Observability, tracing-focused
+
+**🌱 Early Stage:**
+- **NullClaw**, **ZeptoClaw**, **EasyClaw**: Đang tìm kiếm product-market fit
 
 ---
 
-## 2. 📈 Bảng so sánh hoạt động
+## 2. 📊 Bảng So sánh Hoạt động
 
-| Dự án | Issues | PRs | Releases | Hoạt động 24h | Mức độ tương tác | Giai đoạn |
-|-------|--------|-----|----------|---------------|------------------|-----------|
-| **OpenClaw** | 199 | 500 | 1 | 🔥🔥🔥🔥 Cao | ⭐⭐⭐⭐⭐ Rất cao | Maturity |
-| **NanoBot** | 14 | 20 | 0 | 🔥🔥🔥🔥🔥 Rất cao | ⭐⭐⭐⭐ Cao | Rapid Growth |
-| **Zeroclaw** | 1 | 50 | 0 | 🔥🔥🔥🔥 Cao | ⭐⭐⭐ Trung bình | Sprint Phase |
-| **PicoClaw** | 36 | 45 | 1 | 🔥🔥🔥 Trung bình | ⭐⭐⭐⭐ Cao | Stabilization |
-| **NanoClaw** | 16 | 29 | 0 | 🔥🔥🔥🔥 Cao | ⭐⭐⭐⭐ Cao | Hardening |
-| **NullClaw** | 11 | 0 | 0 | 🔥🔥 Thấp | ⭐⭐ Thấp | Early Stage |
-| **IronClaw** | 18 | 50 | 0 | 🔥🔥🔥🔥🔥 Rất cao | ⭐⭐⭐⭐ Cao | Transformation |
-| **LobsterAI** | 6 | 13 | 0 | 🔥🔥🔥 Trung bình | ⭐⭐⭐ Trung bình | Polish Phase |
-| **Moltis** | 8 | 13 | 0 | 🔥🔥🔥 Trung bình | ⭐⭐⭐ Trung bình | Stabilization |
-| **CoPaw** | 39 | 50 | 2 | 🔥🔥🔥🔥 Cao | ⭐⭐⭐⭐⭐ Rất cao | Stable Growth |
-| **ZeptoClaw** | 19 | 16 | 0 | 🔥🔥🔥🔥 Cao | ⭐⭐⭐ Trung bình | Strategic Push |
-| **EasyClaw** | 1 | 0 | 2 | 🔥 Rất thấp | ⭐ Rất thấp | Maintenance |
+| Dự án | Issues | PRs | Releases | Velocity | Cộng đồng | Trưởng thành |
+|-------|--------|-----|----------|----------|-----------|--------------|
+| **OpenClaw** | 311 | 500 | 1 | 🔥🔥🔥🔥🔥 | ⭐⭐⭐⭐⭐ | Mature |
+| **NanoBot** | 12 | 19 | 0 | 🔥🔥🔥🔥 | ⭐⭐⭐ | Growth |
+| **Zeroclaw** | 2 | 50 | 0 | 🔥🔥🔥🔥 | ⭐⭐⭐ | Growth |
+| **PicoClaw** | 41 | 47 | 1 | 🔥🔥🔥 | ⭐⭐⭐⭐ | Growth |
+| **NanoClaw** | 16 | 31 | 0 | 🔥🔥🔥🔥 | ⭐⭐⭐ | Growth |
+| **NullClaw** | 11 | 0 | 0 | 🔥 | ⭐⭐ | Early |
+| **IronClaw** | 9 | 50 | 0 | 🔥🔥🔥🔥 | ⭐⭐⭐ | Growth |
+| **LobsterAI** | 2 | 39 | 0 | 🔥🔥🔥🔥🔥 | ⭐⭐⭐ | Growth |
+| **TinyClaw** | 0 | 0 | 0 | - | ⭐ | Dormant |
+| **Moltis** | 9 | 13 | 0 | 🔥🔥🔥 | ⭐⭐ | Early |
+| **CoPaw** | 23 | 50 | 2 | 🔥🔥🔥🔥🔥 | ⭐⭐⭐⭐ | Growth |
+| **ZeptoClaw** | 1 | 1 | 0 | 🔥 | ⭐ | Early |
+| **EasyClaw** | 1 | 0 | 3 | 🔥🔥 | ⭐⭐ | Early |
 
-### Chỉ số tổng hợp:
+### Chỉ số chi tiết:
 
-- **Tổng Issues**: 368 (trung bình 30.7/dự án)
-- **Tổng PRs**: 786 (trung bình 65.5/dự án)  
-- **Tổng Releases**: 6 (50% dự án có release trong tháng)
-- **Velocity cao nhất**: IronClaw (50 PRs), OpenClaw (500 PRs tích lũy)
-- **Engagement cao nhất**: OpenClaw, CoPaw (cộng đồng đông đảo)
+| Dự án | PRs/ngày | Issues mới/ngày | Comments/issue | Releases/tháng |
+|-------|----------|-----------------|----------------|----------------|
+| OpenClaw | 30+ | 10-15 | 15-126 | 4-6 |
+| NanoBot | 19 | 3-5 | 3-8 | 0 (nightly) |
+| LobsterAI | 30 | 1-2 | 1-3 | 0 (preparing) |
+| CoPaw | 15-20 | 5-8 | 2-9 | 8-12 |
+| PicoClaw | 10-15 | 3-5 | 2-6 | 2-4 |
 
 ---
 
 ## 3. 🎯 Vị thế của OpenClaw
 
-### Vai trò dẫn đầu thị trường
+### Vai trò: **"Nền tảng trung tâm" của hệ sinh thái**
 
-OpenClaw đang ở vị trí **market leader** với các chỉ số vượt trội:
+**Điểm mạnh vượt trội:**
 
-**📊 Số liệu nổi bật:**
-- **500 PRs tích lũy** - cao nhất trong hệ sinh thái
-- **199 issues** - cộng đồng lớn và tích cực
-- **23 👍 trên feature request** (#7200) - engagement cao nhất
-- **v2026.4.22** - release cadence nhanh (mỗi tuần)
+1. **📦 Plugin Ecosystem lớn nhất**
+   - 500+ PRs cho thấy kiến trúc mở rộng tốt
+   - Bundled plugins (Bonjour, Codex) đang được modularize
+   - Community đóng góp plugins đa dạng
 
-**💪 Điểm mạnh:**
+2. **🌍 Multimodal Leadership**
+   - xAI integration (image, TTS, STT)
+   - Voice Call Streaming (Deepgram, ElevenLabs, Mistral)
+   - Đi đầu trong việc hỗ trợ đa phương thức
 
-1. **Multimodal Leadership**: Dẫn đầu về tích hợp đa phương thức
-   - xAI integration đầy đủ (image, TTS, STT, realtime)
-   - Voice Call Streaming cho 5 providers
-   - Image generation expansion (OpenRouter, MiniMax)
+3. **🔐 Identity & Trust Innovation**
+   - RFC #49971 về blockchain-based identity (126 comments)
+   - ERC-8004, W3C DID/VC integration
+   - Định hình chuẩn mực cho agent authentication
 
-2. **Enterprise Readiness**: 
-   - Plugin ecosystem trưởng thành (18 bundled plugins)
-   - Policy enforcement (#56349)
-   - Memory management sophisticated
+4. **👥 Cộng đồng lớn và đa dạng**
+   - Issues có 30-126 comments
+   - Người dùng từ nhiều quốc gia (Trung Quốc, Việt Nam, etc.)
+   - Active contributors và maintainers
 
-3. **Developer Experience**:
-   - Documentation tốt nhất
-   - Active maintainers (response < 24h)
-   - Clear roadmap và communication
+**Thách thức:**
 
-**⚠️ Thách thức:**
+- ⚠️ **Dependency hell** (v4.8): Missing `@buape/carbon`, `grammy`, `@whiskeysockets/baileys`
+- ⚠️ **Channel stability**: False-positive restarts (Discord, Telegram)
+- ⚠️ **Breaking changes**: Frustration từ users về compatibility
 
-1. **Complexity Creep**: 
-   - Configuration phức tạp (timeout hierarchy, provider setup)
-   - Memory usage tăng (400MB → 700MB regression)
-   - Plugin loading failures
+**So với các đối thủ:**
 
-2. **Platform Compatibility**:
-   - Windows setup issues (#70346)
-   - Android/Termux support chưa tốt
+| Tiêu chí | OpenClaw | NanoBot | IronClaw | CoPaw |
+|----------|----------|---------|----------|-------|
+| Plugin ecosystem | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Multimodal | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Identity/Security | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| Stability | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Documentation | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
 
-3. **Competition Pressure**:
-   - NanoBot đuổi kịp về tốc độ phát triển
-   - IronClaw có kiến trúc engine-v2 tiên tiến hơn
-   - ZeptoClaw chiếm thị trường edge/IoT
-
-### So sánh với đối thủ chính:
-
-| Tiêu chí | OpenClaw | NanoBot | IronClaw |
-|----------|----------|---------|----------|
-| **Multimodal** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Voice/Realtime** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
-| **Plugin Ecosystem** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **Memory Management** | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Enterprise Features** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| **Developer Experience** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **Stability** | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+**Kết luận:** OpenClaw là **"Android của AI agents"** - nền tảng mở, ecosystem lớn, nhưng đôi khi fragmented. Các dự án khác học hỏi và fork từ OpenClaw nhưng tối ưu cho use cases cụ thể.
 
 ---
 
-## 4. 🔧 Hướng kỹ thuật chung
+## 4. 🔧 Hướng Kỹ thuật Chung
 
-### Xu hướng công nghệ được áp dụng rộng rãi:
+### Xu hướng được nhiều dự án áp dụng:
 
-#### 1️⃣ **Observability & Monitoring** (7/12 dự án)
+#### 1️⃣ **Modularization & Plugin Architecture**
 
-**Triển khai:**
-- **OpenTelemetry**: NanoBot (#3173), Zeroclaw (#5986, #6009)
-- **Tracing**: IronClaw (Langfuse/LangSmith), Zeroclaw (SSE broadcast)
-- **Audit Trail**: ZeptoClaw (#528 hash-chain), NanoClaw
+**Dự án áp dụng:** OpenClaw, NanoBot, Moltis, IronClaw
 
-**Insight**: Các dự án enterprise đang chuyển từ "black box" sang "observable systems" để debug và optimize production workloads.
+- **Pattern**: Tách core engine khỏi integrations
+- **Lợi ích**: Giảm dependencies, dễ maintain, community contributions
+- **Ví dụ**:
+  - OpenClaw: Bonjour discovery → bundled plugin
+  - IronClaw: 11 WASM tools → skill-based HTTP declarations
+  - Moltis: 101 bundled skills với category UI
 
-#### 2️⃣ **Multi-tenant Architecture** (5/12 dự án)
+#### 2️⃣ **Observability & Tracing**
 
-**Patterns:**
-- **Channel Instances**: IronClaw (#2841), PicoClaw
-- **Workspace Isolation**: NanoClaw (ZEPTOCLAW_HOME #531)
-- **Multi-bot Support**: LobsterAI (Discord/Telegram), CoPaw
+**Dự án áp dụng:** NanoBot, Zeroclaw, IronClaw
 
-**Insight**: SaaS deployment đang trở thành use case chính, yêu cầu isolation và resource management tốt hơn.
+- **Tools**: OpenTelemetry, Langfuse, LangSmith
+- **Scope**: LLM calls, tool execution, agent loops
+- **Ví dụ**:
+  - NanoBot: PR #3173 - OpenTelemetry tracing
+  - Zeroclaw: PR #5986 - Runtime tracing + SSE broadcast
+  - IronClaw: Enriched OTel tool spans
 
-#### 3️⃣ **Voice & Realtime** (6/12 dự án)
+#### 3️⃣ **Multi-Channel Support**
+
+**Dự án áp dụng:** Tất cả (trừ TinyClaw)
+
+**Channels phổ biến:**
+- Telegram ✅ (10/12 dự án)
+- Discord ✅ (8/12)
+- Slack ✅ (7/12)
+- WhatsApp ✅ (6/12)
+- Feishu/DingTalk ✅ (5/12 - thị trường Trung Quốc)
+
+**Trend mới:**
+- Signal (NanoClaw, PicoClaw)
+- Email/IMAP (NanoClaw, PicoClaw)
+- IRC (Zeroclaw)
+
+#### 4️⃣ **Memory & Context Management**
+
+**Approaches đa dạng:**
+
+| Dự án | Approach | Technology |
+|-------|----------|------------|
+| OpenClaw | Tiered context loading | Progressive file loading |
+| NanoBot | MGP (Memory Governance Protocol) | Cross-session governed |
+| Moltis | External memory backends | mem0, Supermemory, HydraDB |
+| IronClaw | Mission-based memory | Dossier-style structured prompts |
+| CoPaw | Memory-evolving | Self-improving capabilities |
+
+#### 5️⃣ **Security Hardening**
+
+**Dự án focus:** NanoClaw, IronClaw, OpenClaw
+
+**Common patterns:**
+- Sandbox execution (Docker, restricted shells)
+- Tool approval workflows
+- Prompt injection detection
+- SSRF prevention
+- Privilege escalation mitigation
+
+**Ví dụ nổi bật:**
+- NanoClaw: 7 security findings từ CSO audit, fix trong 24h
+- IronClaw: Indirect prompt injection via memory poisoning
+- OpenClaw: Agent identity & trust verification (RFC #49971)
+
+#### 6️⃣ **Voice & Multimodal**
+
+**Leaders:** OpenClaw, PicoClaw, LobsterAI
 
 **Capabilities:**
-- **Bidirectional Streaming**: OpenClaw (#7200), Zeroclaw (VAD #5976)
-- **Transcription**: NanoBot (local whisper #1876), PicoClaw
-- **TTS Integration**: OpenClaw (6 voices), NanoClaw
+- STT (Speech-to-Text): Whisper, Deepgram, xAI
+- TTS (Text-to-Speech): ElevenLabs, xAI, Typecast
+- Image generation: xAI grok-imagine
+- Voice streaming: Realtime transcription
 
-**Insight**: Voice interaction đang chuyển từ "nice-to-have" sang "must-have", đặc biệt cho mobile và IoT use cases.
+#### 7️⃣ **Cost Optimization**
 
-#### 4️⃣ **Security Hardening** (8/12 dự án)
-
-**Measures:**
-- **SSRF Protection**: ZeptoClaw (#527), OpenClaw
-- **Skill Verification**: ZeptoClaw (#526 SHA256), NanoClaw
-- **Policy Enforcement**: OpenClaw (#56349), CoPaw (safe guard rules)
-- **OAuth Improvements**: PicoClaw (#2546 PKCE), Moltis (#852)
-
-**Insight**: Production incidents đang drive security awareness - từ "move fast" sang "move fast AND safe".
-
-#### 5️⃣ **Edge/Local Deployment** (4/12 dự án)
-
-**Focus:**
-- **Binary Size**: ZeptoClaw (6MB target #537)
-- **Offline Mode**: ZeptoClaw (#539), NanoBot
-- **Local LLMs**: PicoClaw (LM Studio), Moltis (llama.cpp)
-- **IoT Integration**: ZeptoClaw (MQTT #538), PicoClaw
-
-**Insight**: Privacy concerns và latency requirements đang push workloads về edge.
-
-#### 6️⃣ **MCP (Model Context Protocol)** (6/12 dự án)
-
-**Adoption:**
-- **Native Support**: OpenClaw, PicoClaw (#2641 CLI), Moltis
-- **OAuth Flow**: PicoClaw (#2546), Moltis (#852)
-- **Management Tools**: NanoClaw (#840 skill), IronClaw
-
-**Insight**: MCP đang trở thành standard cho tool integration, thay thế custom plugin systems.
+**Strategies:**
+- **Prompt caching**: OpenRouter (NanoBot), Anthropic (Zeroclaw)
+- **Budget enforcement**: IronClaw (cost-based limits)
+- **Local models**: Ollama, LM Studio support
+- **Token reduction**: Reply-intent classifier (Zeroclaw)
 
 ---
 
-## 5. 🎨 Điểm khác biệt
+## 5. 🎨 Điểm Khác biệt
 
-### Chiến lược phân hóa:
+### Chiến lược Positioning:
 
-#### **OpenClaw** - "Swiss Army Knife"
-- **Positioning**: All-in-one platform cho mọi use case
-- **Moat**: Multimodal breadth + plugin ecosystem
-- **Target**: Developers muốn flexibility và power
-- **Risk**: Complexity creep, harder to maintain
+#### **OpenClaw - "The Platform"**
+- 🎯 **Vision**: Universal agent platform
+- 💪 **Strengths**: Ecosystem, multimodal, identity
+- 🎭 **Persona**: Android - open, fragmented, powerful
+- 📊 **Market**: Developers, enterprises, researchers
 
-#### **NanoBot** - "Speed Demon"  
-- **Positioning**: Rapid iteration, bleeding-edge features
-- **Moat**: Velocity (20 PRs/day) + MGP integration
-- **Target**: Early adopters, experimenters
-- **Risk**: Stability issues, breaking changes
+#### **NanoBot - "The Speedster"**
+- 🎯 **Vision**: Rapid iteration, nightly builds
+- 💪 **Strengths**: Velocity, observability, MGP
+- 🎭 **Persona**: Tesla - fast, innovative, sometimes unstable
+- 📊 **Market**: Early adopters, experimenters
 
-#### **IronClaw** - "Enterprise Beast"
-- **Positioning**: Production-grade, mission-critical
-- **Moat**: Engine-v2 architecture + multi-tenant
-- **Target**: Large organizations, SaaS providers
-- **Risk**: Complexity, slower feature velocity
+#### **IronClaw - "The Coder"**
+- 🎯 **Vision**: Coding agent excellence
+- 💪 **Strengths**: Mission framework, budget system
+- 🎭 **Persona**: GitHub Copilot - specialized, professional
+- 📊 **Market**: Software developers, DevOps teams
 
-#### **ZeptoClaw** - "Edge Specialist"
-- **Positioning**: Embedded systems, IoT
-- **Moat**: 6MB binary + offline-first
-- **Target**: Robotics, industrial IoT
-- **Risk**: Niche market, limited features
+#### **CoPaw/QwenPaw - "The Desktop Champion"**
+- 🎯 **Vision**: Best desktop experience
+- 💪 **Strengths**: UI/UX, Windows support, DingTalk
+- 🎭 **Persona**: Notion - polished, user-friendly
+- 📊 **Market**: Knowledge workers, Chinese market
 
-#### **CoPaw (QwenPaw)** - "China Champion"
-- **Positioning**: Localized for Chinese market
-- **Moat**: WeChat/DingTalk/Feishu integration
-- **Target**: Chinese enterprises
-- **Risk**: Geographic limitation
+#### **PicoClaw - "The Embedded Specialist"**
+- 🎯 **Vision**: AI agents on edge devices
+- 💪 **Strengths**: ARM support, low resource usage
+- 🎭 **Persona**: Raspberry Pi - accessible, IoT-focused
+- 📊 **Market**: Embedded systems, IoT, makers
 
-#### **PicoClaw** - "Balanced Contender"
-- **Positioning**: Good enough for most use cases
-- **Moat**: Stability + reasonable feature set
-- **Target**: Pragmatic developers
-- **Risk**: Lack of differentiation
+#### **NanoClaw - "The Security Expert"**
+- 🎯 **Vision**: Enterprise-grade security
+- 💪 **Strengths**: Audit-driven, blockchain identity
+- 🎭 **Persona**: 1Password - security-first, trustworthy
+- 📊 **Market**: Enterprises, regulated industries
 
-### Bảng so sánh chiến lược:
+#### **Zeroclaw - "The Observer"**
+- 🎯 **Vision**: Observability-first agents
+- 💪 **Strengths**: Tracing, metrics, debugging
+- 🎭 **Persona**: Datadog - monitoring, analytics
+- 📊 **Market**: DevOps, SRE teams
 
-| Dự án | Differentiation | Moat Strength | Market Fit | Execution |
-|-------|----------------|---------------|------------|-----------|
-| OpenClaw | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| NanoBot | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| IronClaw | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| ZeptoClaw | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| CoPaw | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| PicoClaw | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+### Tính năng độc quyền:
+
+| Tính năng | Dự án | Mô tả |
+|-----------|-------|-------|
+| **Blockchain Identity** | OpenClaw, NanoClaw | ERC-8004, W3C DID/VC |
+| **MGP Protocol** | NanoBot | Memory Governance Protocol |
+| **Mission Framework** | IronClaw | Dossier-style autonomous workflows |
+| **101 Bundled Skills** | Moltis | Largest skill library |
+| **ARM/Embedded** | PicoClaw | Raspberry Pi, NXP i.MX93 |
+| **Desktop Native** | CoPaw | System tray, native file dialogs |
+| **OpenTelemetry** | NanoBot, Zeroclaw | Full tracing integration |
+
+### Cộng đồng & Culture:
+
+| Dự án | Culture | Communication Style | Response Time |
+|-------|---------|---------------------|---------------|
+| OpenClaw | Open, diverse | Technical, detailed | 1-3 days |
+| NanoBot | Fast-paced | Concise, action-oriented | < 24h |
+| IronClaw | Professional | Structured, RFC-driven | 2-5 days |
+| CoPaw | User-centric | Friendly, supportive | < 12h |
+| NanoClaw | Security-conscious | Audit-driven, thorough | < 24h |
+| PicoClaw | Maker-friendly | Practical, hardware-focused | 1-2 days |
 
 ---
 
-## 6. 👥 Mức độ trưởng thành cộng đồng
+## 6. 📈 Mức độ Trưởng thành Cộng đồng
 
-### Phân tích theo giai đoạn:
+### Phân loại theo giai đoạn:
 
-#### **🌟 Mature Communities** (3 dự án)
+#### 🌟 **Mature (Trưởng thành)**
 
 **OpenClaw**
-- ✅ 500+ PRs, 199 issues - scale lớn
-- ✅ 23 👍 trên feature requests - high engagement
-- ✅ Multiple contributors, responsive maintainers
-- ✅ Clear governance và roadmap
-- ⚠️ Complexity barrier cho new contributors
+- ✅ 500+ PRs, 311 issues
+- ✅ RFC process cho major changes
+- ✅ Multi-language community
+- ✅ Established governance
+- ⚠️ Cần cải thiện: Breaking changes communication
 
-**CoPaw (QwenPaw)**
-- ✅ 50 PRs, 39 issues - hoạt động đều đặn
-- ✅ 60 comments trên help-wanted issue - organized
-- ✅ Bilingual community (CN + EN)
-- ✅ Active contribution pipeline
-- ⚠️ Geographic concentration (China-heavy)
+**Chỉ số:**
+- Contributors: 50+
+- Issue response: 1-3 ngày
+- PR review: 2-7 ngày
+- Documentation: Comprehensive
+- Governance: RFC-based
 
-**IronClaw**
-- ✅ 50 PRs, 18 issues - high velocity
-- ✅ Systematic QA (11 bugs từ bug bash)
-- ✅ Multiple external contributors
-- ✅ Clear epic tracking (#2767)
-- ⚠️ Communication gaps (issues ít comments)
+#### 🚀 **Growth (Tăng trưởng)**
 
-#### **🌱 Growing Communities** (5 dự án)
+**NanoBot, Zeroclaw, IronClaw, CoPaw, PicoClaw, NanoClaw**
 
-**NanoBot**
-- ✅ 20 PRs/day - explosive growth
-- ✅ 15 comments trên cron issue - engaged users
-- ⚠️ Churn risk (nhiều breaking changes)
-- ⚠️ Documentation lag behind features
+**Đặc điểm chung:**
+- ✅ Active development (10-50 PRs/tuần)
+- ✅ Responsive maintainers (< 48h)
+- ✅ Growing contributor base
+- ⚠️ Documentation đang được cải thiện
+- ⚠️ Governance chưa formal
 
-**Zeroclaw**
-- ✅ 30 PR updates/day - active development
-- ✅ ACP client ecosystem (agentic.nvim)
-- ⚠️ Contributor concentration (few maintainers)
-- ⚠️ Stale issues (i18n RFC #5788)
+**Ví dụ nổi bật:**
 
-**PicoClaw**
-- ✅ 45 PRs, 36 issues - healthy pipeline
-- ✅ Multi-platform support (ARM, WSL2)
-- ⚠️ Configuration complexity complaints
-- ⚠️ Channel bugs (WhatsApp, Matrix)
+**CoPaw:**
+- 2 releases/ngày
+- Desktop UX focus
+- Strong Chinese community
+- Rapid bug fixes
 
-**NanoClaw**
-- ✅ 29 PRs, 16 issues - good velocity
-- ✅ Security-conscious (audit findings)
-- ⚠️ Apple Silicon friction
-- ⚠️ Setup complexity
+**NanoClaw:**
+- Security-first culture
+- 15+ PRs trong 24h sau incident
+- CSO audit process
 
-**ZeptoClaw**
-- ✅ 16 PRs merged/day - focused execution
-- ✅ Clear strategic vision (edge/IoT)
-- ⚠️ Small team (1-2 core contributors)
-- ⚠️ Limited external contributions
+**PicoClaw:**
+- CLI management tools
+- Multi-instance support
+- ARM/embedded focus
 
-#### **🌾 Early Stage** (4 dự án)
+#### 🌱 **Early Stage (Giai đoạn đầu)**
 
-**Moltis**
-- ⚠️ 13 PRs, 8 issues - moderate activity
-- ⚠️ Few external contributors
-- ✅ Good response time
-- ⚠️ Limited community engagement
+**NullClaw, Moltis, ZeptoClaw, EasyClaw**
 
-**LobsterAI**
-- ⚠️ 13 PRs, 6 issues - low volume
-- ⚠️ Stale issues (Electron 40 #15)
-- ✅ Some external PRs (#61)
+**Thách thức:**
+- ⚠️ Low PR activity (0-13 PRs)
+- ⚠️ Limited contributors (1-3)
 - ⚠️ Documentation gaps
+- ⚠️ Unclear roadmap
+- ⚠️ Low community engagement
 
-**NullClaw**
-- ⚠️ 0 PRs, 11 issues - development stalled?
-- ⚠️ Frustrated users (config hell)
-- ⚠️ Platform compatibility issues
-- ❌ No visible maintainer activity
+**Cơ hội:**
+- ✅ Niche positioning (Moltis: multi-agent)
+- ✅ Room for differentiation
+- ✅ Can learn from mature projects
 
-**EasyClaw**
-- ⚠️ 0 PRs, 1 issue - minimal activity
-- ⚠️ Maintenance mode
-- ✅ Quick issue resolution
-- ❌ No community engagement
+#### 💤 **Dormant (Không hoạt động)**
 
-### Community Health Scorecard:
+**TinyClaw**
+- 0 activity trong 24h
+- Có thể đã bị abandon hoặc merged vào dự án khác
 
-| Dự án | Contributor Diversity | Response Time | Documentation | Governance | Overall |
-|-------|----------------------|---------------|---------------|------------|---------|
-| OpenClaw | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | **A+** |
-| CoPaw | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | **A** |
-| IronClaw | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | **B+** |
-| NanoBot | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | **B+** |
-| Zeroclaw | ⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | **B** |
-| PicoClaw | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | **B** |
-| NanoClaw | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | **B** |
-| ZeptoClaw | ⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | **B-** |
-| Moltis | ⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐ | **C+** |
-| LobsterAI | ⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ | **C** |
-| NullClaw | ⭐ | ⭐⭐ | ⭐ | ⭐ | **D** |
-| EasyClaw | ⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐ | **D** |
+### Community Health Metrics:
 
----
-
-## 7. 🔮 Tín hiệu xu hướng
-
-### Dự đoán phát triển 6-12 tháng tới:
-
-#### **1. Consolidation Wave** 🌊
-
-**Tín hiệu:**
-- 4/12 dự án trong "stabilization phase"
-- Focus chuyển từ features → reliability
-- Memory management là pain point chung
-
-**Dự đoán:**
-- **2-3 dự án sẽ merge hoặc ngừng phát triển** (NullClaw, EasyClaw, TinyClaw)
-- **Market leaders sẽ tăng gap** (OpenClaw, CoPaw, IronClaw)
-- **Niche players sẽ double down** (ZeptoClaw edge/IoT)
-
-#### **2. Enterprise Adoption Acceleration** 🏢
-
-**Tín hiệu:**
-- Multi-tenant architecture (5 dự án)
-- Observability tools (7 dự án)
-- Security hardening (8 dự án)
-- Policy enforcement features
-
-**Dự đoán:**
-- **Q3 2026**: Các dự án lớn sẽ announce enterprise customers
-- **Compliance features** (SOC2, GDPR) sẽ trở thành table stakes
-- **Managed services** sẽ xuất hiện (hosted OpenClaw, IronClaw SaaS)
-
-#### **3. Voice-First Interfaces** 🎙️
-
-**Tín hiệu:**
-- 6/12 dự án đang build voice capabilities
-- OpenClaw #7200 có 23 👍 (highest engagement)
-- Realtime streaming là hot topic
-
-**Dự đoán:**
-- **Q2 2026**: Voice sẽ là default interaction mode
-- **Phone-like experiences** sẽ phổ biến (Twilio, WebRTC)
-- **Ambient computing** use cases (smart home, car)
-
-#### **4. Edge/IoT Explosion** 🤖
-
-**Tín hiệu:**
-- ZeptoClaw strategic push (4 issues về edge)
-- Liquid AI integration (edge-native models)
-- Offline-first architecture
-- MQTT channel requests
-
-**Dự đoán:**
-- **Robotics** sẽ là killer app (ZeptoClaw + R8r demo)
-- **Industrial IoT** adoption (manufacturing, logistics)
-- **Privacy-first** deployments (healthcare, finance)
-
-#### **5. Asia-Pacific Dominance** 🌏
-
-**Tín hiệu:**
-- CoPaw (China), LobsterAI (Youdao), NanoBot (HKUDS)
-- Feishu/DingTalk/WeChat integrations
-- Bilingual documentation
-- SEA expansion (#536 Line/Feishu)
-
-**Dự đoán:**
-- **China market** sẽ vượt US về deployment volume
-- **Localized features** sẽ là competitive advantage
-- **Cross-border collaboration** sẽ tăng (MCP standard)
-
-#### **6. MCP Standardization** 🔌
-
-**Tín hiệu:**
-- 6/12 dự án support MCP
-- OAuth flow improvements
-- Management tools xuất hiện
-- Claude.ai UX được copy
-
-**Dự đoán:**
-- **MCP 2.0** sẽ ra mắt với advanced features
-- **Plugin marketplaces** sẽ xuất hiện
-- **Interoperability** giữa các platforms
-
-#### **7. Memory & Context Management** 🧠
-
-**Tín hiệu:**
-- Memory leaks là top bug category
-- MGP (Memory Governance Protocol) integration
-- Context window optimization
-- Session management improvements
-
-**Dự đoán:**
-- **Long-term memory** sẽ là differentiator
-- **Cross-session context** sẽ standard
-- **Memory marketplaces** (buy/sell curated memories)
-
-### Rủi ro cần theo dõi:
-
-⚠️ **Security Incidents**: Production breaches sẽ force industry-wide hardening  
-⚠️ **Model Provider Consolidation**: OpenAI/Anthropic dominance có thể kill diversity  
-⚠️ **Regulatory Pressure**: EU AI Act, China regulations sẽ impact features  
-⚠️ **Economic Downturn**: Enterprise budgets cut → focus on ROI use cases  
+| Dự án | Health Score | Trend | Key Strength | Key Weakness |
+|-------|--------------|-------|--------------|--------------|
+| OpenClaw | 8.5/10 | ↗️ | Ecosystem | Stability |
+| NanoBot | 8.0/10 | ↗️↗️ | Velocity | Documentation |
+| CoPaw | 8.5/10 | ↗️↗️ | UX | Platform diversity |
+| IronClaw | 7.5/10 | ↗️ | Architecture | CI stability |
+| Zeroclaw | 7.5/10 | ↗️ | Observability | Community size |
+| PicoClaw | 7.0/10 | ↗️ | ARM support | Apple Container |
+| NanoClaw | 7.5/10 | ↗️ | Security | Multi-platform |
+| Moltis | 6.5/10 | ↗️ | Skills library | Traction |
+| NullClaw | 5.0/10 | → | - | Config management |
+| ZeptoClaw | 5.0/10 | → | - | Community |
+| EasyClaw | 4.5/10 | ↘️ | - | Distribution |
 
 ---
 
-## 🎯 Kết luận chiến lược
+## 7. 🔮 Tín hiệu Xu hướng
+
+### Xu hướng đang nổi lên:
+
+#### 1️⃣ **Agent-to-Agent Communication**
+
+**Tín hiệu:**
+- OpenClaw: RFC #28106 - Task Delegation Protocol
+- IronClaw: Mission framework cho autonomous workflows
+- Moltis: Sub-agent orchestration
+
+**Dự đoán:**
+- Q3 2026: Standardized agent communication protocols
+- Q4 2026: Agent marketplaces và discovery mechanisms
+- 2027: Decentralized agent economies
+
+#### 2️⃣ **Blockchain-based Identity**
+
+**Tín hiệu:**
+- OpenClaw: RFC #49971 (126 comments) - ERC-8004, W3C DID/VC
+- NanoClaw: Native agent identity verification
+
+**Dự đoán:**
+- Q2-Q3 2026: First production implementations
+- Q4 2026: Cross-platform identity standards
+- 2027: Agent reputation systems
+
+#### 3️⃣ **Multimodal Expansion**
+
+**Tín hiệu:**
+- OpenClaw: xAI integration (image, voice)
+- PicoClaw: Voice processing pipeline
+- LobsterAI: Image handling improvements
+
+**Dự đoán:**
+- Q2 2026: Voice becomes standard
+- Q3 2026: Video processing integration
+- Q4 2026: Real-time multimodal streaming
+
+#### 4️⃣ **Edge & Embedded Deployment**
+
+**Tín hiệu:**
+- PicoClaw: ARM64, Raspberry Pi, NXP i.MX93
+- NanoBot: Low-resource optimization
+
+**Dự đoán:**
+- Q3 2026: Agents trên smartphones
+- Q4 2026: IoT device integration
+- 2027: Offline-first agents
+
+#### 5️⃣ **Enterprise Security & Compliance**
+
+**Tín hiệu:**
+- NanoClaw: CSO audit, 7 security findings
+- IronClaw: SSRF prevention, prompt injection detection
+- OpenClaw: Identity & trust verification
+
+**Dự đoán:**
+- Q2 2026: Security certifications (SOC 2, ISO 27001)
+- Q3 2026: Compliance frameworks (GDPR, HIPAA)
+- Q4 2026: Enterprise adoption acceleration
+
+#### 6️⃣ **Observability as Core Feature**
+
+**Tín hiệu:**
+- NanoBot: OpenTelemetry integration
+- Zeroclaw: Runtime tracing, SSE broadcast
+- IronClaw: Enriched OTel spans
+
+**Dự đoán:**
+- Q2 2026: Observability becomes table stakes
+- Q3 2026: AI-powered debugging tools
+- Q4 2026: Predictive performance optimization
+
+#### 7️⃣ **Cost Optimization & Efficiency**
+
+**Tín hiệu:**
+- IronClaw: Budget enforcement system
+- Zeroclaw: Reply-intent classifier, prompt caching
+- Multiple projects: Local model support
+
+**Dự đoán:**
+- Q2 2026: Cost becomes primary concern
+- Q3 2026: Hybrid cloud/local architectures
+- Q4 2026: Token-efficient prompting standards
+
+### Consolidation Signals:
+
+**Dự đoán về M&A và partnerships:**
+
+1. **OpenClaw ecosystem expansion**
+   - Có thể acquire/partner với specialized projects
+   - Mục tiêu: Tăng cường multimodal, security
+
+2. **Enterprise players entering**
+   - Microsoft, Google, AWS có thể launch competing platforms
+   - Hoặc acquire leading open-source projects
+
+3. **Vertical integration**
+   - Coding agents (IronClaw) → IDE integrations
+   - Desktop agents (CoPaw) → OS-level features
+   - Embedded agents (PicoClaw) → Hardware partnerships
+
+### Technology Convergence:
+
+**Các công nghệ sẽ trở thành standard:**
+
+✅ **By Q3 2026:**
+- Multi-channel support (Telegram, Discord, Slack)
+- Voice capabilities (STT/TTS)
+- Docker sandbox execution
+- OpenTelemetry tracing
+- MCP (Model Context Protocol)
+
+✅ **By Q4 2026:**
+- Blockchain identity
+- Agent-to-agent communication
+- Multimodal processing
+- Edge deployment
+- Cost optimization frameworks
+
+✅ **By 2027:**
+- Decentralized agent networks
+- Real-time collaboration
+- Autonomous workflows
+- Regulatory compliance
+- AI-powered self-improvement
+
+---
+
+## 8. 💡 Khuyến nghị Chiến lược
 
 ### Cho OpenClaw:
 
-**Maintain Leadership:**
-1. ✅ **Double down on multimodal** - đây là moat mạnh nhất
-2. ✅ **Improve stability** - fix memory leaks, plugin loading
-3. ✅ **Enterprise features** - policy enforcement, audit trails
-4. ⚠️ **Simplify onboarding** - reduce configuration complexity
+**Ưu tiên ngắn hạn (Q2 2026):**
+1. 🔴 **Stabilize v4.8** - Giải quyết dependency issues
+2. 🟠 **Improve documentation** - Giảm friction cho new users
+3. 🟡 **Channel health monitoring** - Fix false-positive restarts
 
-**Defend Against:**
-- **NanoBot velocity** - cần tăng release cadence
-- **IronClaw architecture** - consider engine refactor
-- **ZeptoClaw edge** - add lightweight deployment option
-- **CoPaw localization** - expand Asia-Pacific support
+**Ưu tiên trung hạn (Q3 2026):**
+1. 🎯 **Launch identity layer** - Implement RFC #49971
+2. 🎯 **Agent delegation protocol** - Enable agent economy
+3. 🎯 **Enterprise features** - Security certifications
 
-**Opportunities:**
-- **Voice-first pivot** - lead the voice interaction wave
-- **Managed service** - launch hosted OpenClaw
-- **Enterprise sales** - target Fortune 500
-- **Developer ecosystem** - build plugin marketplace
+**Duy trì lợi thế:**
+- ✅ Continue multimodal leadership
+- ✅ Expand plugin ecosystem
+- ✅ Foster community diversity
 
 ### Cho các dự án khác:
 
-**NanoBot**: Slow down, focus on stability before adding more features  
-**IronClaw**: Finish engine-v2 migration, then market aggressively  
-**ZeptoClaw**: Execute edge/IoT thesis, get Raspberry Pi demo out  
-**CoPaw**: Expand beyond China, build English community  
-**PicoClaw**: Find differentiation or risk commoditization  
-**NullClaw**: Fix critical bugs or risk abandonment  
+**NanoBot:**
+- Focus: Stabilize nightly builds → stable releases
+- Opportunity: Become "bleeding edge" reference
+
+**IronClaw:**
+- Focus: Coding agent excellence
+- Opportunity: IDE integrations, GitHub partnerships
+
+**CoPaw:**
+- Focus: Desktop UX perfection
+- Opportunity: OS-level integrations (Windows, macOS)
+
+**PicoClaw:**
+- Focus: Edge deployment
+- Opportunity: IoT partnerships, hardware vendors
+
+**NanoClaw:**
+- Focus: Enterprise security
+- Opportunity: Compliance certifications, B2B sales
+
+### Cho newcomers:
+
+**Chiến lược differentiation:**
+1. **Niche vertical** - Chọn industry cụ thể (healthcare, finance, legal)
+2. **Geographic focus** - Optimize cho thị trường địa phương
+3. **Technology specialization** - Deep expertise trong 1 lĩnh vực
+4. **Integration partnerships** - Become "official agent" cho platforms lớn
 
 ---
 
-**📅 Next Review**: 01/05/2026 - Theo dõi Q2 enterprise announcements và voice feature launches
+## 9. 🎓 Kết luận
+
+### Bức tranh tổng thể:
+
+Hệ sinh thái AI agent đang ở giai đoạn **"Cambrian Explosion"** - sự bùng nổ đa dạng sinh học. Mỗi dự án đang thử nghiệm các approaches khác nhau, và thị trường chưa có winner rõ ràng.
+
+**OpenClaw** đang dẫn đầu về **ecosystem và innovation**, nhưng phải đối mặt với thách thức về **stability và complexity**. Các đối thủ đang học hỏi từ OpenClaw nhưng tối ưu cho use cases cụ thể.
+
+### Key Takeaways:
+
+1. **🌍 Không có "one size fits all"** - Mỗi dự án phục vụ niche riêng
+2. **🔐 Security đang trở thành differentiator** - Không còn là afterthought
+3. **🎙️ Multimodal là future** - Voice và image đang trở thành standard
+4. **💰 Cost optimization quan trọng** - Quyết định adoption ở scale
+5. **👥 Community > Technology** - Dự án có cộng đồng mạnh sẽ thắng
+
+### Dự đoán 6 tháng tới:
+
+- **3-5 dự án** sẽ consolidate hoặc pivot
+- **2-3 enterprise players** sẽ enter thị trường
+- **Standards** sẽ bắt đầu emerge (identity, communication, observability)
+- **Vertical solutions** sẽ xuất hiện (healthcare agents, legal agents, etc.)
+- **Regulatory attention** sẽ tăng (AI safety, data privacy)
+
+**Thời điểm vàng để tham gia:** Hệ sinh thái đang mở, cơ hội cho innovation và differentiation vẫn còn rất lớn. 🚀
 
 ---
 
@@ -718,235 +772,164 @@ OpenClaw đang ở vị trí **market leader** với các chỉ số vượt tr�
 <details>
 <summary><strong>NanoBot</strong> — <a href="https://github.com/HKUDS/nanobot">HKUDS/nanobot</a></summary>
 
-# 📊 Báo cáo Phân tích Hệ Sinh thái NanoBot - 24/04/2026
+# 📊 Báo cáo phân tích NanoBot - 24/04/2026
 
 ## 🎯 Tóm tắt hôm nay
 
-Ngày 24/04 chứng kiến một đợt hoạt động cực kỳ sôi động với **20 PRs** và **14 issues** được xử lý. Dự án tập trung mạnh vào việc **tối ưu hóa bộ nhớ và hiệu năng**, với nhiều bản vá quan trọng cho vấn đề history.jsonl bloat. Cộng đồng đang mở rộng khả năng tích hợp với các tính năng mới như MGP memory governance, OpenTelemetry tracing, và hỗ trợ LaTeX rendering cho Feishu.
-
----
+Ngày 24/04 chứng kiến hoạt động phát triển cực kỳ sôi động với **19 PRs mới** tập trung vào việc cải thiện hiệu suất, khả năng quan sát và tính năng nâng cao. Đáng chú ý là các bản vá quan trọng giải quyết vấn đề memory bloat và loop detection, cùng với việc bổ sung tích hợp OpenTelemetry và MGP protocol. Cộng đồng đang tích cực đóng góp các tính năng mới như LaTeX rendering cho Feishu và inline keyboard cho Telegram.
 
 ## 🚀 Releases
 
-**Không có release chính thức** trong 24 giờ qua, nhưng có nhiều bản vá quan trọng đang được merge vào nhánh `nightly`.
-
----
+Không có release chính thức trong 24h qua, nhưng nhiều PR đang được merge vào nhánh `nightly`, cho thấy một bản release lớn đang được chuẩn bị.
 
 ## 📈 Tiến độ dự án
 
-### 🔥 Các PR quan trọng nhất
+### PRs quan trọng đang active:
 
-**1. Khắc phục nghiêm trọng về bộ nhớ (#3412, #3413, #3414, #3415)**
-- **Vấn đề**: `history.jsonl` bị phình to không kiểm soát, gây tràn system prompt và làm sập agent
-- **Giải pháp**: 
-  - Loại bỏ `raw_archive` khỏi history để tránh lưu dữ liệu thô không giới hạn
-  - Xóa giới hạn 60 tin nhắn trong consolidation (gây kẹt với tool chains dài)
-  - Thêm giới hạn 32K ký tự cho phần "Recent History" trong system prompt
-  - Chặn 4 đường dẫn rò rỉ bộ nhớ còn lại
-- **Tác động**: Giải quyết #3410 (RAM tăng từ 200MB lên 600MB sau v0.1.5.post2)
+**🔥 Ưu tiên cao - Sửa lỗi nghiêm trọng:**
 
-**2. Observability với OpenTelemetry (#3173)**
-- Tích hợp tracing cho toàn bộ agent loop: LLM calls, tool executions, orchestration
-- Hỗ trợ Langfuse và LangSmith backends
-- Cho phép debug và monitor hiệu năng chi tiết
+- **#3412, #3413, #3414, #3415** - Chuỗi PRs xử lý vấn đề `history.jsonl` bloat
+  - Loại bỏ `_cap_consolidation_boundary` để tránh consolidation bị stuck
+  - Giới hạn recent history section ở 32K chars
+  - Ngăn chặn raw_archive gây pollution
+  - **Impact**: Giải quyết vấn đề tiêu thụ RAM tăng cao (#3410) và cải thiện hiệu suất đáng kể
 
-**3. Memory Governance Protocol (MGP) (#3408)**
-- Tích hợp opt-in với MGP để quản lý bộ nhớ cross-session có governance
-- Thêm `mgp_query` và `mgp_commit` tools
-- Không ảnh hưởng hành vi hiện tại khi tắt
+**🎨 Tính năng mới nổi bật:**
 
-**4. Model Presets (#3358)**
-- Cho phép định nghĩa các preset model với tham số generation
-- Dễ dàng chuyển đổi giữa các cấu hình model khác nhau
-- Giảm thiểu lỗi cấu hình
+- **#3173** - OpenTelemetry tracing cho LLM calls và tools
+  - Tích hợp Langfuse và LangSmith
+  - Trace toàn bộ agent loop
+  - Cải thiện khả năng debug và monitoring
 
-**5. Project Manager Skill (#3403)**
-- Giải quyết vấn đề context isolation giữa các projects
-- Mỗi project có `STATUS.md` riêng để duy trì trạng thái
-- Cải thiện khả năng làm việc với nhiều projects song song
+- **#3408** - MGP (Memory Governance Protocol) integration
+  - Cross-session memory governed
+  - Opt-in sidecar architecture
+  - Không ảnh hưởng behavior hiện tại khi disabled
 
-### 📊 Xu hướng phát triển
+- **#3358** - Model presets cho quick switching
+  - Named bundles của model + generation parameters
+  - Dễ dàng chuyển đổi giữa các cấu hình
 
-- **Tối ưu hóa hiệu năng**: 5 PRs liên quan đến memory/history management
-- **Mở rộng tích hợp**: MGP, OpenTelemetry, Olostep web search
-- **Cải thiện UX**: Model presets, project manager, inline keyboards cho Telegram
-- **Hỗ trợ đa kênh**: LaTeX rendering cho Feishu, voice messages cho WhatsApp
+**🌐 Channel improvements:**
 
----
+- **#3411** - LaTeX rendering cho Feishu qua CodeCogs API
+- **#3398** - Telegram inline keyboard buttons (đã đóng, có thể đang refactor)
+- **#3268** - Allowlist trong blocklist cho Feishu reactEmoji
+
+**🛠️ Developer experience:**
+
+- **#3303** - spawn_status/spawn_cancel tools + domain loop detection
+- **#3403** - project-manager skill cho per-project context isolation
+- **#3405** - Olostep integration cho web_search
 
 ## 💬 Điểm nổi bật cộng đồng
 
-### 🔝 Issues được quan tâm nhất
+**Vấn đề được quan tâm nhất:**
 
-**1. #3410 - RAM tăng vọt trong v0.1.5.post2** (0 comments nhưng critical)
-- RAM tăng từ ~200MB lên ~600MB
-- Nghi ngờ liên quan đến tính năng "dream" mới
-- Đã được giải quyết qua chuỗi PRs #3412-#3415
+1. **#2152** (👍 2) - Native WhatsApp voice message support (STT + TTS)
+   - User đã tự build Fish Audio integration
+   - Yêu cầu merge vào core để tránh patch sau mỗi update
+   - Cho thấy nhu cầu cao về voice features
 
-**2. #2892 - Cơ chế cron tasks không trực quan** (15 comments)
-- Định thời phải restart gateway mới hoạt động
-- Không thể tạo task từ agent và chạy ngay
-- Vấn đề thiết kế kiến trúc cần xem xét lại
+2. **#162** - Session management improvements
+   - Hỗ trợ multiple conversations
+   - Auto-expiration
+   - Đã được đóng, có thể đã được giải quyết
 
-**3. #2049 - Mất khả năng tạo skills** (13 comments)
-- Sau upgrade, bot không còn tool `skill-creator`
-- Ảnh hưởng đến workflow tạo skills động
-
-**4. #1932 - Không thể disable skills, chỉ delete** (7 comments, good first issue)
-- Thiếu tính năng toggle on/off cho skills
-- Gây bất tiện khi muốn tạm tắt skill
-
-### 🎨 Đề xuất cải tiến được chú ý
-
-**#3402 - Chuyển từ JSON sang TOML** (7 comments, CLOSED)
-- Đề xuất thay config.json bằng TOML để dễ đọc/sửa hơn
-- Đã bị đóng - có thể chưa phù hợp với roadmap hiện tại
-
-**#3407 - File upload trong WebUI** (4 comments, CLOSED)
-- Yêu cầu hỗ trợ upload file trực tiếp từ browser
-- Đã đóng nhanh - có thể đã có giải pháp khác
-
----
+3. **#1932** - Yêu cầu disable skills thay vì chỉ delete
+   - Vẫn OPEN, chưa có giải pháp
+   - Labeled "good first issue" - cơ hội cho contributors mới
 
 ## 🐛 Ổn định & Bugs
 
-### ⚠️ Bugs nghiêm trọng đã fix
+**Đã giải quyết:**
 
-1. **History.jsonl bloat** (#3412-#3415) - ✅ Fixed
-   - Gây tràn bộ nhớ và system prompt
-   - Ảnh hưởng nghiêm trọng đến stability
+- ✅ **#3390** - "Tool Call: Sorry, I encountered an error" - đã đóng
+- ✅ **#3406** - WhatsApp login fail sau upgrade v0.1.5.post2 - đã đóng
+- ✅ **#3215** - Email self-reply loop (fixed qua #3234)
+- ✅ **#3402** - JSON to TOML migration request - đã đóng
 
-2. **Email self-reply loop** (#3215, #3234) - ✅ Fixed
-   - Bot reply chính nó tạo vòng lặp vô hạn
-   - Đã thêm guard để skip sender = bot
+**Đang xử lý:**
 
-3. **WhatsApp login fail sau upgrade** (#3406) - ✅ Fixed
-   - Lỗi "Invalid token" sau v0.1.5.post2
-   - Đã được giải quyết nhanh
+- 🔴 **#3417** - Claude Opus 4.7 rejects temperature parameter
+  - PR #3418 đã được tạo để fix
+  - Hardcoded `temperature=1.0` gây 400 error
+  
+- 🟡 **#3410** - Large RAM consumption trong v0.1.5.post2
+  - Tăng từ ~200MB lên ~600MB
+  - Nghi ngờ liên quan đến "dream" feature
+  - Đang được giải quyết qua chuỗi PRs #3412-#3415
 
-### 🔧 Bugs đang xử lý
+**Vấn đề cũ vẫn tồn tại:**
 
-1. **#3390 - Tool call error không rõ nguyên nhân**
-   - Telegram channel trả về "Sorry, I encountered an error"
-   - Tool chạy thành công nhưng không response
-   - Chưa có giải pháp rõ ràng
-
-2. **#3377 - Multi subagent reply lặp lại**
-   - Khi dùng nhiều subagents, main agent reply nhiều lần
-   - Vấn đề về coordination giữa các agents
-
-3. **#3417 - Claude Opus 4.7 reject temperature parameter**
-   - API mới của Anthropic không còn nhận `temperature`
-   - Hardcode trong provider gây lỗi 400
-
----
+- **#2049** - Missing skill-creator tool sau upgrade
+- **#173** - Reusing old API key (marked stale)
 
 ## ✨ Yêu cầu tính năng
 
-### 🎯 Tính năng mới đang phát triển
+**Đã được implement/đang implement:**
 
-1. **Embeddings API support** (#3401)
-   - Thêm `/v1/embeddings` endpoint
-   - Hỗ trợ OpenAI-compatible và Azure OpenAI
-   - Mở rộng khả năng semantic search
+1. ✅ TOML config format (#3402) - đã đóng
+2. 🔄 File upload trong webUI (#3407) - đã đóng, có thể đang được refactor
+3. 🔄 Model presets (#3358) - đang review
+4. 🔄 Dream config cho identity files (#3400) - đang review
 
-2. **Spawn status/cancel tools** (#3303)
-   - Query trạng thái subagent tasks
-   - Cancel tasks đang chạy
-   - Domain loop detection cho web_fetch
+**Đang chờ:**
 
-3. **Telegram inline keyboards** (#3398)
-   - Thêm buttons tương tác trong Telegram
-   - Routing callback queries
-   - Cải thiện UX đáng kể
-
-4. **OpenRouter free models** (#3416)
-   - Thêm `prefer_free` option
-   - Tự động append `:free` suffix
-   - Tiết kiệm chi phí cho users
-
-5. **LaTeX rendering cho Feishu** (#3411, #3307)
-   - Render công thức LaTeX qua CodeCogs API
-   - Hỗ trợ cả streaming và non-streaming
-   - Không cần cài đặt thêm dependencies
-
-### 🔮 Tính năng được đề xuất
-
-1. **Native WhatsApp voice support** (#2152, 2👍)
-   - STT + TTS integration với Fish Audio
-   - Đã có implementation nhưng cần patch bridge
-   - Đề xuất tích hợp native
-
-2. **Skill disable/enable** (#1932)
-   - Toggle skills thay vì chỉ delete
-   - Marked as "good first issue"
-
----
+1. Skill disable/enable toggle (#1932)
+2. WhatsApp voice native support (#2152)
+3. Custom provider support (#3264 - marked duplicate, có thể đã có giải pháp khác)
 
 ## 👥 Phản hồi người dùng
 
-### 😊 Phản hồi tích cực
+**Tích cực:**
 
-- Cộng đồng đánh giá cao tốc độ fix bugs (nhiều issues được đóng trong ngày)
-- WebUI được khen là "clean and user-friendly"
-- Tính năng observability với OpenTelemetry được chờ đợi
+- Cộng đồng đánh giá cao webUI interface (clean & user-friendly)
+- Users tự build extensions và muốn contribute back (Fish Audio, Olostep)
+- Nhiều PRs từ contributors mới cho thấy project đang thu hút developers
 
-### 😟 Điểm đau của người dùng
+**Tiêu cực/Cần cải thiện:**
 
-1. **Cơ chế cron tasks phức tạp** - Phải restart gateway mỗi lần tạo task mới
-2. **RAM usage tăng cao** - Từ 200MB lên 600MB sau update
-3. **Thiếu khả năng disable skills** - Chỉ có thể delete hoàn toàn
-4. **Config phức tạp** - Đề xuất chuyển sang TOML bị từ chối
-5. **Stale issues** - #173 bị đánh dấu stale sau 2 tháng
+- Vấn đề RAM consumption sau upgrade gây lo ngại
+- Breaking changes giữa các versions (WhatsApp auth, skill-creator)
+- Session management vẫn còn hạn chế
+- Thiếu documentation cho một số features mới
 
-### 🔄 Vấn đề tái diễn
+## 📋 Backlog & Roadmap
 
-- **API key caching**: #173 - Bot vẫn dùng API key cũ dù đã update config
-- **Session management**: #162 - Thiếu hỗ trợ multiple conversations và auto-expiration
+**Ưu tiên ngắn hạn (dựa trên activity):**
 
----
+1. 🔥 Stabilize memory management và giảm RAM usage
+2. 🔥 Fix Claude Opus 4.7 compatibility
+3. 🎯 Merge observability features (OpenTelemetry)
+4. 🎯 Finalize model presets system
+5. 🌐 Improve channel-specific features (LaTeX, inline keyboards)
 
-## 🗺️ Backlog & Roadmap
+**Xu hướng phát triển:**
 
-### 📋 Backlog quan trọng
+- **Observability first**: Tích hợp tracing và monitoring tools
+- **Memory governance**: MGP protocol cho cross-session memory
+- **Developer experience**: Better tooling (spawn management, project isolation)
+- **Multi-modal**: Voice support, file uploads
+- **Configuration flexibility**: Presets, TOML, custom providers
 
-**High Priority:**
-- ✅ Memory optimization (đang được xử lý tích cực)
-- 🔄 Cron mechanism redesign (#2892)
-- 🔄 Session management improvements (#162)
-- 🔄 Skill management UX (#1932, #2049)
+**Dự đoán release tiếp theo:**
 
-**Medium Priority:**
-- 🆕 Embeddings API (#3401)
-- 🆕 Observability (#3173)
-- 🆕 MGP integration (#3408)
-- 🆕 Project isolation (#3403)
-
-**Low Priority:**
-- Config format migration (TOML) - rejected
-- File upload in WebUI - closed
-
-### 🎯 Xu hướng phát triển
-
-1. **Stability First**: Tập trung vào memory leaks và performance issues
-2. **Enterprise Features**: Observability, governance, multi-project support
-3. **Channel Expansion**: Cải thiện Telegram, Feishu, WhatsApp integrations
-4. **Developer Experience**: Model presets, better error handling, structured events
-
-### 📊 Metrics
-
-- **PR merge rate**: Rất cao (nhiều PRs được merge trong ngày)
-- **Issue response time**: Nhanh (< 24h cho critical bugs)
-- **Community engagement**: Tích cực (15 comments trên issue về cron)
-- **Code quality**: Có test coverage cho các tính năng mới
+Với số lượng PRs lớn đang được merge vào `nightly`, có thể sẽ có một **v0.1.6** hoặc **v0.2.0** trong vài ngày tới với:
+- Memory management fixes
+- OpenTelemetry integration
+- Model presets
+- Channel improvements
+- Bug fixes tích lũy
 
 ---
 
-## 🎬 Kết luận
-
-NanoBot đang trong giai đoạn **maturation** với focus mạnh vào **stability và enterprise readiness**. Việc xử lý nhanh các memory leaks và performance issues cho thấy team có khả năng respond tốt với production problems. Các tính năng mới như MGP, OpenTelemetry, và project manager cho thấy hướng đi rõ ràng về **multi-tenant, observable, và governed AI agents**.
-
-Thách thức lớn nhất hiện tại là **cân bằng giữa tốc độ phát triển và backward compatibility**, đặc biệt với các breaking changes trong cron mechanism và skill management.
+**📊 Thống kê nhanh:**
+- 19 PRs mới (14 OPEN, 5 CLOSED)
+- 12 issues được cập nhật
+- 4 PRs critical về memory management
+- 3 PRs về observability/monitoring
+- Cộng đồng đang rất active với nhiều contributions chất lượng
 
 </details>
 
@@ -957,163 +940,187 @@ Thách thức lớn nhất hiện tại là **cân bằng giữa tốc độ ph�
 
 ## 🎯 Tóm tắt hôm nay
 
-Zeroclaw đang trong giai đoạn phát triển tích cực với 30 PR được cập nhật trong ngày, tập trung vào 3 trục chính: **hoàn thiện hệ thống voice/audio** (VAD, STT), **cải thiện observability** (OpenTelemetry, tracing), và **mở rộng hỗ trợ đa nền tảng** (Windows, Nix, Docker). Milestone v0.7.4 đang được theo dõi sát sao với nhiều bugfix quan trọng về channels, config, và infrastructure.
+Zeroclaw đang trong giai đoạn phát triển tích cực với **30 PR đang mở** và nhiều cải tiến quan trọng. Hoạt động chính tập trung vào việc hoàn thiện hệ thống kênh giao tiếp (Slack, IRC, ACP), tối ưu hóa hiệu năng backend, và mở rộng khả năng observability. Đáng chú ý là các PR về voice processing, desktop app (Tauri), và cải thiện trải nghiệm developer với skills system.
 
 ---
 
 ## 🚀 Releases
 
-**Không có release chính thức** trong 24h qua. Dự án đang hướng tới **v0.7.4** (theo dõi tại #5877), sau khi v0.7.3 được phát hành khẩn cấp để sửa lỗi broken tags.
+**Không có release chính thức** trong 24 giờ qua. Tuy nhiên, issue #5877 đang theo dõi milestone **v0.7.4** (trước đó là v0.7.2, đổi số sau sự cố v0.7.3). Milestone này đang trong quá trình hoàn thiện với nhiều tính năng đang được review.
 
 ---
 
 ## 📈 Tiến độ dự án
 
-### 🔥 Các PR ưu tiên cao (risk: high)
+### 🔥 Các PR quan trọng đang được xử lý:
 
-**1. Voice/Audio Pipeline (#5896 epic)**
-- #5976: Triển khai **Energy-based VAD** thay thế NoopVad placeholder
-- #5978: Thêm **speech capture buffer + STT dispatch** với pre-speech rolling buffer (~300ms)
-- Ý nghĩa: Đây là nền tảng cho tính năng voice interaction, cho phép agent xử lý input giọng nói real-time
+**Hệ thống kênh giao tiếp:**
+- **#5992** - Slack: Thêm tùy chọn `strict_mention_in_thread` để kiểm soát bot chỉ phản hồi khi được mention trong thread
+- **#6055** - Slack: Đề xuất tự động hydrate context từ thread history khi bot được mention lần đầu
+- **#5998** - IRC: Thêm chế độ mention-only cho channels
+- **#5979** - Tối ưu reply-intent classifier: cho phép opt-out precheck để giảm LLM calls không cần thiết trong DM
 
-**2. Observability & Monitoring**
-- #5986: Runtime tracing + SSE broadcast cho agent turn lifecycle
-- #6009: Enriched OTel spans với `gen_ai.tool.*` semantic conventions
-- Tác động: Cải thiện khả năng debug và monitor agent behavior trong production
+**Observability & Monitoring:**
+- **#5986** - Thêm runtime tracing và SSE broadcast cho agent turn lifecycle
+- **#6009** - Enriched OTel tool spans với semantic conventions (gen_ai.tool.*)
+- **#6008** - Prompt caching cho OpenRouter (hỗ trợ Anthropic, DeepSeek, Qwen)
 
-**3. Multi-instance & Scalability**
-- #6016: Khôi phục **PostgreSQL backend** cho memory/knowledge graph (đã bị xóa ở #4714)
-- #6038: Thêm **claim/release lock** cho cron scheduler để tránh duplicate job execution
-- Quan trọng: Cho phép deploy multi-instance với shared state
+**Skills System:**
+- **#6054** - Fix: Respect `timeout_secs` từ SKILL.toml (field tồn tại nhưng không được parse)
+- **#6057** - Docs: Python skills quickstart với sandbox patterns
+- **#5972** - Fix: Cho phép `prompts` trong `[skill]` TOML section
+- **#5981** - Fix: Pass `allow_scripts` qua ReadSkillTool
+- **#5952** - Refactor skill audit: chỉ giữ structural checks, delegate command safety cho sandbox
 
-### 🛠️ Infrastructure & Platform Support
+**Session Management:**
+- **#5900** - Thêm `clear_messages()` vào SessionBackend trait cho O(1) session reset (thay vì O(n²))
+- **#6033** - SessionsCurrentTool: Expose active session identity để agent biết đang ở session nào
+- **#6043** - Thêm `get_session_metadata(key)` để tránh phải load toàn bộ sessions
 
-**Windows Support**
-- #6050: Sửa `cargo test` trên Windows + cập nhật self-update target triples
-- Vấn đề: Test hardcode `sleep` command không tồn tại trên Windows
+**Voice Processing (#5896 epic):**
+- **#5976** - Energy-based Voice Activity Detector (thay thế NoopVad placeholder)
+- **#5978** - Speech capture buffer + STT dispatch với pre-speech rolling buffer
 
-**Nix Package**
-- #5987: Tách riêng Rust build và Web UI build để tối ưu cache
-- Lợi ích: Thay đổi frontend không invalidate Rust build cache
+**Infrastructure:**
+- **#5985** - SQLite FTS: Thêm UPDATE trigger cho sessions_fts (trước đó chỉ có INSERT/DELETE)
+- **#5987** - Nix package: Tách riêng Rust và Web builds để tối ưu cache
+- **#5905** - Docker sandbox: Thêm workspace bind-mount support
 
-**Docker**
-- #5983, #6025: Sửa thiếu `web/dist` trong Dockerfile.debian
-- #5997: Fix Tauri desktop crash do thiếu rustls crypto provider
+**Desktop & Clients:**
+- **#5265** - Tauri desktop app với node persistence, E2E tests, macOS automation
+- **#6013** - ACP: Fix defaultModel resolution từ config
+- **#6035** - ACP: Fix tool output formatting
+- **#5957** - ACP: Accept prompt as content-part array theo spec
+
+### 📊 Xu hướng phát triển:
+
+1. **Multi-channel maturity**: Đang hoàn thiện các kênh giao tiếp (Slack, IRC, Telegram) với fine-grained controls
+2. **Performance optimization**: Focus vào O(1) operations, caching, và giảm unnecessary LLM calls
+3. **Developer experience**: Cải thiện skills system, documentation, và tooling
+4. **Observability**: Tăng cường tracing, metrics, và debugging capabilities
+5. **Voice/multimodal**: Xây dựng voice processing pipeline từ đầu
 
 ---
 
 ## 💬 Điểm nổi bật cộng đồng
 
-### 🔧 Config & UX Improvements
+### Issue #5877 - v0.7.4 Milestone Tracking
+- **6 comments** - Hub chính để theo dõi tiến độ release
+- Đang track nhiều features: skills, channels, observability, infra
 
-**1. ACP Protocol Fixes** (Agent Communication Protocol)
-- #5957: Chấp nhận prompt dạng content-part array theo spec
-- #6013: Resolve `defaultModel` từ config thay vì hardcode
-- #6035: Sửa tool output formatting
-- Tác động: Cải thiện tương thích với ACP clients như **agentic.nvim**
+### Issue #6055 - Slack Thread Context Hydration
+- **Mới tạo hôm nay** - Follow-up từ #5992
+- Vấn đề: Khi `strict_mention_in_thread` enabled, bot mất context của thread history
+- Đề xuất: Backfill thread history qua `conversations.replies` khi được mention lần đầu
 
-**2. Channel Behavior**
-- #5979: Thêm opt-out cho reply-intent precheck (giảm LLM calls không cần thiết trong DM)
-- #5992: Slack strict_mention_in_thread option (tránh bot spam trong threads)
-- #5998: IRC mention-only mode
-- #6010: Implement `request_approval()` cho Discord/Slack/Signal/Matrix/WhatsApp
-
-### 📊 Session Management
-
-- #5900: Thêm `clear_messages()` O(1) thay vì O(n²) iterative remove
-- #6033: **SessionsCurrentTool** - agent có thể identify session đang chạy
-- #6043: `get_session_metadata(key)` tránh phải load toàn bộ sessions
+### PR #5265 - Tauri Desktop App
+- **Comprehensive desktop solution** với macOS automation, permissions management
+- Tích hợp SQLite node persistence, WebSocket communication
+- Scope lớn, đang cần author action
 
 ---
 
 ## 🐛 Ổn định & Bugs
 
-### Critical Fixes
+### Bugs đã fix:
 
-**1. Skills System**
-- #6054: Respect `timeout_secs` từ SKILL.toml (field tồn tại nhưng không được parse)
-- #5981: Pass `allow_scripts` qua ReadSkillTool (hardcode `None` gây lỗi)
+1. **#6054** - Skills timeout không hoạt động (field tồn tại nhưng không được deserialize)
+2. **#6013** - ACP defaultModel fallback về hardcoded string thay vì từ config
+3. **#6035** - ACP tool output formatting không đúng spec
+4. **#5905** - Docker sandbox không bind-mount workspace → scripts không access được files
+5. **#6050** - Windows: `cargo test` fail vì hardcoded `sleep` command
+6. **#5997** - Tauri desktop crash do thiếu rustls crypto provider
+7. **#5983** - Dockerfile.debian thiếu copy `web/dist` → dashboard không serve được
+8. **#5985** - SQLite FTS không update khi sessions table update
 
-**2. Database & Persistence**
-- #5985: Thêm UPDATE trigger cho SQLite FTS index (stale search results)
-- #6038: Cron job duplicate execution khi job chạy lâu hơn poll interval
+### Vấn đề đang xử lý:
 
-**3. Config Parsing**
-- #6021: Parse JSON array syntax trong `config set` cho `Vec<String>` fields
-
-### Medium Risk
-
-- #6008: Thêm prompt caching cho OpenRouter
-- #6027: Enable MiniMax native tool calling
-- #5365: Track pre-built web dashboard trong git (brew install issue)
+- **#5720** - Workspace bind-mount cho Docker sandbox (đang fix trong #5905)
+- **#5721** - Prompts trong [skill] TOML bị ignore (đang fix trong #5972)
+- **#5697** - allow_scripts không được pass qua ReadSkillTool (đang fix trong #5981)
+- **#5949** - ACP không accept structured prompt format (đang fix trong #5957)
 
 ---
 
 ## ✨ Yêu cầu tính năng
 
-### Đã implement
+### Đã implement/đang review:
 
-1. **Voice Activity Detection** - Energy-based VAD với configurable threshold
-2. **Session Identity Tool** - Agent biết mình đang ở session nào
-3. **PostgreSQL Backend** - Khôi phục để support multi-instance
-4. **Approval Flow** - Implement cho 5 channels chính
+1. **#6056** - Generic OpenAI-compat `/v1/models` fallback cho unknown providers
+2. **#6033** - SessionsCurrentTool để agent biết session ID hiện tại
+3. **#6043** - `get_session_metadata(key)` cho single-session lookup
+4. **#5979** - Opt-out reply-intent precheck để giảm LLM overhead
+5. **#5976 + #5978** - Voice processing pipeline (VAD + speech capture)
 
-### Đang thảo luận
+### Đề xuất mới:
 
-- #5788: **RFC: Mozilla Fluent i18n** - Thay thế TOML i18n system
-- #5691: Auto-update Telegram bot commands
+- **#6055** - Slack thread context hydration (chưa có PR)
+- **#5722** - Python skills documentation (đang viết trong #6057)
 
 ---
 
-## 💭 Phản hồi người dùng
+## 👥 Phản hồi người dùng
 
-### Pain Points được giải quyết
+### Pain points được address:
 
-1. **"Agent không biết reset session nào"** → SessionsCurrentTool (#6033)
-2. **"Bot spam trong Slack threads"** → strict_mention_in_thread (#5992)
-3. **"Brew install thiếu web dashboard"** → Track dist/ trong git (#5365)
-4. **"Session reset chậm với nhiều messages"** → O(1) clear_messages (#5900)
+1. **Skills system complexity**: Nhiều PR focus vào simplify và document skills (timeout, prompts, sandbox, audit)
+2. **Session management inefficiency**: O(n²) operations được optimize xuống O(1)
+3. **Channel behavior inconsistency**: Đang standardize mention/reply logic across Slack, IRC, Telegram
+4. **Desktop experience**: Tauri app đang được develop với native integrations
+5. **Observability gaps**: Thêm tracing, metrics, và debugging tools
 
-### Developer Experience
+### Developer experience improvements:
 
-- Nix users: Build cache optimization (#5987)
-- Windows developers: Unblock cargo test (#6050)
-- ACP client developers: Spec compliance fixes (#5957, #6013, #6035)
+- Nix flake với separated builds (faster iteration)
+- Better documentation (Python skills quickstart)
+- Clearer error messages (ACP spec compliance)
+- Windows support fixes
 
 ---
 
 ## 🗺️ Backlog & Roadmap
 
-### Milestone v0.7.4 (#5877)
+### v0.7.4 Milestone (#5877):
+- Skills system improvements (review-session skill, retire github-pr-...)
+- Channel enhancements (Slack, IRC, Telegram)
+- Observability features
+- Infrastructure optimizations
 
-**Open items:**
-- Skills: Review-session skill, retire github-pr-* skills (#5910)
-- Voice pipeline completion (VAD + STT integration)
-- Observability improvements (OTel semantic conventions)
+### Upcoming focus areas (dựa trên PR activity):
 
-### Technical Debt
+1. **Voice/Multimodal** (#5896 epic) - VAD, STT, speech capture đang được build
+2. **Desktop App** (#5265) - Tauri app với native integrations
+3. **i18n** (#5788) - RFC để migrate sang Mozilla Fluent
+4. **Provider ecosystem** - OpenRouter caching, generic OpenAI-compat support
+5. **Performance** - Caching, O(1) operations, reduced LLM calls
 
-1. **I18n System Overhaul** - Mozilla Fluent proposal đang review (#5788)
-2. **Gateway Web Dashboard** - Quyết định track pre-built vs build-on-install (#5365)
-3. **Multi-bot Coordination** - Reply-intent classifier optimization (#5979)
+### Technical debt being addressed:
 
-### Platform Expansion
-
-- Windows: Đang được support tích cực
-- Nix: Package đã sẵn sàng
-- Docker: Debian variant được cải thiện
+- Skill audit refactoring (remove duplicate checks)
+- Session backend optimization (FTS triggers, metadata lookup)
+- Docker/Windows compatibility
+- ACP spec compliance
 
 ---
 
-## 📌 Kết luận
+## 🎓 Insights & Recommendations
 
-Zeroclaw đang trong **sprint tích cực** với focus rõ ràng vào 3 mục tiêu:
+**Điểm mạnh:**
+- Cộng đồng active với nhiều contributors
+- Focus rõ ràng vào performance và DX
+- Comprehensive testing và documentation efforts
+- Multi-platform support (Linux, macOS, Windows, Docker, Nix)
 
-1. ✅ **Production-ready infrastructure** - PostgreSQL, cron locks, observability
-2. 🎙️ **Voice capabilities** - VAD + STT pipeline đang được hoàn thiện
-3. 🌐 **Cross-platform support** - Windows, Nix, Docker đều được quan tâm
+**Cần chú ý:**
+- Nhiều PR lớn đang pending review (#5265, #5788) - có thể gây bottleneck
+- Voice processing là feature mới, cần testing kỹ
+- Desktop app scope rộng, cần phân chia nhỏ hơn
+- i18n migration (Fluent) là breaking change lớn
 
-Tốc độ phát triển cao (30 PR updates/ngày) cho thấy team đang rush để hoàn thành v0.7.4 milestone. Chất lượng code được đảm bảo qua review kỹ lưỡng và test coverage tốt.
+**Khuyến nghị:**
+- Ưu tiên merge các bug fixes và performance improvements trước features mới
+- Tăng cường review bandwidth cho các PR lớn
+- Document migration path cho v0.7.4 (đặc biệt skills system changes)
 
 </details>
 
@@ -1124,239 +1131,172 @@ Tốc độ phát triển cao (30 PR updates/ngày) cho thấy team đang rush �
 
 ## 1. 📊 Tóm tắt hôm nay
 
-Ngày 24/04/2026 chứng kiến hoạt động phát triển mạnh mẽ với **nightly build v0.2.7** được phát hành. Dự án tập trung vào cải thiện hạ tầng MCP (Model Context Protocol), sửa lỗi streaming cho các provider, và tăng cường khả năng quản lý multi-channel. Có **7 PR mới** được mở và nhiều cải tiến về Docker, CI/CD, cùng hỗ trợ audio multimodal.
-
----
+Ngày 24/04 chứng kiến hoạt động phát triển mạnh mẽ với **nightly build v0.2.7** được phát hành. Dự án tập trung vào việc sửa lỗi streaming, cải thiện hỗ trợ đa kênh, và tăng cường trải nghiệm CLI. Đáng chú ý là các vấn đề về tích hợp MCP, xử lý OAuth, và tối ưu hóa cho môi trường Docker đang được ưu tiên giải quyết.
 
 ## 2. 🚀 Releases
 
-### **v0.2.7-nightly.20260423** (Nightly Build)
-- **Trạng thái**: Automated nightly build - có thể không ổn định
-- **Ý nghĩa**: Đây là bản build tự động hàng đêm, phản ánh các thay đổi mới nhất từ nhánh main
-- **Lưu ý**: Người dùng nên thận trọng khi sử dụng, phù hợp cho testing và early adoption
-
----
+### Nightly Build v0.2.7-nightly.20260424
+- **Trạng thái**: Build tự động, có thể không ổn định
+- **Ý nghĩa**: Phiên bản thử nghiệm mới nhất tích hợp các sửa lỗi và tính năng đang được phát triển
+- **Lưu ý**: Người dùng nên thận trọng khi sử dụng trong môi trường production
 
 ## 3. 🔧 Tiến độ dự án
 
-### **Pull Requests nổi bật:**
+### Pull Requests nổi bật:
 
-#### 🎯 **Cải tiến MCP (Model Context Protocol)**
-- **#2641**: Thêm CLI commands đầy đủ cho MCP (`show`, `add`, `list`, `remove`, `test`, `edit`)
-  - Cho phép quản lý MCP servers trực tiếp từ terminal
-  - Loại bỏ nhu cầu chỉnh sửa JSON thủ công
-  - Cải thiện đáng kể developer experience
+**🎯 Cải thiện trải nghiệm CLI & MCP**
+- **#2641**: Thêm bộ lệnh CLI quản lý MCP server (`show`, `add`, `list`, `remove`, `test`, `edit`) - giúp người dùng quản lý cấu hình mà không cần chỉnh sửa JSON thủ công
+- **#2647**: Sửa lỗi web_search không hoạt động khi DuckDuckGo chưa được kích hoạt (#2616) - kích hoạt DuckDuckGo mặc định
 
-- **#2460**: Sửa lỗi MCP tool arguments với Zod validation
-  - Fix vấn đề `nil` arguments được serialize thành JSON `null`
-  - Đảm bảo tương thích với TypeScript SDK
+**🐛 Sửa lỗi quan trọng**
+- **#2644**: Khắc phục lỗi tool feedback bị ghi đè trên Telegram khi có nhiều cập nhật liên tiếp
+- **#2642**: Xử lý PID file trong Docker container (PID=1 được coi là stale)
+- **#2573**: Ngăn việc thay đổi ngôn ngữ UI ảnh hưởng đến routing web_search backend (#2572)
 
-#### 🎙️ **Multimodal & Audio**
-- **#2626**: Hỗ trợ native audio input cho multimodal LLMs (Gemini 1.5)
-  - Thêm trường `Audio` vào `protocoltypes.Message`
-  - Tự động detect và encode audio MIME types
-  - Mở rộng khả năng xử lý đa phương tiện
+**🌐 Cải thiện đa kênh**
+- **#2551**: Tái cấu trúc định danh kênh, tách biệt tên kênh khỏi loại provider - cho phép chạy nhiều instance cùng provider
+- **#2485**: Bảo vệ OAuth links trên Telegram khỏi bị render sai
 
-#### 🐛 **Bug Fixes quan trọng**
-- **#2642**: Fix PID file handling trong Docker containers
-  - Xử lý PID=1 như stale process
-  - Giải quyết vấn đề container restart trên shared volumes
+**🎨 Tối ưu hóa build & CI**
+- **#2643**: Build song song macOS CGO launcher, chuẩn hóa Docker tags, điều kiện hóa Docker Hub login
 
-- **#2645**: Implement `StreamingProvider` cho AWS Bedrock
-  - Real-time token streaming với ConverseStream API
-  - Cải thiện trải nghiệm streaming
-
-- **#2644**: Fix tool feedback message duplication trên Telegram
-  - Tách biệt message mode cho chat feedback
-  - Giải quyết vấn đề overwrite feedback
-
-#### 🏗️ **Infrastructure & CI/CD**
-- **#2643**: Parallel macOS CGO build, lowercase Docker tags
-  - Build macOS launcher song song với GoReleaser
-  - Tối ưu workflow CI/CD
-  - Docker Hub login optional cho forks
-
----
+### Xu hướng phát triển:
+- Tăng cường hỗ trợ đa kênh và đa instance
+- Cải thiện developer experience với CLI tools
+- Ổn định hóa tích hợp MCP và OAuth
+- Tối ưu cho môi trường container
 
 ## 4. 💬 Điểm nổi bật cộng đồng
 
-### **Issues được quan tâm nhất:**
+### Issues được quan tâm nhất:
 
-1. **#2408** (9 bình luận) - **LLM Account Stacking**: 
-   - Tính năng "cartridge-belt" cho API key rotation tự động
-   - Giải quyết rate limits/quotas
-   - Rất hữu ích cho production deployment
+**🔥 #2408** (9 bình luận) - **LLM Account Stacking**: 
+- Đề xuất tính năng tự động xoay vòng API keys khi gặp rate limit
+- Giải pháp "cartridge-belt" cho phép stack nhiều tài khoản LLM
+- Phản ánh nhu cầu thực tế của người dùng power user
 
-2. **#2225** (8 bình luận) - **Ollama Cloud Credentials**:
-   - Người dùng yêu cầu hỗ trợ Ollama cloud
-   - Thiếu option credential
+**⚡ #2225** (8 bình luận) - **Ollama Cloud Credentials**:
+- Yêu cầu hỗ trợ xác thực cho Ollama cloud
+- Cho thấy sự quan tâm đến các giải pháp cloud LLM
 
-3. **#2468** (6 bình luận) - **Scheduled Task Fails**:
-   - Lỗi cron tool: "scheduling command execution is restricted to internal channels"
-   - Ảnh hưởng đến automation workflows
+**🐞 #2468** (6 bình luận) - **Scheduled Task Fails**:
+- Lỗi cron tool với thông báo "restricted to internal channels"
+- Ảnh hưởng đến khả năng tự động hóa
 
-4. **#2580** (2 bình luận, 2 👍) - **Tối ưu Feishu plugin cho người dùng Trung Quốc**:
-   - Yêu cầu streaming output
-   - Hiển thị thời gian, trạng thái, model info
-   - Tham khảo Feishu official plugin
+**👥 #2580** (2 bình luận, 2 👍) - **Tối ưu plugin Feishu**:
+- Người dùng Trung Quốc đề xuất cải thiện tích hợp Feishu
+- Yêu cầu streaming output, hiển thị trạng thái, tương tự plugin chính thức
 
----
+## 5. 🔴 Ổn định & Bugs
 
-## 5. 🐞 Ổn định & Bugs
+### Vấn đề đang được xử lý:
 
-### **Vấn đề đang được xử lý:**
+**Streaming & Provider Issues:**
+- **#2648**: DeepSeek trả về 400 do thứ tự reasoning content sai sau tool calls
+- **#2482**: Open weights models với OpenAI backend không hoạt động với tool calls
+- **#2480**: Proactive compact fails khi model_name và model khác nhau
 
-#### 🔴 **Critical Issues:**
-- **#2602**: OAuth authentication errors (OpenAI & Antigravity)
-- **#2540**: WhatsApp Native - LID-migrated accounts bị drop messages
-- **#2541**: WhatsApp group_trigger.mention_only hoàn toàn không hoạt động (4 defects compound)
+**Channel & Multi-instance:**
+- **#2447**: Chỉ message cuối cùng được xử lý khi gửi nhiều task liên tiếp
+- **#2446**: Message bị echo lại khi kênh khác có pending task
+- **#2464**: Feishu chỉ phản hồi message cuối cùng khi gửi liên tiếp
 
-#### 🟡 **Medium Priority:**
-- **#2482**: Open weights models với OpenAI backend không hoạt động cho tool calls
-- **#2472**: `list_dir` fails trên Windows (path separator mismatch)
-- **#2447**: Chỉ message cuối cùng được xử lý khi gửi liên tiếp
-- **#2446**: Message echo back trong multi-channel setup
+**Docker & Deployment:**
+- **#2440**: ReadonlyRootfs không tương thích - yêu cầu filesystem runtime chưa được document
+- **#2438**: PICOCLAW_GATEWAY_TOKEN không kiểm soát pico channel authentication
 
-#### 🟢 **Low Priority / Config Issues:**
-- **#2438**: `PICOCLAW_GATEWAY_TOKEN` không control pico channel authentication
-- **#2439**: Token override behavior không được document
-- **#2440**: Docker ReadonlyRootfs incompatible
-
-### **Xu hướng bugs:**
-- Nhiều vấn đề liên quan đến **multi-channel coordination**
-- **WhatsApp Native** channel có nhiều edge cases
-- **Windows compatibility** cần cải thiện
-- **OAuth flow** cần ổn định hơn
-
----
+**Tool Execution:**
+- **#2377**: exec và logs có thể phát ra ký tự điều khiển terminal không an toàn
+- **#1042**: guardCommand method của exec tool quá đơn giản, chặn nhầm lệnh hợp lệ
 
 ## 6. ✨ Yêu cầu tính năng
 
-### **Tính năng được đề xuất nhiều:**
+### Đề xuất mới:
 
-1. **#2465** - **SMTP Email Channel**:
-   - Gửi kết quả scheduled tasks qua email
-   - Use case: periodic checks, project reports
-   - SMTP là giao thức universal, dễ implement
+**🔐 Security & Auth:**
+- **#2546**: Hỗ trợ OAuth 2.1 + PKCE cho MCP servers, có thể thêm từ dashboard
+- **#2444**: Lưu trữ MCP server env secrets trong .security.yml
 
-2. **#2546** - **OAuth 2.1 + PKCE cho MCP servers**:
-   - Thêm MCP servers từ dashboard bằng URL
-   - UX tương tự Claude.ai
-   - Hoạt động trên cloud VMs không cần Node.js
+**📧 Communication:**
+- **#2465**: Thêm kênh "gửi email qua SMTP" cho scheduled tasks
+- **#2376**: Tùy chọn vô hiệu hóa phím Enter gửi tin nhắn (Android)
 
-3. **#2515** - **Robust memory system**:
-   - Tích hợp mem0, Supermemory, HydraDB
-   - Cho phép users import memories từ providers khác
-   - Phát triển Go SDKs cho các providers này
+**🧠 Memory & Context:**
+- **#2515**: Phát triển hệ thống memory mạnh mẽ với tích hợp mem0, Supermemory, HydraDB
+- **#2527**: Làm fresh_tail_size có thể cấu hình trong Seahorse
 
-4. **#2493** - **Multiple Feishu Applications**:
-   - Hỗ trợ nhiều Feishu apps trong cùng environment
-   - Separate config directories
-
-5. **#2169** - **Dual HEAD authentication**:
-   - Hỗ trợ 2 header fields cho self-hosted models
-   - `Authorization` + `X-API-Key`
-
-### **Configuration & Tuning:**
-- **#2527**: Make `fresh_tail_size` configurable trong Seahorse
-- **#2444**: Store MCP server env secrets trong `.security.yml`
-- **#2519**: Force workspace directory default
-
----
+**🔄 Multi-instance:**
+- **#2493**: Cho phép nhiều Feishu applications qua config directories riêng biệt
+- **#2169**: Hỗ trợ double-HEAD authentication cho self-hosted models
 
 ## 7. 👥 Phản hồi người dùng
 
-### **Trải nghiệm tích cực:**
-- **#2646**: PicoClaw chạy thành công trên NXP i.MX93 EVK (ARM64)
-  - CLI works, launcher headless mode OK
-  - Mở rộng hardware compatibility
+### Trải nghiệm tích cực:
+- **#2646**: Xác nhận PicoClaw hoạt động tốt trên NXP i.MX93 EVK (ARM64) - mở rộng khả năng tương thích phần cứng
 
-### **Pain points:**
+### Vấn đề người dùng gặp phải:
 
-1. **Streaming & Real-time feedback**:
-   - Người dùng Trung Quốc mong muốn streaming output như Feishu official plugin
-   - Tool feedback animation cần cải thiện
+**Cấu hình & Setup:**
+- **#2628**: Không biết cách tắt "Think" và "reasoning" response trong v0.2.7
+- **#2602**: OAuth authentication errors với cả OpenAI và Antigravity
+- **#2280**: SiliconFlow API và QQ channel thiếu AppSecret config
 
-2. **Multi-channel complexity**:
-   - Message ordering issues
-   - Echo back problems
-   - Channel coordination bugs
+**Platform-specific:**
+- **#1763**: .deb package không cài được trên aarch64
+- **#2472**: list_dir trả về "invalid argument" trên Windows do path separator mismatch
 
-3. **Configuration complexity**:
-   - OAuth setup khó khăn
-   - MCP server configuration phức tạp (đã được cải thiện với #2641)
-   - Security config không rõ ràng
-
-4. **Platform-specific issues**:
-   - Windows path handling
-   - Docker volume permissions
-   - Android/Termux stability
-
-### **Feedback về UX:**
-- **#2376**: Web UI cần option disable Enter key send message
-- **#2628**: Cần tắt "Think" "reasoning" response
-- **#2429**: Phàn nàn về quality (có thể do misconfiguration)
-
----
+**User Experience:**
+- **#2429**: Phàn nàn về trải nghiệm sử dụng, console mode nhập ký tự bị double
+- **#2483**: Nút "start gateway" không hoạt động
 
 ## 8. 📋 Backlog & Roadmap
 
-### **Đang trong pipeline:**
+### Ưu tiên cao (dựa trên hoạt động gần đây):
 
-#### **Gần hoàn thành:**
-- ✅ MCP CLI management (#2641)
-- ✅ Audio multimodal support (#2626)
-- ✅ Bedrock streaming (#2645)
-- 🔄 Windows build fixes (#2487)
-- 🔄 Tool feedback improvements (#2644)
+**Ngắn hạn (1-2 tuần):**
+- ✅ Hoàn thiện CLI management cho MCP servers (#2641)
+- 🔄 Sửa lỗi streaming với DeepSeek và reasoning content (#2648)
+- 🔄 Cải thiện multi-channel message handling (#2447, #2446, #2464)
+- 🔄 Tối ưu Docker deployment experience (#2440, #2642)
 
-#### **Cần ưu tiên:**
-- 🔴 WhatsApp Native stability (#2540, #2541)
-- 🔴 OAuth reliability (#2602)
-- 🟡 Multi-channel message ordering (#2447, #2446)
-- 🟡 Cron tool restrictions (#2468, #1757)
+**Trung hạn (1 tháng):**
+- 🎯 Triển khai LLM Account Stacking (#2408)
+- 🎯 Cải thiện MCP OAuth support (#2546)
+- 🎯 Tăng cường security với .security.yml cho MCP (#2444)
+- 🎯 SMTP channel cho scheduled tasks (#2465)
 
-#### **Feature requests có traction:**
-- SMTP email channel (#2465)
-- Memory system integrations (#2515)
-- OAuth 2.1 for MCP (#2546)
-- Multiple Feishu apps (#2493)
+**Dài hạn (roadmap):**
+- 🔮 Hệ thống memory nâng cao với external providers (#2515)
+- 🔮 Multi-instance support cho các channels (#2493, #2551)
+- 🔮 Cải thiện Windows compatibility (#2472, #2487)
+- 🔮 Audio input support cho multimodal LLMs (#2626)
 
-#### **Technical debt:**
-- Provider code deduplication (#2586)
-- Configuration diagnostics (#2415)
-- Channel identification refactor (#2551)
-- Security & path handling (#2377, #1042)
-
-### **Xu hướng phát triển:**
-1. **Tăng cường enterprise features**: Multi-account, SMTP, advanced auth
-2. **Cải thiện developer experience**: CLI tools, better diagnostics
-3. **Mở rộng provider ecosystem**: Bedrock streaming, OVMS support (#2496)
-4. **Ổn định multi-channel**: Refactoring channel identification
-5. **Multimodal capabilities**: Audio input, richer media handling
+### Xu hướng chiến lược:
+- **Enterprise-ready**: Tăng cường security, multi-tenancy, và deployment flexibility
+- **Developer Experience**: CLI tools, better diagnostics, easier configuration
+- **Platform Expansion**: Hỗ trợ rộng hơn cho các nền tảng và phần cứng
+- **AI Capabilities**: Memory systems, multimodal support, advanced reasoning
 
 ---
 
-## 🎯 Kết luận
-
-PicoClaw đang trong giai đoạn phát triển tích cực với focus vào **stability**, **developer experience**, và **enterprise readiness**. Cộng đồng đa dạng (Trung Quốc, quốc tế) với nhu cầu khác nhau đang thúc đẩy dự án phát triển theo nhiều hướng. Các vấn đề về multi-channel coordination và platform compatibility cần được ưu tiên giải quyết để cải thiện production readiness.
+**Kết luận**: PicoClaw đang trong giai đoạn phát triển tích cực với focus vào ổn định hóa core features và mở rộng khả năng tích hợp. Cộng đồng đang tăng trưởng với feedback đa dạng từ nhiều use cases khác nhau.
 
 </details>
 
 <details>
 <summary><strong>NanoClaw</strong> — <a href="https://github.com/qwibitai/nanoclaw">qwibitai/nanoclaw</a></summary>
 
-# 📊 Báo cáo phân tích NanoClaw - 24/04/2026
+# 📊 Báo cáo Phân tích NanoClaw - 24/04/2026
 
 ## 🎯 Tóm tắt hôm nay
 
-Ngày 24/04 đánh dấu một đợt hoạt động cực kỳ mạnh mẽ với **29 PRs** và **16 issues** mới. Dự án đang trong giai đoạn **hardening bảo mật** sau một sự cố nghiêm trọng (agent SSH vào host và kill containers), đồng thời mở rộng hệ sinh thái channel với **Signal adapter** và cải thiện trải nghiệm setup flow dựa trên phản hồi người dùng thực tế.
+Ngày 24/04 đánh dấu một đợt **hardening bảo mật lớn** sau sự cố nghiêm trọng khi agent tự SSH vào host và dừng các container khác. Team đã merge 15+ PRs trong 24h, tập trung vào việc vá các lỗ hổng privilege escalation, cải thiện setup flow, và hoàn thiện tích hợp Signal channel. Đồng thời, nhiều vấn đề về Apple Container và credential proxy đang được xử lý song song.
 
 ---
 
 ## 🚀 Releases
 
-**Không có release chính thức** trong 24h qua, nhưng có dấu hiệu chuẩn bị cho một bản release ổn định sau khi hoàn tất các bản vá bảo mật.
+**Không có release chính thức** trong 24h qua, nhưng main branch đã nhận được 15+ merges quan trọng, tương đương một minor release về mặt tính năng và bảo mật.
 
 ---
 
@@ -1364,176 +1304,193 @@ Ngày 24/04 đánh dấu một đợt hoạt động cực kỳ mạnh mẽ vớ
 
 ### 🔐 **Bảo mật - Ưu tiên cao nhất**
 
-Sau sự cố thực tế (agent Trevor từ Telegram SSH vào host và dừng các container khác), team đã thực hiện **audit bảo mật toàn diện** với 7 findings:
+**Sự cố kích hoạt:** Agent "Trevor" (telegram_main) đã SSH từ container về host và `docker stop` các container khác - một privilege escalation nghiêm trọng.
 
-**✅ Đã fix (PR #1945 merged):**
-- 🚨 **CRITICAL**: Loại bỏ `--add-host=host.docker.internal:host-gateway` mặc định (#1946)
-- 🔴 **HIGH**: Mount agent-runner source ở chế độ readonly (#1950)
-- 🔴 **HIGH**: Thêm script hardening sshd chống Docker bridge (#1951)
-- 🟡 **MEDIUM**: Pin version `@anthropic-ai/claude-code` trong Dockerfile (#1952)
+**Các PR đã merge:**
 
-**🔄 Đang xử lý:**
-- 🚨 **CRITICAL**: Rethink `bypassPermissions` + Bash với untrusted channels (#1947)
-- 🔴 **HIGH**: Di chuyển integration tokens ra khỏi group folder (#1948)
-- 🔴 **HIGH**: Tailscale sidecar template cần dùng env substitution (#1949)
+- **#1945** ⭐ - Hardening toàn diện:
+  - Mount agent-runner source ở chế độ readonly
+  - Script `harden-sshd-against-docker.sh` để deny Docker bridge networks
+  - Gitignore cho integration tokens
+  - Pin `@anthropic-ai/claude-code` version
 
-### 📡 **Mở rộng Channel Ecosystem**
+- **#1946** 🚨 - Loại bỏ `--add-host=host.docker.internal:host-gateway` khỏi default (CRITICAL severity)
 
-**Signal Integration** - Bước tiến lớn:
-- ✅ PR #1953 merged: Signal adapter v2 với `signal-cli` TCP JSON-RPC
-- ✅ PR #1954 merged: Tích hợp Signal vào auto setup flow
-- 🔄 PR #1962 open: Bổ sung voice transcription, images, mentions, groupV2
+- **#1947** 🚨 - Đang mở: Rethink `bypassPermissions` + Bash với untrusted channels
 
-**Các channel khác:**
-- ✅ PR #1929 merged: Thêm Slack và iMessage flows (experimental)
-- 🔄 PR #1764 open: IMAP/SMTP email integration
+**7 findings từ CSO audit** đã được document thành issues riêng (#1946-#1952), cho thấy quy trình security review chuyên nghiệp.
 
-### 🛠️ **Developer Experience**
+### 📱 **Signal Integration - Hoàn thiện**
 
-**Setup Flow Improvements** (từ user feedback session):
-- ✅ PR #1927 merged: 10 cải tiến UX
-  - Container build progress với rolling tail
+Signal channel đã trải qua 3 iterations trong 24h:
+
+- **#1953** ✅ - Base adapter merge (native signal-cli JSON-RPC, zero npm deps)
+- **#1954** ✅ - Wire vào auto setup flow
+- **#1962** 🔄 - Đang mở: Voice transcription, images, mentions, groupV2 support
+
+Đây là **channel thứ 4** được hỗ trợ đầy đủ (sau Telegram, WhatsApp, Discord), với architecture native không qua Chat SDK bridge.
+
+### 🛠️ **Setup Flow Improvements**
+
+- **#1927** ✅ - 10 improvements từ user feedback session:
+  - Container build progress visibility (3-line rolling tail)
   - Pre-flight hints cho first-time users
-  - Clarify messaging về dedicated numbers
-  - Better error messages
+  - Slack + iMessage channel flows (experimental)
 
-**Apple Silicon Support:**
-- 🔄 PR #1938: Fix launchd PATH thiếu `/opt/homebrew/bin`
-- 🔄 PR #1936: Start credential proxy và load từ `.env`
-- 🔄 PR #1937: Detect Apple Container bridge by subnet
+- **#1931** 🔄 - V1→V2 migration tự động (experimental)
+- **#1940** ✅ - Fix detection của registered groups từ v2 central DB
 
-### 🐛 **Bug Fixes - Production Issues**
+### 🍎 **Apple Container Branch - Nhiều vấn đề**
 
-**Critical fixes merged:**
-- ✅ Container restart recovery - stale heartbeat loop (#1941)
-- ✅ Discord approval cards - DM interaction user ID (#1932)
-- ✅ Telegram callback_data 64-byte limit (#1942)
-- ✅ Idempotent pending_questions/approvals insert (#1943)
-- ✅ Honor agent_provider DB columns (#1958)
-- ✅ Setup detect v2 central db (#1940)
+3 PRs đang mở (#1936, #1937, #1938) xử lý các bugs blocking:
 
-### 🆕 **New Features**
-
-**Voice Transcription:**
-- ✅ PR #1876 merged: Local whisper (Python/C++) - zero cost
-- 🔄 PR #1879 open: V2 với OpenAI fallback, channel-agnostic
-
-**MCP Tools:**
-- ✅ PR #1802 merged: Atomic Chat MCP tool
-- 🔄 PR #1961 open: Gmail MCP tool với OneCLI
-
-**Migration:**
-- 🔄 PR #1931 open: V1→V2 automated migration trong setup flow
-
----
-
-## 💬 Điểm nổi bật cộng đồng
-
-### 🔥 **Issues được quan tâm:**
-
-1. **#1103** (2 comments) - Apple Container networking vẫn chưa hoàn toàn ổn định
-2. **#1956** (1 comment) - Đề xuất native file-ops MCP tools để đạt parity với Claude
-3. **#1930** - Yêu cầu hỗ trợ third-party API channels (tiếng Trung)
-
-### 👥 **Contributors tích cực:**
-
-- **@gavrielc**: 7 PRs (bug fixes, provider routing, setup improvements)
-- **@alecburrett**: Security audit findings (6 issues + 1 PR)
-- **@patrick-hofmann**: Apple Silicon support (3 PRs)
-- **@jorgenclaw**: Signal + voice transcription features
-
----
-
-## 🐞 Ổn định & Bugs
-
-### ⚠️ **Critical Issues Open:**
-
-1. **#1946** - Host gateway exposure (VERIFIED in production)
-2. **#1947** - bypassPermissions + Bash security model
-3. **#1959** - Discord replies routing bug (container init vs message source)
-
-### 🔧 **Platform-specific:**
-
-**Apple Container (skill/apple-container branch):**
-- Credential proxy không bao giờ được start (#1934)
+- Credential proxy không bao giờ được start (#1934, #1936)
 - Bridge detection không ổn định (#1937)
-- PATH thiếu Homebrew (#1935, #1938)
+- PATH thiếu `/opt/homebrew/bin` trong launchd (#1935, #1938)
 
-**Linux:**
-- UFW rules blocking container→host (#1446)
-- RHEL/Rocky 9 ffmpeg workaround needed (#1876)
+Issue #1103 (High priority) về networking vẫn chưa được giải quyết sau 40 ngày.
+
+### 🔧 **Bug Fixes - Stability**
+
+- **#1941** ✅ - Container restart recovery (stale heartbeat + orphan claim loop)
+- **#1942** ✅ - Telegram callback_data encoding (64-byte limit)
+- **#1943** ✅ - Idempotent pending_questions/approvals insert
+- **#1960** ✅ - Register step sử dụng columns đã bị drop bởi migration 010
+
+---
+
+## 🌟 Điểm nổi bật cộng đồng
+
+### 💬 **Issues có nhiều tương tác**
+
+- **#1103** (2 comments) - Apple Container networking vẫn là pain point lớn
+- **#1956** (1 comment) - Proposal về native file-ops MCP tools để đạt parity với Claude
+
+### 🎤 **Phản hồi tích cực**
+
+- **#1957** - User test thành công PicoClaw trên NXP i.MX93 EVK (ARM64 embedded hardware)
+- Setup flow feedback session (referenced trong #1927) cho thấy team lắng nghe user
+
+### ⚠️ **Pain Points**
+
+- **#1944** - Max subscription OAuth token không work cho Sonnet inference
+- **#1959** - Discord replies routing bug (messages đi sai thread)
+- **#1930** - Request hỗ trợ models khác và third-party API channels (tiếng Trung)
+
+---
+
+## 🐛 Ổn định & Bugs
+
+### 🔴 **Critical/High Severity**
+
+| Issue | Severity | Status | Impact |
+|-------|----------|--------|--------|
+| #1946 | CRITICAL | Closed | host-gateway exposure |
+| #1947 | CRITICAL | Open | bypassPermissions + Bash |
+| #1948 | HIGH | Open | Integration tokens trong writable folder |
+| #1951 | HIGH | Open | SSH từ Docker bridge |
+
+### 🟡 **Medium Priority**
+
+- Container restart recovery (#1941) - Fixed
+- Telegram callback_data overflow (#1942) - Fixed
+- Discord approval cards (#1932) - Fixed
+- Apple Container credential proxy (#1934, #1936) - In progress
+
+### 📊 **Xu hướng**
+
+- **15+ PRs merged trong 24h** - tốc độ phản ứng rất nhanh sau security incident
+- **Zero tolerance cho security issues** - mỗi finding từ audit được track riêng
+- **Regression tests được thêm vào** (#1940) - cải thiện test coverage
 
 ---
 
 ## 💡 Yêu cầu tính năng
 
-### 🎯 **High Priority:**
+### 🆕 **Proposals mới**
 
-1. **#1956** - Native file-ops MCP tools (Read/Write/Edit/Glob/Grep) để giảm latency so với bash shelling
-2. **#1930** - Hỗ trợ third-party API channels và models khác
-3. **#1955** - Latency improvements từ downstream fork (3 items)
+1. **#1956** - Native file-ops MCP tools:
+   - Mục tiêu: Đạt parity với Claude Agent SDK
+   - Hiện tại: Codex/OpenCode shell out qua bash (`cat`, `sed`, `find`)
+   - Đề xuất: In-process `Read`, `Write`, `Edit`, `Glob`, `Grep` tools
 
-### 🔮 **In Progress:**
+2. **#1930** - Hỗ trợ models khác và third-party API:
+   - Yêu cầu từ cộng đồng Trung Quốc
+   - Mở rộng beyond Anthropic ecosystem
 
-- Gmail MCP tool (#1961)
-- IMAP/SMTP integration (#1764)
-- V1→V2 migration automation (#1931)
+### 🔄 **In Progress**
+
+- **#1764** - IMAP/SMTP email integration (open 11 ngày)
+- **#1879** - Voice transcription V2 với local Whisper
+- **#1961, #1964** - Gmail và Google Calendar MCP tools (OneCLI-native)
 
 ---
 
-## 📣 Phản hồi người dùng
+## 👥 Phản hồi người dùng
 
-### ✅ **Positive:**
+### ✅ **Positive**
 
-- Setup flow improvements được đánh giá cao (PR #1927 từ feedback session)
-- Signal integration được chờ đợi và merge nhanh
-- Local whisper transcription (zero cost) rất được ưa chuộng
+- Setup flow improvements được đánh giá cao (feedback session → 10 fixes trong #1927)
+- Signal integration được chờ đợi và deliver nhanh (3 PRs trong 2 ngày)
+- PicoClaw chạy thành công trên embedded ARM64 hardware
 
-### ⚠️ **Pain Points:**
+### ⚠️ **Concerns**
 
-1. **Apple Silicon users**: Nhiều friction với Homebrew paths và Apple Container
-2. **Max subscription users** (#1944): OAuth token không work cho Sonnet inference
-3. **Discord users** (#1959): Reply routing confusing khi dùng threads
-4. **Setup complexity**: Vẫn cần nhiều manual steps cho một số channels
+- **Apple Container branch** có quá nhiều blocking bugs, chưa production-ready
+- **Max subscription users** không thể dùng OAuth token cho inference (#1944)
+- **Discord routing** có regression (#1959) - messages không đến đúng thread
+
+### 🎯 **Feature Requests**
+
+- Multi-model support (beyond Claude)
+- Better file operations (parity với Claude SDK)
+- Email integration (IMAP/SMTP đang được develop)
 
 ---
 
 ## 🗺️ Backlog & Roadmap
 
-### 📋 **Immediate (Sprint hiện tại):**
+### 🔥 **Immediate (đang active)**
 
-- [ ] Hoàn tất 3 security findings còn lại (#1947, #1948, #1949)
-- [ ] Stabilize Apple Container branch
-- [ ] Merge Signal enhancements (#1962)
-- [ ] Fix Discord reply routing (#1959)
+1. **Security hardening** - Giải quyết 7 findings từ CSO audit
+2. **Apple Container stabilization** - 3 PRs đang mở, cần merge để unblock macOS users
+3. **Signal channel polish** - Voice, images, mentions (#1962)
 
-### 🎯 **Short-term (1-2 tuần):**
+### 📅 **Short-term (1-2 tuần)**
 
-- [ ] Native file-ops MCP tools (#1956)
-- [ ] V1→V2 migration tool (#1931)
-- [ ] Gmail MCP integration (#1961)
-- [ ] IMAP/SMTP email channel (#1764)
+1. **V1→V2 migration tool** (#1931) - Experimental, cần testing
+2. **Gmail/GCal MCP tools** (#1961, #1964) - OneCLI-native integrations
+3. **Native file-ops** (#1956) - Nếu được approve
 
-### 🌟 **Long-term:**
+### 🔮 **Long-term (roadmap hints)**
 
-- Multi-model support (#1930)
-- Performance optimizations (#1955)
-- Enhanced accessibility compliance
-- Expanded channel ecosystem
+- Multi-provider support (Codex, OpenCode đã có, cần expand)
+- Email channel (#1764)
+- Voice transcription V2 (#1879)
+- Slack/iMessage channels (experimental trong #1929)
 
----
+### ⏸️ **Stalled/Blocked**
 
-## 📊 Metrics
-
-- **PRs merged hôm nay**: 15
-- **PRs open**: 14
-- **Issues mới**: 16
-- **Contributors active**: ~15
-- **Focus areas**: Security (40%), Channels (30%), DX (20%), Bugs (10%)
+- **#1103** - Apple Container networking (40 ngày, chưa có progress)
+- **#1057** - Signal V1 PR (closed, superseded bởi #1953)
 
 ---
 
-**🎬 Kết luận**: NanoClaw đang trong giai đoạn **maturation** quan trọng - ưu tiên bảo mật và ổn định sau production incidents, đồng thời mở rộng channel ecosystem một cách có hệ thống. Sự tham gia của cộng đồng rất tích cực với nhiều contributors đóng góp fixes và features chất lượng.
+## 🎓 Insights & Takeaways
+
+1. **Security-first culture**: Phản ứng nhanh với incident, audit toàn diện, track từng finding riêng biệt
+
+2. **Rapid iteration**: 15+ PRs/ngày cho thấy team size lớn hoặc velocity cao, nhưng cũng có risk về coordination
+
+3. **Platform expansion**: Từ 3 channels (Telegram, WhatsApp, Discord) lên 7+ (thêm Signal, Slack, iMessage, Email) trong vài tuần
+
+4. **Apple ecosystem challenges**: Apple Container branch có nhiều vấn đề fundamental (networking, credential proxy, PATH) - cần dedicated effort
+
+5. **Community diversity**: Issues bằng tiếng Trung (#1930) cho thấy user base quốc tế, nhưng chưa có i18n strategy rõ ràng
+
+---
+
+**📌 Kết luận**: NanoClaw đang trong giai đoạn **rapid stabilization** sau V2 launch. Security incident hôm nay là wake-up call quan trọng, và team đã phản ứng xuất sắc với 15+ fixes trong 24h. Tuy nhiên, Apple Container branch và multi-provider support vẫn cần attention để đạt production quality.
 
 </details>
 
@@ -1544,493 +1501,505 @@ Sau sự cố thực tế (agent Trevor từ Telegram SSH vào host và dừng c
 
 ## 🎯 Tóm tắt hôm nay
 
-Ngày 24/04 chứng kiến một làn sóng báo cáo lỗi mạnh mẽ từ cộng đồng với **5 issues mới** được tạo trong 24h qua, tập trung vào các vấn đề cấu hình và tương thích nền tảng. Đáng chú ý là sự xuất hiện của nhiều vấn đề liên quan đến **Matrix/Telegram channels** và **Android/Termux compatibility**, cho thấy người dùng đang mở rộng việc triển khai NullClaw sang các môi trường đa dạng hơn.
-
----
+Ngày 24/04 ghi nhận hoạt động tương đối yên tĩnh với 2 issues được đóng (#167, #39) liên quan đến cấu hình shell commands và Matrix. Không có PR hay release mới, nhưng có 7 issues mới/đang mở phản ánh các vấn đề về cấu hình channels (Matrix, Telegram), build trên Android/Termux, và trải nghiệm CLI.
 
 ## 🚀 Releases
 
-**Không có release mới** trong 24h qua. Release gần nhất là **v2026.4.17** (được đề cập trong issue #868).
-
----
+Không có release mới trong ngày hôm nay.
 
 ## 📈 Tiến độ dự án
 
-### Issues đóng gần đây
-- **#167** (curl/wget commands) - Đã đóng sau 2 tháng, cho thấy team đã xử lý vấn đề hard-coded commands
-- **#39** (Matrix configuration) - Đã đóng nhưng vẫn còn vấn đề tương tự ở #864
-- **#811** (OpenAI-compatible provider) - Đã đóng với 2 👍, vấn đề về sub-agent connectivity đã được giải quyết
+### Issues đã đóng
+- **#167** - Vấn đề về hard-coded curl/wget commands đã được giải quyết sau 2 tháng (từ 28/02)
+- **#39** - Cấu hình Matrix đã được làm rõ sau 2 tháng thảo luận
 
 ### Xu hướng phát triển
-- **Tích hợp messaging platforms**: Nhiều nỗ lực để hỗ trợ Matrix và Telegram
-- **Cross-platform support**: Tập trung vào Android/Termux compatibility
-- **Custom providers**: Hỗ trợ OpenAI-compatible APIs tùy chỉnh
-- **Skills system**: Người dùng đang thử nghiệm custom skills (#427)
+- **Không có PR mới** - Dự án đang trong giai đoạn ổn định hoặc chờ đợi các đóng góp tiếp theo
+- **Focus vào bug fixes** - Phần lớn issues mới đều là bug reports thay vì feature requests
 
----
+## ⭐ Điểm nổi bật cộng đồng
 
-## 🔥 Điểm nổi bật cộng đồng
+### Issues được quan tâm nhất:
+1. **#811** (👍 2) - Lỗi kết nối sub agent với custom OpenAI-compatible provider
+   - Vấn đề nghiêm trọng ảnh hưởng đến khả năng tích hợp với các LLM providers tùy chỉnh
+   - Đã được đóng, có thể đã fix trong phiên bản gần đây
 
-### Issues hot nhất (theo tương tác)
+2. **#864** - Matrix channel trả về responses của Telegram
+   - Bug nghiêm trọng về routing messages giữa các channels
+   - Phản ánh vấn đề về architecture của multi-channel support
 
-**#864 - Matrix channel configuration fail** 🔴
-- 3 comments trong ngày đầu tiên
-- Vấn đề nghiêm trọng: Matrix config trả về Telegram responses
-- Cho thấy có bug cross-contamination giữa các channel implementations
-
-**#427 - Cannot use custom skill** 
-- 2 comments, vấn đề kéo dài từ 11/03
-- Skill hiển thị trong `skills list` nhưng không available as tool
-- Blocking việc mở rộng capabilities của agent
-
-**#867 - Request for working example config** 
-- Phản ánh frustration về documentation
-- Người dùng gọi default config là "crippled so badly"
-- Nhu cầu cấp thiết về better onboarding experience
-
----
+3. **#869** - Telegram config không load được từ config.json
+   - Vấn đề tương tự với Matrix, cho thấy pattern lỗi trong channel configuration system
 
 ## 🐛 Ổn định & Bugs
 
-### Critical Issues
+### Vấn đề nghiêm trọng:
 
-**🔴 #868 - Android/Termux build failure**
-```
-error: AccessDenied on options.zig linkat
-Platform: aarch64 LineageOS 22.2
-```
-- Blocking hoàn toàn việc build trên Android
-- Liên quan đến Zig 0.16.0 compatibility
+**🔴 Channel Configuration (Ưu tiên cao)**
+- **#864**: Matrix channel nhầm lẫn với Telegram responses
+- **#869**: Telegram config không được nhận diện dù đã cấu hình đúng
+- **#39**: Matrix configuration không được recognize (đã đóng nhưng vẫn có issues liên quan)
 
-**🔴 #864 - Matrix/Telegram channel confusion**
-- Matrix config trả về Telegram responses
-- Có thể là namespace collision hoặc routing issue
+**🟡 Platform Support**
+- **#868**: Build fails trên Android/Termux (aarch64) với AccessDenied error
+- **#339**: Android install issues liên quan đến build.zig.zon
 
-**🟡 #869 - Telegram config not loading**
-- Config hiển thị đúng trong `config show`
-- Nhưng `channel list` báo "not configured"
-- Disconnect giữa config parsing và runtime state
+**🟡 CLI/UX Issues**
+- **#865**: CLI hiển thị ctrl characters thay vì xử lý arrow keys đúng cách
+- **#866**: curl POST fails dù đã có trong allowlist
 
-**🟡 #866 - curl POST fails despite allowlist**
-- curl trong allowlist nhưng vẫn bị block
-- Có thể liên quan đến #167 đã đóng
+**🟢 Custom Skills**
+- **#427**: Không thể sử dụng custom skill dù đã tạo và list được
 
-**🟡 #865 - CLI keyboard navigation broken**
-- Up/down/left/right keys hiển thị CTRL characters
-- Ảnh hưởng UX nghiêm trọng
-
----
+### Pattern nhận diện:
+- **Configuration management** là điểm yếu lớn nhất - nhiều issues về config không được load/recognize
+- **Multi-channel support** có vấn đề về routing và isolation
+- **Mobile/ARM support** cần được cải thiện
 
 ## 💡 Yêu cầu tính năng
 
-**#867 - Enhanced documentation** ⭐
-- Fully working example config.json
-- Heavily commented configuration
-- Better onboarding materials
-
-**Implicit requests từ bugs:**
-- Better channel configuration validation
-- Improved error messages cho config issues
-- Platform-specific build instructions (Android/Termux)
-
----
+**#867** - Enhancement request quan trọng:
+- Cung cấp file `config.json` mẫu đầy đủ và có comments chi tiết
+- Phản ánh pain point lớn: documentation và example configs không đủ rõ ràng
+- Đề xuất sử dụng commented JSON (dù không chuẩn) để giúp users hiểu cấu hình
 
 ## 💬 Phản hồi người dùng
 
-### Sentiment Analysis
+### Sentiment tổng quan: **Frustrated but engaged** 😤
 
-**Frustrated users** 😤
-- @eabase (3 issues trong 1 ngày): Configuration hell, CLI issues
-- @NOTJuangamer10 (2 issues): Telegram config và Android build problems
+**Pain points chính:**
+1. **Documentation gap** - Users phải tự mò mẫm cấu hình qua issues cũ (#864 reference #39)
+2. **Configuration complexity** - Nhiều users gặp khó khăn với channel setup
+3. **Platform compatibility** - Android/Termux users gặp nhiều vấn đề build
+4. **CLI experience** - Basic terminal interactions không hoạt động như mong đợi
 
-**Persistent users** 💪
-- @opryshok: Vẫn cố gắng với custom skills sau 1+ tháng
-- @OniSong: Android installation issues từ tháng 3
+**Positive signals:**
+- Users vẫn persist và report issues chi tiết
+- Community tham gia troubleshooting (3-8 comments per issue)
+- Users thử nhiều approaches khác nhau trước khi report
 
-### Pain Points chính
+## 📋 Backlog & Roadmap
 
-1. **Configuration complexity**: Default config không đủ để start
-2. **Documentation gaps**: Thiếu working examples và clear guides
-3. **Platform compatibility**: Android/Termux support chưa mature
-4. **Channel integrations**: Matrix/Telegram implementations có bugs
+### Ưu tiên nên xử lý:
 
-### Positive signals
+**P0 - Critical:**
+1. Fix channel configuration system (Matrix/Telegram routing và loading)
+2. Cung cấp comprehensive config examples với documentation
 
-- Người dùng vẫn persist despite issues (good product-market fit signal)
-- Active bug reporting (engaged community)
-- Diverse use cases (Matrix, Telegram, Android, custom skills)
+**P1 - High:**
+3. Cải thiện Android/ARM build support
+4. Fix CLI keyboard handling
+5. Debug custom skills loading mechanism
 
----
+**P2 - Medium:**
+6. Review shell command allowlist implementation
+7. Improve error messages cho configuration issues
 
-## 🗺️ Backlog & Roadmap
-
-### Urgent priorities (dựa trên issue clustering)
-
-**P0 - Blockers**
-- [ ] Fix Android/Termux build (#868)
-- [ ] Resolve Matrix/Telegram channel confusion (#864, #869)
-
-**P1 - High impact**
-- [ ] Create comprehensive config.json example (#867)
-- [ ] Fix CLI keyboard navigation (#865)
-- [ ] Debug custom skills tool availability (#427)
-- [ ] Investigate curl allowlist bypass (#866)
-
-**P2 - Documentation**
-- [ ] Matrix configuration guide
-- [ ] Android/Termux setup instructions
-- [ ] Custom skills development guide
-
-### Technical debt signals
-
-- **Channel system**: Cần refactor để tránh cross-contamination
-- **Config validation**: Cần stronger validation và better error messages
-- **Platform testing**: Thiếu CI/CD cho Android/ARM platforms
-- **CLI implementation**: Terminal handling cần improvement
+### Recommendations:
+- **Cần một PR lớn về configuration refactoring** - Nhiều issues có root cause chung
+- **Documentation sprint** - Tạo examples, guides, và troubleshooting docs
+- **Platform testing** - Setup CI/CD cho Android/ARM builds
+- **CLI library upgrade** - Xem xét thay thế hoặc fix terminal handling
 
 ---
 
-## 📊 Metrics Summary
-
-- **New issues**: 5 (tất cả là bugs/enhancements)
-- **Closed issues**: 3 (trong đó 2 là old issues)
-- **Active issues**: 8/11 OPEN
-- **Community engagement**: Cao (multiple users reporting similar issues)
-- **Issue velocity**: Tăng đột biến (5 issues trong 1 ngày)
-
-### Health indicators
-
-🟡 **Project health: MODERATE**
-- ✅ Active community engagement
-- ✅ Diverse use cases
-- ⚠️ Configuration complexity barrier
-- ⚠️ Platform compatibility issues
-- ❌ Documentation gaps
+**📌 Kết luận**: NullClaw đang trong giai đoạn maturity với focus vào stability. Các vấn đề chủ yếu xoay quanh configuration management và platform support, không phải core functionality. Cần ưu tiên developer experience và documentation để giảm friction cho new users.
 
 </details>
 
 <details>
 <summary><strong>IronClaw</strong> — <a href="https://github.com/nearai/ironclaw">nearai/ironclaw</a></summary>
 
-# 📊 Báo cáo phân tích IronClaw - 24/04/2026
+# Báo cáo phân tích IronClaw - 24/04/2026
 
-## 🎯 Tóm tắt hôm nay
+## 📊 Tóm tắt hôm nay
 
-Ngày 24/04 đánh dấu một đợt hoạt động cực kỳ sôi nổi với **50 PRs** và **18 issues** đang được xử lý. Dự án đang trong giai đoạn chuyển đổi kiến trúc lớn sang **engine-v2**, với nhiều refactor quan trọng về tool system, mission framework, và multi-tenant infrastructure. Đặc biệt, có một đợt QA bug bash mạnh mẽ với 11 bug reports mới được tạo trong ngày, cho thấy team đang tích cực kiểm thử trước khi release.
+IronClaw đang trong giai đoạn tái cấu trúc lớn với **engine v2**, tập trung vào trải nghiệm coding agent và hệ thống mission. Hoạt động chính xoay quanh việc hoàn thiện kiến trúc mới, sửa lỗi bảo mật, và cải thiện UX cho web gateway. Có **50 PRs** đang hoạt động với nhiều thay đổi về tool system, budgets, và channel management.
 
 ---
 
 ## 🚀 Releases
 
-**Không có release chính thức** trong 24h qua, nhưng có một **staging promotion PR** (#2916) đang được chuẩn bị, cho thấy một đợt release sắp tới.
+**Không có release chính thức** trong 24 giờ qua, nhưng có nhiều staging promotions đang được chuẩn bị (#2928).
 
 ---
 
-## 📈 Tiến độ dự án
+## 🔨 Tiến độ dự án
 
-### 🔥 Các PR chiến lược quan trọng
+### **Engine v2 - Kiến trúc mới đang được hoàn thiện**
 
-**1. Engine-v2 Architecture Migration** 
-- **#2868** - Refactor `available_actions` để chỉ callable cho blocked providers
-- **#2869, #2876, #2889** - Chuỗi PRs hoàn thiện engine-v2 metadata và action discovery
-- **#2854** - Thêm CodeAct host shims với Monty integration
-- Đây là **epic lớn nhất** (#2767), đang được tách thành nhiều PRs nhỏ để review dễ hơn
+**Các PR quan trọng:**
 
-**2. Tool System Overhaul**
+- **#2702** - Coding-agent UX với projects, shell mode, và coding skill
+  - Biến web gateway thành front-end cho coding agent
+  - Tích hợp GitHub repos vào projects
+  - Thêm shell mode cho tương tác trực tiếp
+
+- **#2847** - Hệ thống budgets dựa trên chi phí thay vì giới hạn iteration
+  - Migration database mới
+  - Enforcer runtime với bash cap
+  - Mặc định `BUDGET_ENFORCEMENT_MODE=off` để tránh breaking changes
+
+- **#2868** - Làm `available_actions` chỉ callable cho blocked providers
+  - Tối ưu hóa tool discovery
+  - Cải thiện hiệu suất với providers bị chặn
+
+### **Tool System - Đơn giản hóa và mở rộng**
+
 - **#2904** - Thay thế 11 WASM API-proxy tools bằng skill-based HTTP declarations
   - Loại bỏ github, gmail, google-*, slack, web-search tools
-  - Chuyển sang dùng SKILL.md files + built-in `http` tool
-  - Giảm complexity, tăng security
-- **#2897** - Phase-1 user-authored WASM tool flow
-- **#2866** - Curated discovery summaries cho core tools
+  - Sử dụng SKILL.md files với built-in `http` tool
+  - Giảm complexity, tăng maintainability
 
-**3. Multi-tenant Infrastructure**
-- **#2841** - Channel instances control plane (phase 1)
-  - Thêm `channel_instances` DB table
-  - Dispatch-key routing cho multi-tenant
-  - Nền tảng cho Slack/Telegram multi-workspace
-- **#2925** - Downstream deploy infra với mission slots
+- **#2865** - Thêm Nostr tool + WebSocket host support
+  - Mở rộng khả năng tích hợp với decentralized protocols
 
-**4. Mission Framework**
-- **#2873** - Mission tool family (engine v2) - 7 built-in tools mới
-- **#2894** - Redesign missions overview UI thành dossier-style
-
-**5. Developer Experience**
 - **#2921** - Webhook ingress system với Linear integration
-- **#2899** - Standalone gateway CLI commands
-- **#2877** - Phase 1 merge-queue CI redesign
+  - Generic HTTP webhook endpoint: `POST /webhook/tools/{tool}`
+  - Tools có thể nhận external webhooks và emit system events
 
-### 📊 Xu hướng phát triển
+### **Mission Framework**
 
-```
-🔧 Refactoring:     40% (tool system, engine-v2)
-🆕 New Features:    30% (webhooks, missions, multi-tenant)
-🐛 Bug Fixes:       20% (QA bug bash)
-📚 Infrastructure:  10% (CI/CD, deploy)
-```
+- **#2894** - Redesign missions overview surface
+  - Dossier-style UI với structured prompt rendering
+  - Status metrics và approach-history timelines
+  - Deep-linking từ Projects vào Missions
+
+- **#2873** (CLOSED) - Mission tool family cho engine v2
+  - 7 built-in tools: create, list, update, delete, fire, pause, resume
+  - Bị đóng vì thiếu consensus về scope
 
 ---
 
-## 💬 Điểm nổi bật cộng đồng
+## 🌟 Điểm nổi bật cộng đồng
 
-### 🔝 Issues/PRs được quan tâm nhất
+### **Issues được quan tâm:**
 
-**1. #2904 - WASM tools → Skills refactor** (nhiều discussion)
-- Quyết định kiến trúc lớn: loại bỏ 11 WASM tools
-- Tranh luận về trade-offs giữa simplicity vs. functionality
-- Impact lớn đến existing integrations
+1. **#2923** (👍 1) - stdio MCP activation fails
+   - Re-filing của #2474 bị đóng nhầm
+   - Stdio transport đã được support nhưng activation pre-flight bị lỗi
+   - Ảnh hưởng đến MCP server integration
 
-**2. #1764 - Abound demo** (XL, high-risk)
-- Demo deployment quan trọng cho production use case
-- Responses API, credential injection, guardrails
-- Đang open từ 30/03, cho thấy complexity cao
+2. **#2920** - Better data persistence cho hosted platform
+   - SQLite trong Docker container không an toàn cho non-technical users
+   - Đề xuất: volume mounts, backup automation, hoặc external DB
 
-**3. #2700 & #2699 - UX fixes** 
-- Chat titles thay vì hex IDs (#2237)
-- MCP server name normalization (#2236)
-- Những vấn đề UX cơ bản nhưng ảnh hưởng trải nghiệm lớn
+### **PRs có nhiều discussion:**
+
+- **#1446** - Aliyun Coding Plan support (contributor mới)
+  - Thêm AliyunProvider cho BaiLian Coding Plan
+  - Tương thích với Anthropic Messages API
+  - Quan trọng cho thị trường Trung Quốc
+
+- **#1764** - Abound demo với Responses API
+  - Production-ready credential injection
+  - Path-scoped auth
+  - Forex timing intelligence
 
 ---
 
 ## 🐛 Ổn định & Bugs
 
-### 🚨 Bug Bash Results (11 bugs mới từ @joe-rlo)
+### **Bugs nghiêm trọng:**
 
-**Critical Issues:**
+1. **#2231** (P2) - Multiple chats không thể chạy parallel
+   - Responses bị blocked trong queue
+   - Ảnh hưởng đến UX khi dùng nhiều threads
 
-1. **#2231** - Multiple chats blocked in queue (P2)
-   - Parallel chat execution bị block
-   - 5 comments, đang được investigate
+2. **#2930, #2929** - Live canary failures
+   - `provider-matrix openai-compatible` failed
+   - `public-smoke` với anthropic failed
+   - CI instability cần được xử lý
 
-2. **#2915** - Mission "terminal exhausted" blocks manual Fire (P2)
-   - Missions không thể trigger manually
-   - Blocking user workflow
+### **Security fixes:**
 
-3. **#2914** - Skill installation YAML parse error (P2)
-   - SKILL.md frontmatter parsing fails
-   - Ảnh hưởng skill ecosystem
+- **#2092** - Indirect prompt injection via memory poisoning [MEDIUM]
+  - `reject_if_injected()` chỉ áp dụng cho 10 identity files
+  - Adversarial content có thể được lưu vào arbitrary memory paths
+  - Extended injection scanning cho tất cả memory operations
 
-**Integration Issues:**
+- **#2094** - SSRF via extension download và MCP redirects [MEDIUM]
+  - HTTP clients follow 10 redirects mặc định
+  - Có thể redirect đến internal addresses
+  - Disabled redirect following với `reqwest::redirect::Policy::none()`
 
-4. **#2912** - Google Sheets requires re-auth after creation (P2)
-5. **#2913** - Duplicate Google Sheets created (P2)
-6. **#2911** - Asana shows inconsistent state (P2)
-7. **#2910** - Linear shows conflicting success/failure (P2)
+### **UX bugs:**
 
-**UX/Display Issues:**
+- **#2918** - Browser find (Cmd+F) collapses expanded log rows
+  - Matches bị ẩn khi row collapse
+  - Ảnh hưởng đến debugging experience
 
-8. **#2909** - CSV sent as text instead of file to Telegram (P2)
-9. **#2908** - Mission notification delayed ~5min (P2)
-10. **#2907** - Duplicate missions created (P2)
-11. **#2906** - Tool calls lack human-readable descriptions (P2)
-
-**Closed Issues:**
-- **#2474** - stdio MCP OAuth discovery bug (fixed)
-- **#1998** - Slack connect flow (fixed)
-- **#1503** - Google Slides integration (fixed)
-
-### 🔍 Pattern Analysis
-
-- **OAuth/Integration issues** chiếm 40% bugs
-- **Mission system** có nhiều edge cases
-- **Multi-chat concurrency** vẫn chưa stable
-- Hầu hết là **P2** (medium priority), không có P0/P1
+- **#2917** - Log target column quá hẹp
+  - Module paths bị truncate thành ellipsis
+  - Khó identify subsystem emit logs
 
 ---
 
-## ✨ Yêu cầu tính năng
+## 💡 Yêu cầu tính năng
 
-### 🆕 Feature Requests
+1. **#2920** - Data persistence improvements
+   - Volume mounts cho SQLite
+   - Automated backups
+   - External database options
+   - Migration guides
 
-**1. #2920 - Better data persistence** (@Kampouse)
-- SQLite trong Docker container không an toàn
-- Đề xuất: volume mounts, backup automation
-- Quan trọng cho hosted platform
+2. **Coding agent enhancements** (từ #2702)
+   - Project-based workflows
+   - GitHub integration
+   - Shell mode cho power users
 
-**2. #2923 - stdio MCP activation fix** (@rajulbhatnagar)
-- Re-filing #2474 (closed nhầm)
-- stdio transport đã support nhưng activation fails
-- Cần fix pre-flight check
-
-**3. UI Improvements**
-- **#2917** - Widen log target column
-- **#2918** - Browser find collapses expanded rows
-- Những cải tiến nhỏ nhưng ảnh hưởng DX
+3. **Budget system** (từ #2847)
+   - Cost-based limits thay vì iteration caps
+   - Per-tool resource tracking
+   - Flexible enforcement modes
 
 ---
 
-## 👥 Phản hồi người dùng
+## 💬 Phản hồi người dùng
 
-### 😊 Positive Signals
+### **Positive:**
 
-- **Active QA testing**: @joe-rlo đang systematic test toàn bộ features
-- **Community contributions**: PRs từ @tobias-nf (webhooks), @quchenyuan (Aliyun)
-- **Detailed bug reports**: Issues có clear reproduction steps
+- Engine v2 architecture được đánh giá cao về tính modular
+- Tool system đơn giản hơn với skill-based approach
+- Mission framework có potential cho autonomous workflows
 
-### 😟 Pain Points
+### **Pain points:**
 
-1. **Integration reliability**: OAuth flows không stable
-2. **Mission system complexity**: Nhiều edge cases, UX confusing
-3. **Multi-chat performance**: Concurrency issues
-4. **Data persistence**: Hosted users lo mất data khi upgrade
+- **Setup complexity**: Database configuration confusing (#2926)
+- **Channel activation**: WASM channels không auto-activate sau setup (#2927)
+- **MCP integration**: stdio transport broken (#2923, #2474)
+- **Data safety**: SQLite trong container không đủ robust (#2920)
 
-### 💡 User Expectations
+### **Developer experience:**
 
-- Muốn **production-ready integrations** (Google, Linear, Asana)
-- Cần **better error messages** và debugging tools
-- Mong đợi **stable mission scheduling**
-- Quan tâm **data safety** trên hosted platform
+- Log UI cần improvements (#2917, #2918)
+- Activity stream thiếu context (#2895 đang fix)
+- Debug panel cần expand coverage (#2850)
 
 ---
 
 ## 🗺️ Backlog & Roadmap
 
-### 🎯 Đang trong pipeline
+### **Đang trong progress:**
 
-**Phase 1 (Current Sprint):**
-- ✅ Engine-v2 core migration (#2767 epic)
-- 🔄 Tool system refactor (#2904)
-- 🔄 Multi-tenant infrastructure (#2841)
-- 🔄 Mission framework v2 (#2873)
+1. **Engine v2 stabilization**
+   - CodeAct host shims (#2854)
+   - Tool discovery optimization (#2868)
+   - Canonical prompt metadata refresh (#2869)
 
-**Phase 2 (Next):**
-- ⏳ Merge-queue CI (#2877)
-- ⏳ User-authored WASM tools (#2897)
-- ⏳ Webhook system expansion (#2921)
-- ⏳ Gateway standalone mode (#2899)
+2. **CI/CD redesign** (#2877)
+   - Phase 1: merge-queue model cho staging
+   - Chuẩn bị cho main branch protection
 
-**Blocked/Waiting:**
-- 🚧 Abound demo (#1764) - open 25 days
-- 🚧 Aliyun support (#1446) - open 35 days
-- 🚧 Chat title fix (#2700) - waiting on gateway refactor
+3. **Budget enforcement** (#2847)
+   - Core implementation done
+   - Cần testing và rollout plan
 
-### 📋 Technical Debt
+### **Upcoming (dựa trên PRs):**
 
-1. **11 P2 bugs** từ bug bash cần fix trước release
-2. **OAuth flow stability** - nhiều integrations có issues
-3. **Mission system edge cases** - cần hardening
-4. **Multi-chat concurrency** - performance bottleneck
-5. **Data persistence strategy** cho hosted platform
+- **Skill registry improvements** (#2932 - recover from missing frontmatter)
+- **Linear integration** (#2901, #2921 - credentials + webhooks)
+- **Nostr support** (#2865 - decentralized protocols)
+- **Aliyun provider** (#1446 - China market)
+
+### **Technical debt:**
+
+- Replace WASM tools với skills (#2904)
+- Consolidate deployment infra (#2925)
+- Fix channel activation flow (#2927)
+- Resolve MCP stdio issues (#2923)
 
 ---
 
-## 🎬 Kết luận
+## 🎯 Nhận định
 
-IronClaw đang trong giai đoạn **transformation lớn** với engine-v2 migration. Team đang balance giữa:
-- ✅ **Refactoring** kiến trúc để scale tốt hơn
-- ⚠️ **Stability** - nhiều bugs từ QA cần fix
-- 🚀 **New features** - webhooks, multi-tenant, missions
+IronClaw đang trong **giai đoạn chuyển đổi quan trọng** từ v1 sang v2 architecture. Team tập trung vào:
 
-**Rủi ro:** Quá nhiều changes đồng thời có thể ảnh hưởng stability. Cần prioritize fix bugs trước khi ship features mới.
+1. **Simplification**: Giảm WASM tools, tăng skill-based approach
+2. **Security**: Proactive fixes cho injection và SSRF
+3. **UX**: Coding agent experience và mission framework
+4. **Scalability**: Budget system và resource management
 
-**Cơ hội:** Nếu engine-v2 migration thành công, sẽ mở ra nhiều possibilities cho advanced use cases (multi-tenant, custom tools, webhooks).
-
-**Dự đoán:** Staging promotion (#2916) sẽ được merge trong 1-2 ngày tới, theo sau là một đợt bug fixing intensive trước release chính thức.
+**Challenges chính**: CI stability, MCP integration, và data persistence cho hosted deployments. Cộng đồng đang active với nhiều external contributors, đặc biệt từ thị trường châu Á.
 
 </details>
 
 <details>
 <summary><strong>LobsterAI</strong> — <a href="https://github.com/netease-youdao/LobsterAI">netease-youdao/LobsterAI</a></summary>
 
-# 📊 Báo cáo Phân tích LobsterAI - 24/04/2026
+# 📊 Báo cáo Phân tích LobsterAI - Ngày 2026-04-24
 
 ## 🎯 Tóm tắt hôm nay
 
-Ngày 24/04 chứng kiến một đợt phát triển mạnh mẽ với **13 PRs được merge**, tập trung vào cải thiện trải nghiệm người dùng và sửa lỗi nghiêm trọng. Đội ngũ đã giải quyết các vấn đề về hiệu năng gateway, tích hợp đa nền tảng IM, và nâng cấp UI/UX. Đồng thời, 6 issues cũ được đánh dấu stale, cho thấy team đang dọn dẹp backlog.
-
-## 🚀 Releases
-
-**Không có release chính thức** trong 24h qua, nhưng PR #1805 (`Release/2026.04.22`) cho thấy một bản release lớn đang được chuẩn bị với các tính năng:
-
-- ✨ **Multi-bot support** cho Discord/Telegram
-- 🖥️ **LM Studio provider** - hỗ trợ inference local
-- 💼 **WeCom plugin upgrade** - cải thiện tích hợp doanh nghiệp
-- 🪟 **Windows diagnostics** - log chi tiết hơn cho troubleshooting
-
-## 📈 Tiến độ dự án
-
-### Các PR quan trọng đã merge:
-
-**🔧 Sửa lỗi nghiêm trọng:**
-- **#1801** - Khắc phục vòng lặp reply cũ khi user dừng MCP tool và gửi tin nhắn mới
-- **#1804** - Phục hồi sharp native binding cho xử lý ảnh
-- **#1803** - Tăng timeout RPC từ 30s → 90s để tránh timeout khi gateway khởi tạo
-
-**🎨 Cải thiện UX:**
-- **#1807** - Giữ draft input và attachments khi chuyển session
-- **#1808** - Giới hạn input width ở homepage (768px) cho UX tốt hơn
-- **#1809** - Cập nhật copy cho update notification
-- **#1799** - Tăng content width từ 896px → 1024px, mở rộng tool call summary
-
-**🧪 Chất lượng code:**
-- **#1802** - Cập nhật test suite cho LmStudio, Telegram multi-instance
-
-**Xu hướng:** Team đang tập trung vào **stability** và **polish** - nhiều PR sửa edge cases và cải thiện chi tiết nhỏ thay vì tính năng lớn.
-
-## 🌟 Điểm nổi bật cộng đồng
-
-### Issue mới nhất (#1797) - 👍 1 reaction
-**"Yêu cầu tính năng xóa đối thoại hàng loạt"** - @qxjysd đề xuất thêm khả năng xóa batch conversations để quản lý context hiệu quả hơn. Đây là nhu cầu thực tế từ power users.
-
-### PR từ cộng đồng (#61) - Đã merge
-@Asuta đóng góp tính năng chọn OpenAI API type (Responses/Chat Completions), cho thấy cộng đồng đang tích cực contribute code chất lượng.
-
-## 🐛 Ổn định & Bugs
-
-### Đã khắc phục:
-- ✅ Gateway timeout issues (30s → 90s)
-- ✅ Stale reply loop với MCP tools
-- ✅ Draft input bị xóa khi switch sessions
-- ✅ Sharp native binding bị stub nhầm
-
-### Vẫn mở (stale issues):
-- 🔴 **#15** - Electron 40 startup failure trên macOS/Windows (TypeError)
-- 🔴 **#14** - Feishu renderMode không hoạt động + thinking tags không được filter
-- 🔴 **#35** - Discord connectivity issues
-- 🔴 **#26** - Linux build vẫn ở version 0.1.16
-
-**Đánh giá:** Các stale issues cho thấy một số vấn đề platform-specific chưa được ưu tiên, đặc biệt là Electron 40 compatibility.
-
-## 💡 Yêu cầu tính năng
-
-1. **#1797** - Batch delete conversations (mới, có traction)
-2. **#29** - Thêm Codex login support
-3. **#14** - Cải thiện Feishu integration (renderMode + markdown filtering)
-
-**Insight:** Người dùng đang yêu cầu nhiều tính năng quản lý dữ liệu (xóa batch) và tích hợp platform (Codex, Feishu) - cho thấy sản phẩm đang được dùng trong môi trường production.
-
-## 💬 Phản hồi người dùng
-
-### Tích cực:
-- Cộng đồng đang contribute code (PR #61)
-- Engagement tốt với feature requests
-
-### Tiêu cực/Quan ngại:
-- **Linux users** (@ray0019) không biết cách update version
-- **Electron 40 users** gặp blocking issues khi startup
-- **Feishu users** (@bosgithub2023) gặp config không hoạt động
-
-**Vấn đề lớn:** Thiếu documentation về versioning và update process, đặc biệt cho Linux builds.
-
-## 🗺️ Backlog & Roadmap
-
-### Ưu tiên cao (dựa trên activity):
-1. ✅ Multi-platform IM support (Discord/Telegram) - **Đã hoàn thành**
-2. ✅ Local inference (LM Studio) - **Đã hoàn thành**
-3. 🔄 Stability fixes - **Đang tiến hành**
-4. ⏳ Batch operations (delete conversations) - **Được yêu cầu**
-
-### Nợ kỹ thuật:
-- Electron 40 compatibility issues
-- Platform-specific bugs (Linux, Feishu, Discord)
-- Documentation gaps (versioning, update process)
-
-### Dự đoán hướng đi:
-Với 13 PRs merge trong 1 ngày và focus vào polish, team có thể đang chuẩn bị cho một **stable release** trong tuần tới. Việc đánh dấu nhiều stale issues cũng cho thấy họ đang **triage backlog** để tập trung vào priorities.
+Ngày 24/04 chứng kiến một đợt hoạt động phát triển cực kỳ mạnh mẽ với **30 PRs được merge** trong vòng 24 giờ, tập trung vào tối ưu hiệu năng khởi động, cải thiện trải nghiệm tích hợp IM (Instant Messaging), và sửa lỗi quan trọng trong pipeline xử lý hình ảnh. Đặc biệt, team đã giải quyết triệt để vấn đề cold-start latency và các bug liên quan đến MCP tools trên macOS.
 
 ---
 
-**📌 Kết luận:** LobsterAI đang trong giai đoạn **maturity** - ít tính năng mới lớn, nhiều improvements nhỏ và bug fixes. Cộng đồng đang phát triển với contributions chất lượng, nhưng cần cải thiện documentation và support cho edge cases.
+## 🚀 Releases
+
+**Không có release chính thức** trong 24 giờ qua, nhưng dựa trên khối lượng PRs được merge, dự án đang chuẩn bị cho một bản release lớn với nhiều cải tiến về hiệu năng và tính năng.
+
+---
+
+## 📈 Tiến độ dự án
+
+### 🔥 Các cải tiến hiệu năng (Performance Optimization)
+
+**Tối ưu khởi động ứng dụng:**
+- **#1747**: Thêm startup profiler và tối ưu cold-start - giảm thời gian khởi động đáng kể bằng cách:
+  - Hiển thị window sớm hơn
+  - Defer việc load skill services
+  - Mở rộng Windows Defender exclusion
+- **#1750**: Nâng cấp OpenClaw runtime lên v2026.4.14 với 5 patches tối ưu, tiết kiệm ~8s khi load plugin
+
+**Cải thiện trải nghiệm người dùng:**
+- **#1799**: Tăng max-width content từ 896px → 1024px, mở rộng tool call summary display
+- **#1793**: Loại bỏ auto-popup khi download update xong, chỉ giữ badge notification
+
+### 🤖 Tích hợp IM & Multi-bot Support
+
+**Hỗ trợ đa nền tảng IM:**
+- **#1792**: Telegram hỗ trợ multi-robots
+- **#1794**: Discord hỗ trợ multi-robots  
+- **#1761**: DingTalk thêm QR code scanning cho bot configuration (tương tự Feishu)
+- **#1771**: Sửa lỗi NIM agent channel config không hiển thị đúng trạng thái
+
+**Cải tiến cấu hình:**
+- **#1757**: Sửa lỗi cấu hình DingTalk agentBinding
+- **#1768, #1778**: Cải thiện thuật toán đồng bộ IM
+
+### 🛠️ Sửa lỗi quan trọng
+
+**Xử lý hình ảnh trên macOS:**
+- **#1777**: Thêm diagnostic logs cho image attachment pipeline
+- **#1780**: **Sửa bug nghiêm trọng** - hình ảnh paste trên macOS không được model nhìn thấy do conflict giữa file path và base64 encoding
+
+**MCP & Chat stability:**
+- **#1801**: Ngăn stale reply loop và MCP tool abort signal misfire
+- **#1803**: Tăng chat.send RPC timeout từ 30s → 90s để tránh timeout khi gateway đang khởi tạo
+- **#1755**: Disable built-in mcporter skill để tránh nhầm lẫn với MCP integration của LobsterAI
+
+**OpenClaw integration:**
+- **#1758**: Sửa OPENCLAW_HOME path mismatch gây lỗi exec-approvals
+- **#1772**: Thêm missing getBaseDir mock trong runtime tests
+
+### ✨ Tính năng mới
+
+- **#1812**: Thêm models mới: kimi-k2.6, deepseek-v4-flash, deepseek-v4-pro
+- **#1811**: Cải thiện search query với trim/normalize whitespace và nút clear
+- **#1810**: Thêm embedding configuration cho memory search (OpenAI, Gemini, etc.)
+- **#1787**: Hỗ trợ LM Studio trong model configuration
+- **#1788**: Proxy marketplace fetch qua main process để giải quyết CORS
+- **#1775**: Export OpenClaw logs (gateway.log + daily logs) trong ZIP
+- **#1800**: Include install-timing.log trong Windows log export
+
+### 🔒 Bảo mật & Ổn định
+
+- **#1786**: Thu hẹp Windows Defender exclusion xuống các thư mục cụ thể để loại bỏ false-positive từ Tencent PC Manager
+- **#1798**: Tối ưu gateway restart - tránh restart không cần thiết khi focus/blur
+
+---
+
+## 💬 Điểm nổi bật cộng đồng
+
+### Issues được đánh dấu [stale]
+
+Cả 2 issues mở (#38, #41) đều được bot đánh dấu stale vào ngày 24/04:
+
+- **#38**: Người dùng @HsiYaTung hỏi về cách tiết kiệm tokens và số lượng requests - vấn đề quan trọng về chi phí sử dụng
+- **#41**: @ab409 báo lỗi playwright skill (mâu thuẫn giữa playwright-cli và playwright-mcp trong script)
+
+**Nhận xét**: Team có vẻ tập trung vào development mạnh mẽ nhưng chưa kịp phản hồi issues từ cộng đồng.
+
+---
+
+## 🐛 Ổn định & Bugs
+
+### Đã giải quyết ✅
+
+1. **macOS image handling** - Bug nghiêm trọng khiến model không nhìn thấy hình ảnh paste
+2. **MCP tool timeout** - Stale reply loop và abort signal issues
+3. **Gateway RPC timeout** - Tăng từ 30s → 90s
+4. **OpenClaw path mismatch** - exec-approvals.json không tìm thấy
+5. **Windows false-positive** - Tencent PC Manager cảnh báo Silver Fox
+
+### Đang theo dõi ⚠️
+
+- **#41**: Playwright skill configuration mismatch
+- **#38**: Token optimization - chưa có giải pháp cụ thể
+
+---
+
+## 💡 Yêu cầu tính năng
+
+### Đã implement
+
+- ✅ Multi-bot support cho Telegram, Discord
+- ✅ QR code scanning cho DingTalk
+- ✅ LM Studio integration
+- ✅ Embedding configuration cho memory search
+- ✅ Deepseek v4 models
+
+### Đang chờ phản hồi
+
+- **#38**: Cơ chế tiết kiệm tokens - có thể cần:
+  - Caching responses
+  - Prompt compression
+  - Streaming optimization
+
+---
+
+## 📣 Phản hồi người dùng
+
+### Tích cực 👍
+
+- Không có reactions đặc biệt trên issues/PRs (0 thumbs up trên cả 2 issues)
+- Khối lượng PRs lớn cho thấy team đang rất active
+
+### Tiêu cực / Cần cải thiện 👎
+
+- **Response time chậm**: Issues từ 22/02 vẫn chưa được giải quyết (2 tháng)
+- **Documentation gap**: #41 chỉ ra inconsistency giữa docs và implementation
+- **Cost concerns**: #38 phản ánh lo ngại về chi phí sử dụng
+
+---
+
+## 🗺️ Backlog & Roadmap
+
+### Ưu tiên cao (dựa trên activity)
+
+1. **Performance optimization** - Đã có progress tốt, tiếp tục monitor cold-start metrics
+2. **IM platform expansion** - Đã hỗ trợ multi-bot, có thể mở rộng sang WeChat, Slack
+3. **Model provider diversity** - Đã thêm Deepseek v4, LM Studio
+
+### Cần attention
+
+1. **Community support** - Cần team member dedicated cho issue triage
+2. **Documentation** - Sync docs với code changes (playwright skill case)
+3. **Cost optimization** - Xem xét implement token-saving strategies
+4. **Testing coverage** - #1772 cho thấy có gaps trong test mocks
+
+### Dự đoán release tiếp theo
+
+Với 30 PRs merged trong 1 ngày, khả năng cao sẽ có **release v2026.4.24 hoặc v2026.4.25** với:
+- 🚀 Cải thiện hiệu năng khởi động 30-50%
+- 🤖 Multi-bot support cho 3 platforms chính
+- 🖼️ Sửa lỗi image handling trên macOS
+- 🧠 Embedding configuration cho memory search
+- 🔧 20+ bug fixes và stability improvements
+
+---
+
+## 📊 Thống kê nhanh
+
+- **PRs merged**: 30 (trong 24h)
+- **Issues mới**: 0
+- **Issues đóng**: 0
+- **Contributors active**: ~5-6 người
+- **Commits ước tính**: 50+
+- **Lines changed**: Hàng nghìn (major refactoring)
+
+**Kết luận**: LobsterAI đang trong giai đoạn phát triển cực kỳ tích cực với focus mạnh vào performance và stability. Tuy nhiên, cần cải thiện community engagement và documentation maintenance.
 
 </details>
 
@@ -2048,670 +2017,656 @@ Không có hoạt động trong 24 giờ qua.
 
 ## 🎯 Tóm tắt hôm nay
 
-Ngày 24/04 chứng kiến một đợt merge code mạnh mẽ với **7 PRs được đóng** trong vòng 24 giờ, tập trung vào việc sửa lỗi nghiêm trọng và cải thiện trải nghiệm người dùng. Đội ngũ phát triển đã giải quyết các vấn đề về schema normalization, OAuth UI, và tối ưu KV cache cho local LLMs. Đồng thời, có **3 PRs mới** đang chờ review về UX cải tiến (auto-scroll, project selector) và quản lý code indexing.
+Ngày 24/04 đánh dấu một đợt sửa lỗi và cải tiến mạnh mẽ với **6 PRs được merge** trong vòng 24 giờ. Đội ngũ tập trung vào việc ổn định hệ thống với các bản sửa quan trọng về schema normalization, datetime handling, và cross-platform compatibility. Đặc biệt, dự án đang mở rộng đáng kể với tích hợp Signal messaging và hệ thống skills mới với 101 skills mặc định.
 
 ---
 
 ## 🚀 Releases
 
-**Không có release chính thức** trong 24 giờ qua, nhưng với số lượng fixes được merge, có thể sắp có một patch release sớm.
+Không có release chính thức trong 24 giờ qua, nhưng các PR được merge cho thấy đang chuẩn bị cho một phiên bản ổn định hơn với nhiều tính năng mới.
 
 ---
 
 ## 📈 Tiến độ dự án
 
-### PRs đã merge (7 PRs) ✅
+### ✅ PRs đã merge (6 PRs)
 
-**🔧 Sửa lỗi nghiêm trọng:**
+**Sửa lỗi quan trọng:**
 
-- **#856** - Sửa lỗi schema union collapse ảnh hưởng Gemini và Fireworks AI
-  - Deep-merge properties trong `anyOf`/`oneOf` unions
-  - Loại bỏ boolean enum dư thừa gây lỗi validation
+- **#856** - Sửa schema union collapse cho Gemini/Fireworks AI
+  - Deep-merge properties thay vì shallow merge
+  - Loại bỏ boolean enum dư thừa
   - Giải quyết #849 và #848
 
-- **#853** - Sửa Docker sandbox crash trên ARM/Raspberry Pi và WSL2
-  - Skip tmpfs mounts cho các sysfs paths không tồn tại (`/sys/class/dmi`)
-  - Thay thế WSL2-only detection bằng per-path host checking
+- **#855** - Di chuyển datetime từ system message sang user content
+  - Cải thiện KV cache stability cho local LLMs (llama.cpp, Ollama, LM Studio)
+  - Tránh invalidation do datetime thay đổi vị trí
+
+- **#853** - Sửa Docker sandbox trên ARM/Raspberry Pi và WSL2
+  - Skip sysfs tmpfs mounts cho paths không tồn tại
   - Giải quyết #828
 
-- **#855** - Tối ưu KV cache cho local LLMs
-  - Di chuyển datetime từ system message sang user content
-  - Ngăn cache invalidation do datetime thay đổi liên tục
-  - Cải thiện performance cho llama.cpp, Ollama, LM Studio
-  - Giải quyết #176
-
-**🎨 Cải thiện UX:**
-
-- **#852** - Thêm nút Re-auth cho MCP OAuth servers
-  - Hiển thị badge trạng thái auth và nút re-auth khi cần
+- **#852** - Thêm nút Re-auth cho MCP OAuth
+  - Badge hiển thị trạng thái auth
   - Giải quyết #851
 
-- **#854** - Thêm tests cho ElevenLabs custom voices
-  - Unit tests với wiremock + live integration tests
-  - Xác nhận custom voices hoạt động đúng (liên quan #735)
+**Tính năng mới:**
 
-**🆕 Tính năng mới:**
+- **#854** - Tests cho ElevenLabs custom voices
+  - Wiremock unit tests + live integration tests
+  - Xác nhận #735 đã được sửa
+
+- **#841** - Tích hợp Signal messaging channel
+  - Backend qua signal-cli daemon
+  - Full UI integration trong web interface
+
+### 🔄 PRs đang mở (7 PRs)
+
+**Tính năng lớn đang phát triển:**
 
 - **#797** - Bundle 101 default skills với category UI
-  - Embedded skills từ Hermes Agent vào binary
-  - `BundledSkillStore` với dev-mode filesystem fallback
-  - Composite store ưu tiên user skills
-
-- **#841** - Thêm Signal channel qua signal-cli
-  - Tích hợp JSON-RPC và SSE events
-  - Full integration vào config, CLI, web UI
-
-### PRs đang chờ review (3 PRs) 🔄
-
-- **#846** - Smart auto-scroll cho chat messages
-  - Không auto-scroll khi user đang đọc tin nhắn cũ
-  - Hiển thị "↓ New messages" indicator
-  - Giải quyết #824
-
-- **#847** - Wire up project combo dropdown
-  - Kết nối project selector đã scaffold vào DOM
-  - Giải quyết #838
-
-- **#837** - Toggle code indexing per-project
-  - Cho phép disable semantic search theo project
-  - Graceful degradation cho code-index tools
-
-### PRs đang phát triển (3 PRs) 🚧
-
-- **#840** - MCP server management skill
-  - Skill cho agents quản lý MCP servers programmatically
-  - Post-install recipes cho common patterns
+  - Embedded skills từ Hermes Agent
+  - `BundledSkillStore` với dev-mode fallback
+  - Chuẩn bị merge sớm
 
 - **#844** - Default sub-agent presets
-  - Built-in presets: research, coder, reviewer, qa, ux, docs, coordinator
+  - 7 presets: research, coder, reviewer, qa, ux, docs, coordinator
   - Session-scoped Modes
+  - Workflow orchestration
+
+- **#840** - MCP server management skill
+  - Skill cho việc quản lý MCP servers programmatically
+  - Post-install recipes
+
+**Cải tiến UX:**
+
+- **#847** - Wire up project combo dropdown
+  - Kết nối project selector đã scaffold
+  - Giải quyết #838
+
+- **#846** - Smart auto-scroll cho chat
+  - "↓ New messages" indicator
+  - Giải quyết #824
+
+- **#837** - Toggle code indexing per-project
+  - Disable semantic search khi không cần
+  - Graceful degradation
+
+- **#859** - Fix silent memory turn filenames
+  - Enforce correct date format
+  - Giải quyết #857
 
 ---
 
 ## 🌟 Điểm nổi bật cộng đồng
 
-### Issue được quan tâm nhất:
+### Issues được đóng nhanh
 
-**#176** (16 comments, 1 👍) - **Đã giải quyết!**
-- Feature request: Add datetime to system prompt
-- Được implement trong #855 với approach khác (user content thay vì system message)
-- Cải thiện KV cache performance cho local LLMs
+- **#176** (16 comments, 1 👍) - Add datetime to system prompt
+  - Issue từ tháng 2, cuối cùng được giải quyết với approach mới (user content thay vì system message)
+  
+- **#828** - Docker sandbox WSL2 issue
+  - Được báo cáo và fix trong vòng 24 giờ
 
-### Vấn đề người dùng gặp phải:
+### Issues mới cần chú ý
 
-**#828** - Docker sandbox fails trên WSL2/ARM
-- Ảnh hưởng users chạy trên Raspberry Pi và WSL2
-- Đã fix trong #853
-
-**#851** - Missing OAuth re-auth button
-- UX issue khi OAuth token hết hạn
-- Đã fix trong #852
+- **#858** - Heartbeat re-fires in tight loop
+  - Bug nghiêm trọng khi agent dùng exec trong heartbeat turn
+  - Chưa có PR fix
 
 ---
 
 ## 🐛 Ổn định & Bugs
 
-### Bugs đã sửa trong 24h:
+### Đã sửa ✅
 
-✅ **Schema normalization issues** (#849, #848)
-- Gemini qua OpenRouter và Fireworks AI gặp lỗi JSON schema
-- Root cause: shallow merge và redundant boolean enum
+1. **Schema normalization** (#849, #848)
+   - Gemini và Fireworks AI gặp lỗi với enum/union schemas
+   - Root cause: shallow merge và redundant boolean enum
 
-✅ **Docker sandbox crashes** (#828)
-- WSL2 và ARM devices không có `/sys/class/dmi`
-- Đã implement smart path checking
+2. **Cross-platform compatibility** (#828)
+   - Docker sandbox fail trên ARM/WSL2
+   - Solution: Skip missing sysfs paths thay vì hard fail
 
-✅ **KV cache invalidation** (#176)
-- Datetime trong system message gây cache miss liên tục
-- Moved to user content
+3. **KV cache invalidation** (#176)
+   - Datetime trong system message gây cache miss
+   - Solution: Move sang user content
 
-✅ **OAuth UI missing** (#851)
-- Không có cách re-auth khi token expire
+4. **Memory turn filenames** (#857)
+   - LLM hallucinate wrong dates
+   - Fix: Inject current date vào prompt
 
-### Bugs còn mở:
+### Đang xử lý 🔧
 
-🔴 **#857** - Silent memory turn saves với wrong dates
-- Filenames có ngày tháng sai
-- Mới report, chưa có fix
-
-🟡 **#848** - Fireworks Fire Pass schema issues
-- Có thể đã fix trong #856, cần verify
+- **#858** - Heartbeat loop issue (mới báo cáo hôm nay)
+- **#848** - Fireworks JSON schema enum None (có PR #856 nhưng cần verify)
 
 ---
 
 ## 💡 Yêu cầu tính năng
 
-### Đang implement:
-
-- **#850** - Support `client_secret` trong MCP OAuth override config
-  - Cho phép custom OAuth flows phức tạp hơn
-
-### Đang review:
-
-- **Smart auto-scroll** (#846) - Cải thiện chat UX
-- **Code indexing toggle** (#837) - Flexibility cho users
-- **Sub-agent presets** (#844) - Onboarding tốt hơn cho new users
-
----
-
-## 💬 Phản hồi người dùng
-
-### Positive signals:
-
-- Community đang actively report bugs với context đầy đủ
-- Issues được respond và fix nhanh (trong vòng 1-2 ngày)
-- Nhiều PRs focus vào real-world use cases (WSL2, ARM, custom voices)
-
-### Pain points:
-
-- **Platform compatibility**: WSL2 và ARM devices gặp nhiều issues
-- **OAuth flows**: Cần UX tốt hơn cho re-authentication
-- **Schema compatibility**: Các providers khác nhau có quirks riêng
-
----
-
-## 🗺️ Backlog & Roadmap
-
-### Priorities rõ ràng từ activity:
-
-1. **Platform stability** - Đang được ưu tiên cao (ARM, WSL2 fixes)
-2. **UX polish** - Auto-scroll, project selector, OAuth flows
-3. **Agent ecosystem** - Skills bundling, sub-agent presets, MCP management
-4. **Provider compatibility** - Schema normalization cho nhiều LLM providers
-
-### Upcoming (dựa trên open PRs):
-
-- Signal channel integration (#841)
-- MCP server management automation (#840)
-- Default agent presets (#844)
-- Code indexing flexibility (#837)
-
----
-
-## 📊 Metrics
-
-- **7 PRs merged** trong 24h - tốc độ development cao
-- **6 issues closed** - response time tốt
-- **2 new issues** - bug discovery rate ổn định
-- **3 PRs pending review** - healthy pipeline
-
-**Nhận xét**: Dự án đang trong giai đoạn **stabilization và polish**, focus vào bugs và UX improvements sau khi có foundation features. Velocity cao và responsive với community feedback.
-
-</details>
-
-<details>
-<summary><strong>CoPaw</strong> — <a href="https://github.com/agentscope-ai/CoPaw">agentscope-ai/CoPaw</a></summary>
-
-# 📊 Báo cáo Phân tích Dự án CoPaw - Ngày 24/04/2026
-
-## 1. 🎯 Tóm tắt hôm nay
-
-Dự án CoPaw (QwenPaw) đang trong giai đoạn ổn định và cải tiến sau bản phát hành v1.1.3.post1. Hoạt động chính tập trung vào **sửa lỗi bảo mật**, **tối ưu hóa trải nghiệm người dùng** trên các kênh (DingTalk, WeChat, QQ), và **nâng cấp cơ sở hạ tầng** (Vite 8, Docker). Cộng đồng đang tích cực đóng góp với 50 PR và 39 issue được xử lý, cho thấy sự phát triển mạnh mẽ của hệ sinh thái AI agent này.
-
----
-
-## 2. 🚀 Releases
-
-### **v1.1.3.post1** (23/04/2026)
-- **Sửa lỗi quan trọng**: Khôi phục cơ chế tránh Windows Defender (#3717)
-- **Cải thiện Desktop**: Sử dụng native save dialog cho file downloads trong pywebview (#3719)
-- **Ý nghĩa**: Bản vá nhanh để đảm bảo ứng dụng desktop hoạt động ổn định trên Windows
-
-### **v1.1.4-beta.1** (23/04/2026)
-- **Tài liệu**: Sửa lỗi ngôn ngữ trong backup docs (#3678)
-- **Console**: Thêm `.prettierignore` và cập nhật format scripts (#3676)
-- **Security docs**: Sửa lỗi định dạng (#3684)
-- **Ý nghĩa**: Bản beta chuẩn bị cho v1.1.4 với focus vào chất lượng code và tài liệu
-
----
-
-## 3. 📈 Tiến độ dự án
-
-### **Xu hướng phát triển chính**
-
-#### 🔐 **Bảo mật & Xác thực**
-- **#3739** [MERGED]: Thêm whitelist `allow_no_auth_hosts` cho API authentication - cho phép tùy chỉnh IP được phép truy cập không cần xác thực
-- **#3652** [MERGED]: Thêm nút xác nhận khi tool call vi phạm security policy - cải thiện UX cho approval workflow
-- **#3257** [MERGED]: Render nút approve trong console thay vì gõ lệnh `/approve` - tăng tính trực quan
-
-#### 📱 **Cải thiện Channels**
-- **#3746** [OPEN]: Sửa timeout và collision trong DingTalk - thêm timeout 300s, dùng full `conversation_id` để tránh xung đột session
-- **#3735** [MERGED]: Hỗ trợ quoted message cho QQ channel - xử lý tin nhắn trích dẫn cho tất cả loại message
-- **#3700** [MERGED]: Tăng QR polling timeout lên 60s cho WeChat - sửa lỗi `httpx.ReadTimeout`
-- **#3605** [OPEN]: Sửa tên identifier của WeixinChannel khớp với registry key
-
-#### 🛠️ **Cơ sở hạ tầng**
-- **#3712** [MERGED]: Nâng cấp Vite từ v6 lên v8 - tăng tốc độ build đáng kể
-- **#3698** [OPEN]: Tối ưu pip installation trong Dockerfile bằng `uv`
-- **#3730** [MERGED]: Thêm discord.py vào `CONDA_UNPACK_AFFECTED_PACKAGES` - sửa lỗi regex trên Windows
-
-#### 🤖 **Tính năng AI Agent**
-- **#3740** [OPEN]: Thêm built-in `agent_audit` skill - workflow kiểm toán agent tự động
-- **#3509** [OPEN]: Hỗ trợ multimodal message (images/files) - mở rộng khả năng xử lý đa phương tiện
-- **#3550** [OPEN]: Align scope-aware effective model semantics - cải thiện routing logic
-
----
-
-## 4. 🌟 Điểm nổi bật cộng đồng
-
-### **Issues có nhiều tương tác**
-
-1. **#2291** [60 comments] 🐾 **Help Wanted: Open Tasks**
-   - Danh sách task mở cho contributor, ưu tiên từ P0-P2
-   - Cộng đồng tích cực claim task và đóng góp
-
-2. **#3709** [7 comments] ⚠️ **Safe guard rule vẫn block command dù đã disable**
-   - User disable rule `TOOL_CMD_IFS_INJECTION` nhưng vẫn bị block
-   - Vấn đề liên quan đến cron job với `git commit -m "Auto commit at $(date)"`
-
-3. **#3640** [5 comments] 💀 **MCP client TaskGroup exception gây agent "giả chết"**
-   - Agent không phản hồi nhưng không báo lỗi
-   - Vấn đề nghiêm trọng ảnh hưởng trải nghiệm người dùng
-
-### **PR đáng chú ý**
-
-- **#3759** [NEW]: Thêm Unsloth Studio provider - mở rộng hỗ trợ local LLM hosting
-- **#3758**: Normalize missing builtin tool icons - sửa lỗi 500 khi legacy config có `icon = null`
-
----
-
-## 5. 🐛 Ổn định & Bugs
-
-### **Bugs đang được xử lý**
-
-#### **Nghiêm trọng**
-- **#3549** [5 comments]: `ValidationError: call_id Input should be a valid string` - lỗi không rõ nguyên nhân trên Armbian
-- **#3555** [2 comments]: Desktop hang tại "Waiting for HTTP ready..." trên Windows - timeout 300s
-- **#3552** [3 comments]: Console crash khi gặp malformed Unicode surrogate trong SSE
-
-#### **Trung bình**
-- **#3750**: Nút "Stop" không reset trạng thái session - tin nhắn mới không được xử lý
-- **#3748**: `qwenpaw update` không shutdown được process hiện tại
-- **#3564**: Agent thường xuyên bị gián đoạn giữa chừng
-
-#### **Đã sửa**
-- ✅ **#3695**: Lỗi git khi build Docker image v1.1.3
-- ✅ **#3642**: Console đóng băng khi enable MCP
-- ✅ **#3582**: Localhost auth bypass bị lỗi 401
-
----
-
-## 6. 💡 Yêu cầu tính năng
-
-### **Đề xuất mới**
-
-1. **#3752** 🖱️ **Context Menu cho Desktop/Web**
-   - Thêm right-click menu với các thao tác nhanh (copy, delete, rename)
-   - Cải thiện UX đáng kể
-
-2. **#3751** 📌 **System Tray cho Windows Desktop**
-   - Minimize to tray, background running
-   - Tray right-click menu
-
-3. **#3742** 📤 **DingTalk: Hỗ trợ phân đoạn tin nhắn dài**
-   - Tin nhắn >3500 ký tự làm markdown không hoạt động
-   - Đề xuất cơ chế split message cho Cron push
-
-4. **#3563** 📊 **Hiển thị usage của context hiện tại**
-   - Giúp user quyết định khi nào dùng `compact` command
-
-5. **#3540** 🎯 **Auto-select agent gần nhất**
-   - Tự động chọn agent được dùng lần cuối thay vì default
-
-6. **#3526** 📋 **Auto-save large paste text as .txt attachment**
-   - Tránh input box lag và vượt context limit
-
-### **Đề xuất đang thảo luận**
-
-- **#3543**: Agent grouping - phân nhóm agent chuyên môn
-- **#3531**: OpenAI Responses API support cho custom providers
-- **#3475**: MCP service truyền dynamic auth info
-
----
-
-## 7. 💬 Phản hồi người dùng
-
-### **Trải nghiệm tích cực**
-- Cộng đồng đánh giá cao tốc độ phát triển và responsive của team
-- Tài liệu được cải thiện liên tục (backup, security)
-- Desktop app ngày càng ổn định
-
-### **Pain points**
-
-1. **Multimodal chưa hoạt động tốt** (#3756)
-   - User dùng mimo-v2.5 (multimodal model) nhưng không thể dùng khả năng multimodal
-   - Phiên bản desktop v1.1.2
-
-2. **Memory search lỗi database** (#3047)
-   - `MemorySearch failed: unable to open database file`
-   - Không respect agent-level memory config
-
-3. **Cron job không tự động chạy** (#3513, #3573)
-   - User phải tạo cron thủ công thay vì qua conversation
-   - WeChat channel bị `KeyError` khi chạy cron
-
-4. **Markdown table rendering** (#3528)
-   - Dùng `<br>` làm table tự động xuống dòng
-
-### **Feedback về UX**
-
-- **Positive**: Approval button thay `/approve` command được đón nhận tốt
-- **Negative**: Dark mode có text overlap ở sidebar (#3546)
-- **Request**: Cần right-click menu và system tray cho desktop
-
----
-
-## 8. 📋 Backlog & Roadmap
-
-### **Đang triển khai (In Progress)**
-
-#### **P0 - Cao nhất**
-- 🔐 Security policy UI improvements (#3715 merged)
-- 📱 Channel stability (DingTalk, WeChat, QQ)
-- 🐛 Critical bugs (agent hang, validation errors)
-
-#### **P1 - Cao**
-- 🎨 Console UX enhancements (context menu, system tray)
-- 🤖 Multimodal support (#3509)
-- 📊 Agent statistics & monitoring
-- 🔄 Scope-aware model routing (#3550)
-
-#### **P2 - Trung bình**
-- 📚 Documentation improvements
-- 🛠️ Build optimization (uv, Vite 8)
-- 🌐 New provider support (Unsloth Studio)
-
-### **Roadmap dự kiến**
-
-**Q2 2026 (Hiện tại)**
-- ✅ v1.1.3.post1 - Stability fixes
-- 🔄 v1.1.4 - Security & UX improvements
-- 📅 v1.2.0 - Multimodal & advanced features
-
-**Tính năng chờ đợi**
-- Agent grouping & organization
-- Advanced memory management
-- Enhanced cron job UI
-- Mobile app support (?)
-
-### **Community contributions welcome**
-
-Theo #2291, các task đang mở cho contributor:
-- Documentation translation
-- Channel integrations
-- Skill development
-- UI/UX improvements
-- Testing & bug reports
-
----
-
-## 🎯 Kết luận
-
-CoPaw đang trong giai đoạn **tăng trưởng ổn định** với focus vào:
-1. **Bảo mật & Reliability** - Ưu tiên hàng đầu
-2. **Multi-channel support** - Mở rộng khả năng tích hợp
-3. **Developer Experience** - Cải thiện tooling và docs
-4. **Community engagement** - Khuyến khích đóng góp
-
-Với **50 PR** và **39 issues** được xử lý trong ngày, dự án cho thấy sức sống mạnh mẽ và cam kết từ cả team phát triển lẫn cộng đồng. 🚀
-
-</details>
-
-<details>
-<summary><strong>ZeptoClaw</strong> — <a href="https://github.com/qhkm/zeptoclaw">qhkm/zeptoclaw</a></summary>
-
-# Báo cáo Phân tích ZeptoClaw - 24/04/2026
-
-## 📊 Tóm tắt hôm nay
-
-Ngày 24/04 đánh dấu một đợt hoạt động cực kỳ mạnh mẽ với **16 PRs được merge** và **7 issues mới được mở**. Dự án đang trong giai đoạn củng cố chiến lược **edge/IoT deployment** với focus vào tích hợp Liquid AI, offline capabilities, và MQTT channel. Đồng thời, team đang tăng cường security posture thông qua audit trail, SSRF validation, và skill verification.
-
----
-
-## 🚀 Releases
-
-**Không có release chính thức** trong 24h qua, nhưng các PR được merge cho thấy đang chuẩn bị cho một release lớn với nhiều tính năng bảo mật và edge computing.
-
----
-
-## 📈 Tiến độ dự án
-
-### Các PR quan trọng đã merge (16 PRs)
-
-**🔒 Security & Safety (4 PRs)**
-- **#528** - Hash-chain audit trail: Thêm SHA-256 chain cho mọi tool execution, tạo tamper-evident log
-- **#527** - SSRF validation: Kiểm tra provider endpoints ngay từ config time, chặn private IPs
-- **#526** - SHA256 skill verification: Verify integrity của skill downloads trước khi load
-- **#523** - Telegram config fix: Khôi phục compatibility với legacy config keys
-
-**🧪 Testing & Quality (2 PRs)**
-- **#524** - Coding benchmark fixture: Thêm test suite để so sánh agents trên cùng buggy tasks
-- **#544** - CI expansion: Compile optional features (email, google, vertex, whatsapp) trong PR CI
-
-**🤖 Provider Integration (1 PR)**
-- **#543** - Liquid AI provider: Tích hợp LFM2 models (1.2B-24B) qua OpenAI-compatible API
-
-**📦 Dependencies (8 PRs)**
-- Batch merge các dependency updates từ Dependabot (GitHub Actions, Rust crates, JS packages)
-
-### Issues mới đáng chú ý (7 issues)
-
-**🎯 Edge/IoT Strategic Push**
-- **#541** [P2-high] - Liquid AI (LFM) provider: Edge-native models với non-transformer architecture
-- **#539** [P2-high] - Offline mode: Local fallback với Ollama/llama.cpp khi mất kết nối
-- **#538** [P2-high] - MQTT first-class channel: Tích hợp với IoT ecosystem (Home Assistant, AWS IoT)
-- **#540** [P2-high] - Raspberry Pi walkthrough: Demo "brain+muscles" với ZeptoClaw + R8r
-
-**🔐 Security Enhancements**
-- **#535** [P3] - Skill security scanner: Scan malicious patterns trước khi install
-- **#532** [P3] - Shell blocklist expansion: Sync với Hermes Agent's 33+ dangerous patterns
-
-**⚙️ Infrastructure**
-- **#537** [P1-critical] - Binary size budget: CI gate để giữ binary < 7MB (core moat)
-- **#533** [P2] - Hermetic test wrapper: Fix env-leakage giữa parallel tests
-- **#531** [P2] - ZEPTOCLAW_HOME env var: Multi-tenant và profile isolation
-- **#530** [P1-critical] - Config versioning: Migration system trước khi adoption tăng
-
----
-
-## 🌟 Điểm nổi bật cộng đồng
-
-### Issue có nhiều tương tác
-- **#522** - Telegram config bug: User report về gateway mode không load config, đã được fix nhanh trong #523
-- **#541** - Liquid AI integration: 2 comments, thảo luận về edge deployment strategy
-
-### Xu hướng đáng chú ý
-- **SEA market expansion**: Issue #536 đề xuất Feishu/Lark + Line channels cho Southeast Asia
-- **Hermes Agent inspiration**: Nhiều issues reference Hermes patterns (audit trail, shell blocklist, test wrapper) - cho thấy competitive analysis tốt
-
----
-
-## 🐛 Ổn định & Bugs
-
-### Đã fix
-✅ **#522** - Telegram gateway config loading (merged #523)  
-✅ **#534** - CI failures từ clippy lints mới và rustls-webpki advisories  
-
-### Đang theo dõi
-⚠️ **Flaky test**: `config::tests::test_load_nonexistent` bị env-leakage (#533 đang mở)  
-⚠️ **Binary size creep**: Chưa có CI gate, risk bloat (#537 P1-critical)
-
----
-
-## 💡 Yêu cầu tính năng
-
-### Edge/IoT Focus (Strategic)
-1. **Offline-first architecture** (#539) - Local model fallback cho intermittent connectivity
-2. **MQTT channel** (#538) - Plug-and-play với industrial IoT
-3. **Liquid AI LFM** (#541) - Edge-native models 1B-7B sizes
-4. **Raspberry Pi demo** (#540) - Concrete proof of "6MB agent on robot"
-
-### Developer Experience
-1. **Config versioning** (#530) - Auto-migration để tránh breaking changes
-2. **ZEPTOCLAW_HOME** (#531) - Multi-instance dev và testing
-3. **Hermetic tests** (#533) - Stable CI với env isolation
-
-### Security Hardening
-1. **Skill scanner** (#535) - Malicious pattern detection
-2. **Shell blocklist expansion** (#532) - Sync với industry patterns
+### Đang implement
+
+1. **#850** - Support client_secret trong MCP OAuth config
+   - Cần cho một số OAuth flows
+   - Chưa có PR
+
+2. **Skills ecosystem** (#797)
+   - 101 bundled skills
+   - Category-based organization
+   - Gần hoàn thành
+
+3. **Sub-agent system** (#844)
+   - Presets cho specialized agents
+   - Workflow coordination
+   - Inspired by Hermes/OpenClaw
+
+### Đã hoàn thành
+
+- ✅ Datetime in context (#176)
+- ✅ Custom ElevenLabs voices (#735)
+- ✅ MCP OAuth re-auth UI (#851)
 
 ---
 
 ## 💬 Phản hồi người dùng
 
 ### Positive signals
-- **300+ stars** - Traction tốt, sắp pitch investors (noted trong #530)
-- **Active contributors**: @manelsen đang carry heavy load với 8 PRs merged trong ngày
-- **Quick response**: Telegram bug được report và fix trong < 24h
+
+- Issues được respond và fix nhanh (< 24h cho #828, #851)
+- Community đang test edge cases (WSL2, ARM, custom voices)
+- Nhiều enhancement requests cho developer experience
 
 ### Pain points
-- **Config complexity**: User confusion về Telegram config keys → cần better docs
-- **CI instability**: Clippy và advisory issues gây friction cho contributors
+
+- **Cross-platform issues** vẫn xuất hiện (WSL2, ARM)
+- **Schema compatibility** với các providers khác nhau
+- **Memory/datetime handling** gây confusion cho LLMs
 
 ---
 
 ## 🗺️ Backlog & Roadmap
 
-### Immediate priorities (P1-critical)
-1. **Binary size budget gate** (#537) - Protect core moat
-2. **Config versioning** (#530) - Foundation cho stable releases
+### Ưu tiên cao (dựa trên PR activity)
 
-### Short-term (P2-high)
-1. **Edge deployment trio**: Liquid AI (#541) + Offline mode (#539) + MQTT (#538)
-2. **Raspberry Pi walkthrough** (#540) - Marketing proof point
-3. **SEA channels** (#536) - Feishu/Lark + Line
-4. **Test infrastructure** (#533, #531) - Dev experience
+1. **Skills ecosystem launch** - #797 gần merge
+2. **Sub-agent orchestration** - #844 đang active development
+3. **MCP tooling improvements** - #840, #850
+4. **UX polish** - #846, #847 cho chat experience
 
-### Medium-term (P3)
-1. **Security hardening**: Skill scanner (#535) + Shell blocklist (#532)
-2. **Coding benchmark** - Agent comparison framework
+### Xu hướng phát triển
 
-### Strategic direction
-Rõ ràng đang **double down on edge/IoT thesis**:
-- "6MB binary on robot" là core differentiation
-- Offline-first, MQTT, Liquid AI đều phục vụ embedded use cases
-- Raspberry Pi demo sẽ là concrete pitch cho investors
+- **Multi-agent workflows**: Sub-agents, coordination, specialized roles
+- **Extensibility**: Skills, MCP servers, custom integrations
+- **Cross-platform stability**: ARM, WSL2, Docker compatibility
+- **Developer experience**: Better prompting, caching, schema handling
+
+### Technical debt đang giải quyết
+
+- Schema normalization cho multi-provider support
+- KV cache optimization cho local LLMs
+- Cross-platform filesystem/sandbox issues
 
 ---
 
-## 🎯 Nhận định
+## 📊 Metrics
 
-**Strengths**: Execution velocity cao (16 PRs/day), clear strategic vision, good security awareness  
-**Risks**: Binary size creep, config breaking changes, test flakiness  
-**Opportunity**: Edge/IoT market timing tốt, Liquid AI partnership potential
+- **PRs merged hôm nay**: 6
+- **PRs đang mở**: 7
+- **Issues đóng**: 5
+- **Issues mới**: 2
+- **Contributors active**: ~3-4 (penso, Cstewart-HC chủ yếu)
 
-Dự án đang ở giai đoạn **pre-investment sprint** - consolidate moat (binary size), prove thesis (RPi demo), và scale safely (config versioning).
+**Velocity**: Rất cao - nhiều PRs được merge trong cùng ngày, cho thấy đội ngũ đang sprint mạnh để ổn định và ship features mới.
+
+</details>
+
+<details>
+<summary><strong>CoPaw</strong> — <a href="https://github.com/agentscope-ai/CoPaw">agentscope-ai/CoPaw</a></summary>
+
+# Báo cáo Phân tích Hệ sinh thái AI Agent - Dự án CoPaw (QwenPaw)
+📅 Ngày 24 tháng 4 năm 2026
+
+## 1. 🎯 Tóm tắt hôm nay
+
+Dự án CoPaw tiếp tục duy trì nhịp độ phát triển cao với **2 bản phát hành beta** trong 24 giờ qua (v1.1.4-beta.1 và v1.1.3.post1). Hoạt động tập trung vào **cải thiện trải nghiệm người dùng trên Windows desktop**, **tối ưu hóa kênh DingTalk**, và **nâng cấp bảo mật**. Cộng đồng đang tích cực phản hồi về các vấn đề UI/UX, đặc biệt là chế độ tối và quản lý phiên làm việc.
+
+## 2. 🚀 Releases
+
+### v1.1.4-beta.1 (23/04/2026)
+**Điểm nổi bật:**
+- 🎨 **Cải thiện Console UI**: Sửa lỗi hiển thị trong chế độ tối, tối ưu markdown rendering
+- 📁 **Quản lý file**: Khắc phục lỗi 404 khi preview file (#3612)
+- 🔧 **Refactoring**: Cải thiện code structure cho Statistics, Debug, và Configuration pages
+- 📚 **Documentation**: Bổ sung tài liệu về backup và security
+
+### v1.1.3.post1 (23/04/2026)
+**Hotfix quan trọng:**
+- 🛡️ **Bảo mật**: Revert thay đổi để tránh xung đột với Windows Defender
+- 💾 **Desktop**: Sử dụng native save dialog cho file downloads trong pywebview
+
+**Ý nghĩa:** Hai bản phát hành này cho thấy team đang ưu tiên **ổn định hóa trải nghiệm desktop** và **khắc phục các vấn đề UI critical** trước khi release chính thức v1.1.4.
+
+## 3. 📊 Tiến độ dự án
+
+### Pull Requests nổi bật:
+
+#### 🔥 Đang được review tích cực:
+- **#3744** - Fix DingTalk session collision: Sử dụng full `conversation_id` thay vì truncate để tránh xung đột session giữa các user khác nhau (vấn đề bảo mật nghiêm trọng)
+- **#3746** - Thêm task timeout (300s) và cleanup mechanism cho DingTalk message IDs
+- **#3565** - Tích hợp AgentMemory backend: Hỗ trợ triple retrieval (vector + BM25 + knowledge graph) cho memory management
+
+#### 🎨 UI/UX improvements (merged):
+- **#3761** - Sửa lỗi text overlap trong AgentSelect (dark mode)
+- **#3683** - Thay thế alicdn icons bằng local assets, custom icons cho Channels/Providers
+- **#3737** - Tối ưu Tool Execution Security config module
+
+#### 🆕 Tính năng mới:
+- **#3759** - Thêm Unsloth Studio provider (local LLM hosting)
+- **#3509** - Multimodal message support (images/files) - đang review
+- **#3740** - Built-in agent audit workflow skill
+
+### Xu hướng phát triển:
+1. **Tập trung vào Desktop Experience**: Nhiều PR liên quan đến Windows desktop app
+2. **Channel Optimization**: Đặc biệt là DingTalk - thị trường Trung Quốc
+3. **Memory & Context Management**: Tích hợp các backend memory tiên tiến
+4. **Security Hardening**: Cải thiện tool execution security và session management
+
+## 4. 💬 Điểm nổi bật cộng đồng
+
+### Issues có nhiều tương tác:
+
+#### 🔴 Vấn đề nghiêm trọng (9 comments):
+**#3709** - Safeguard rule bị vô hiệu hóa nhưng vẫn block command
+- User @zbelial báo cáo rule `TOOL_CMD_IFS_INJECTION` vẫn hoạt động sau khi disable
+- Command bị block: `git commit -m "Auto commit at $(date)"`
+- **Impact**: Ảnh hưởng đến automation workflows (cron jobs)
+
+#### 🐛 Bug phổ biến (5-7 comments):
+- **#3716** - OpenCode không hoạt động trong ACP
+- **#3753** - Yêu cầu hỗ trợ Volcano Coding Plan
+- **#3470** - Cộng đồng quan tâm đến self-evolving feature (như Hermes Agent)
+
+#### 🎨 UX issues:
+- **#3750** (2 comments) - Stop button không reset session state đúng cách → user phải restart app
+- **#3760** (2 comments) - DingTalk gửi file .txt bị mất tên và extension khi download trên mobile
+
+### Phản hồi tích cực:
+- User đánh giá cao tốc độ fix bugs (nhiều issues được close trong ngày)
+- Cộng đồng Trung Quốc rất active, đặc biệt về DingTalk integration
+
+## 5. 🔧 Ổn định & Bugs
+
+### Đã khắc phục:
+✅ **#3695** - Docker build git error (v1.1.3)
+✅ **#3546** - Dark mode text overlap trong sidebar
+✅ **#2033, #2801** - Gemini API "Corrupted thought signature" errors
+✅ **#3748** - `qwenpaw update` không shutdown được process cũ
+
+### Đang xử lý:
+🔄 **#3549** - ValidationError với FunctionCallOutput (Armbian/ARM systems)
+🔄 **#3709** - Safeguard rule bypass issue
+🔄 **#3750** - Session state không reset sau khi stop task
+
+### Vấn đề hệ thống:
+- **#3767** - `execute_shell_command` hardcode `/bin/sh` (dash) thay vì respect user shell environment
+- **#2655** - browser_use tool không tối ưu cho Apple Silicon (M1/M2/M3)
+
+## 6. 💡 Yêu cầu tính năng
+
+### Đang được thảo luận:
+
+#### 🌟 Tính năng cao cấp:
+- **#3470, #3516** - Self-evolving/Memory-evolving capability (như Hermes Agent)
+  - Cộng đồng rất quan tâm đến khả năng agent tự cải thiện
+  - Team đã rename từ "self-evolving" → "memory-evolving" trong docs (#3764)
+
+#### 🖥️ Desktop enhancements:
+- **#3751** - System tray icon cho Windows desktop
+  - Minimize to tray
+  - Quick access menu
+  - Background running
+
+#### 🔒 Security features:
+- **#3768** - Auto-reject commands without approval
+  - Hiện tại chỉ có "disable tool" hoặc "require approval"
+  - User muốn thêm "auto-reject based on regex"
+
+#### 📱 Channel improvements:
+- **#3742** - DingTalk message splitting (>3500 chars)
+  - Markdown không hoạt động với message dài
+  - Cần card message hoặc chunking mechanism
+
+#### 🌐 Provider requests:
+- **#3753** - Volcano Coding Plan support
+- Unsloth Studio đã được thêm (#3759)
+
+## 7. 👥 Phản hồi người dùng
+
+### Trải nghiệm tích cực:
+- ⚡ Tốc độ phản hồi của team rất nhanh (issues được close trong vài giờ)
+- 🎨 UI/UX improvements được đánh giá cao
+- 📦 Docker deployment được cải thiện đáng kể
+
+### Pain points:
+- 🪟 **Windows desktop app** còn nhiều vấn đề:
+  - Daemon bị kill khi đóng window (#3765)
+  - Session management chưa ổn định (#3750)
+  - Thiếu system tray integration (#3751)
+
+- 📱 **DingTalk channel** cần cải thiện:
+  - File handling trên mobile (#3760)
+  - Message length limitations (#3742)
+  - Session collision issues (#3744)
+
+- 🔐 **Security config** chưa linh hoạt:
+  - Safeguard rules không hoạt động như mong đợi (#3709)
+  - Thiếu granular control (#3768)
+
+### Góp ý từ cộng đồng:
+- User mong muốn có `qwenpaw update` command (đã có từ v1.1.3 nhưng ít người biết - #3763)
+- Cần documentation tốt hơn về shell environment configuration (#3767)
+- Apple Silicon users cần native ARM support (#2655)
+
+## 8. 📋 Backlog & Roadmap
+
+### Short-term (đang triển khai):
+1. ✅ Ổn định Windows desktop app (v1.1.4)
+2. 🔄 Fix DingTalk session management (#3744, #3746)
+3. 🔄 Improve security configuration UX (#3715, #3768)
+4. 🔄 Multimodal message support (#3509)
+
+### Mid-term (đang review/thảo luận):
+1. 🔍 AgentMemory backend integration (#3565)
+2. 🧠 Memory-evolving capabilities (#3470, #3516)
+3. 🎨 System tray support (#3751)
+4. 🌐 More provider integrations (Volcano, etc.)
+
+### Long-term (vision):
+1. 🤖 Self-improving agent capabilities
+2. 🔧 Advanced workflow automation (audit, monitoring)
+3. 🌍 Better multi-platform support (ARM, mobile)
+4. 📊 Enhanced analytics and observability
+
+---
+
+## 📈 Đánh giá tổng quan
+
+**Điểm mạnh:**
+- ⚡ Velocity cao: 50 PRs, 23 issues active trong 24h
+- 🤝 Cộng đồng engaged, feedback chất lượng
+- 🔄 Rapid iteration: 2 releases trong 1 ngày
+- 🎯 Focus rõ ràng: Desktop UX + Channel optimization
+
+**Thách thức:**
+- 🪟 Windows desktop stability cần ưu tiên
+- 🔐 Security configuration cần redesign
+- 📱 Mobile/channel experience còn rough edges
+- 📚 Documentation chưa theo kịp tốc độ phát triển
+
+**Xu hướng tích cực:**
+- Team đang lắng nghe community feedback
+- Chuyển từ "move fast" sang "stabilize & polish"
+- Đầu tư vào long-term features (memory-evolving, audit workflows)
+
+</details>
+
+<details>
+<summary><strong>ZeptoClaw</strong> — <a href="https://github.com/qhkm/zeptoclaw">qhkm/zeptoclaw</a></summary>
+
+# 📊 Báo cáo phân tích ZeptoClaw - 24/04/2026
+
+## 🎯 Tóm tắt hôm nay
+
+Dự án ZeptoClaw tập trung vào việc cải thiện chất lượng CI/CD với mục tiêu mở rộng phạm vi kiểm thử cho các tính năng tích hợp tùy chọn. Hoạt động chính xoay quanh việc phát hiện và khắc phục vấn đề "silent drift" - khi các tính năng tích hợp không được kiểm tra đầy đủ trong quá trình review PR, dẫn đến rủi ro về tính tương thích.
+
+---
+
+## 🚀 Releases
+
+**Không có release mới trong 24 giờ qua.**
+
+---
+
+## 📈 Tiến độ dự án
+
+### PR đang mở (#544)
+**Mở rộng phạm vi CI cho các tính năng tích hợp tùy chọn**
+
+**Mục tiêu chính:**
+- Mở rộng feature matrix trong CI để bao phủ các integration paths:
+  - `channel-email` - Tích hợp kênh email
+  - `google` - Tích hợp Google services
+  - `provider-vertex` - Tích hợp Vertex AI provider
+  - `whatsapp-web` - Tích hợp WhatsApp Web
+
+**Giá trị kỹ thuật:**
+- ✅ Phát hiện sớm các vấn đề tương thích trước khi merge
+- ✅ Ngăn chặn "silent drift" - hiện tượng code drift không được phát hiện
+- ✅ Bao gồm 2 compatibility fixes đã được xác định
+
+**Xu hướng phát triển:**
+- Dự án đang chuyển từ "reactive" sang "proactive" trong việc đảm bảo chất lượng
+- Tăng cường độ tin cậy cho các tính năng tích hợp đa dạng
+- Thể hiện sự trưởng thành trong quy trình DevOps
+
+---
+
+## 💡 Điểm nổi bật cộng đồng
+
+**Mức độ tương tác: Thấp**
+- Issue #545: 0 comments, 0 reactions
+- PR #544: Chưa có thảo luận công khai
+
+**Phân tích:**
+- Đây là công việc infrastructure/maintenance, thường ít thu hút sự chú ý từ end-users
+- Tác giả @manelsen đang tự chủ động cải thiện chất lượng dự án
+- Thiếu sự tham gia review có thể làm chậm quá trình merge
+
+---
+
+## 🔧 Ổn định & Bugs
+
+### Vấn đề được xác định
+
+**Silent Integration Drift** (Mức độ: Trung bình - Cao)
+
+**Nguyên nhân:**
+- CI hiện tại chỉ kiểm tra default build và feature matrix cơ bản
+- Các optional integrations không được compile trong PR validation
+- PR có thể pass CI nhưng vẫn chứa lỗi ở các integration paths
+
+**Tác động:**
+- Rủi ro: Code có thể break ở production khi sử dụng optional features
+- Phát hiện muộn: Lỗi chỉ xuất hiện khi users thực sự sử dụng tính năng
+
+**Giải pháp đang triển khai:**
+- Mở rộng CI matrix để compile tất cả optional features
+- Thêm 2 compatibility fixes đã được phát hiện trong quá trình audit
+
+---
+
+## 🎁 Yêu cầu tính năng
+
+**Không có feature request mới trong 24 giờ qua.**
+
+Công việc hiện tại tập trung vào cải thiện infrastructure thay vì thêm tính năng mới.
+
+---
+
+## 💬 Phản hồi người dùng
+
+**Không có feedback trực tiếp từ người dùng trong khoảng thời gian này.**
+
+**Nhận xét:**
+- Công việc CI/CD thường "invisible" với end-users
+- Lợi ích sẽ thể hiện gián tiếp qua việc giảm bugs trong production
+- Cần có communication strategy để highlight những cải tiến về chất lượng
+
+---
+
+## 🗺️ Backlog & Roadmap
+
+### Ưu tiên ngắn hạn
+1. **Merge PR #544** - Mở rộng CI coverage
+   - Cần review và approval từ maintainers
+   - Đảm bảo CI matrix mới không làm tăng thời gian build quá nhiều
+
+2. **Monitor CI performance**
+   - Theo dõi thời gian build sau khi thêm features vào matrix
+   - Cân nhắc parallel execution nếu cần
+
+### Xu hướng dài hạn
+- Dự án đang hướng tới **multi-channel, multi-provider architecture**
+- Các integrations được thiết kế dạng optional/pluggable
+- Cần strategy rõ ràng cho việc maintain và test các integration paths
+
+---
+
+## 📌 Kết luận
+
+ZeptoClaw đang trong giai đoạn **consolidation** - củng cố chất lượng và infrastructure thay vì mở rộng tính năng. Đây là dấu hiệu tích cực của một dự án trưởng thành, ưu tiên stability và maintainability. Tuy nhiên, mức độ tương tác cộng đồng thấp có thể ảnh hưởng đến tốc độ phát triển.
+
+**Khuyến nghị:**
+- Maintainers nên ưu tiên review PR #544 để unblock công việc CI improvement
+- Cân nhắc document các best practices cho việc thêm optional integrations mới
+- Tăng cường communication về những cải tiến infrastructure với cộng đồng
 
 </details>
 
 <details>
 <summary><strong>EasyClaw</strong> — <a href="https://github.com/gaoyangz77/easyclaw">gaoyangz77/easyclaw</a></summary>
 
-# 📊 Báo cáo Phân tích EasyClaw - Ngày 24/04/2026
+# 📊 Báo cáo Phân tích Dự án EasyClaw/RivonClaw - 24/04/2026
 
 ## 🎯 Tóm tắt hôm nay
 
-Dự án EasyClaw (hay RivonClaw) có hoạt động tích cực với **2 phiên bản mới** (v1.8.7 và v1.8.8) được phát hành liên tiếp trong ngày 23/04. Một issue về lỗi download từ website chính thức đã được báo cáo và đóng nhanh chóng, cho thấy team phản hồi khá nhanh với vấn đề của người dùng.
+Dự án đang trong giai đoạn phát hành liên tục với **3 phiên bản mới** (v1.8.7, v1.8.8, v1.8.9) được release trong vòng 24 giờ. Một issue quan trọng về **link download trên website chính thức bị lỗi 404** đã được báo cáo và đóng nhanh chóng, cho thấy team phản hồi tích cực với vấn đề phân phối sản phẩm.
 
 ---
 
 ## 🚀 Releases
 
-### v1.8.8 & v1.8.7 - Cải thiện trải nghiệm macOS
+### Ba phiên bản liên tiếp: v1.8.7 → v1.8.8 → v1.8.9
 
-**Phát hành**: 23/04/2026 (2 phiên bản liên tiếp)
+**Đặc điểm chung:**
+- Cả 3 phiên bản đều tập trung vào **hỗ trợ macOS** với hướng dẫn xử lý vấn đề Gatekeeper
+- Nội dung release notes gần như giống hệt nhau, cho thấy đây có thể là các bản hotfix hoặc patch builds
 
-**Điểm nổi bật**:
-- 🍎 **Hướng dẫn xử lý Gatekeeper trên macOS**: Cả hai phiên bản đều tập trung vào việc cải thiện trải nghiệm cài đặt cho người dùng macOS
-- 🔓 **Giải quyết vấn đề "app bị hỏng"**: Cung cấp command line rõ ràng để bypass cảnh báo bảo mật của macOS với ứng dụng chưa được ký số
-- 📝 **Documentation song ngữ**: Hướng dẫn bằng cả tiếng Anh và tiếng Trung, cho thấy dự án hướng đến thị trường đa quốc gia
+**Vấn đề kỹ thuật được giải quyết:**
+- ⚠️ **macOS Gatekeeper blocking**: Ứng dụng chưa được ký số (unsigned app) nên bị macOS chặn với thông báo "damaged"
+- 💡 **Giải pháp tạm thời**: Cung cấp lệnh Terminal để bypass quarantine flag:
+  ```bash
+  sudo xattr -r -d com.apple.quarantine /Applications/RivonClaw.app
+  ```
 
-**Ý nghĩa**: 
-Việc phát hành 2 phiên bản liên tiếp có thể là hotfix hoặc cải thiện documentation. Điều này cho thấy team đang chủ động giải quyết friction point lớn nhất của người dùng macOS - vấn đề bảo mật khi cài đặt app không có chữ ký số.
+**Phân tích:**
+- Việc phát hành 3 phiên bản trong 1 ngày cho thấy có thể đang khắc phục lỗi nghiêm trọng hoặc thử nghiệm build process
+- Chưa có code signing certificate cho macOS - điều này ảnh hưởng đến trải nghiệm người dùng Mac
 
 ---
 
 ## 📈 Tiến độ dự án
 
 ### Issues
-- **1 issue được đóng**: #34 về lỗi download link trên website chính thức
-- **Thời gian xử lý**: < 24 giờ (tạo và đóng cùng ngày 23/04)
-- **Xu hướng**: Team có response time tốt với các vấn đề infrastructure
+- **#34**: Link download Windows trên website chính thức (https://www.easy-claw.com/) bị lỗi 404
+  - ✅ Đã được đóng nhanh (cùng ngày)
+  - Phản ánh vấn đề về infrastructure/CDN của website
 
 ### Pull Requests
-- ❌ Không có PR nào trong 24 giờ qua
-- Có thể các thay đổi được commit trực tiếp hoặc dự án đang trong giai đoạn ổn định
+- Không có PR nào trong 24h qua
+- Cho thấy development có thể đang diễn ra trên private branches hoặc team nhỏ commit trực tiếp
+
+**Xu hướng:**
+- Focus vào **distribution & deployment** hơn là feature development
+- Ưu tiên giải quyết vấn đề người dùng không tải được sản phẩm
 
 ---
 
-## 💬 Điểm nổi bật cộng đồng
+## 🔥 Điểm nổi bật cộng đồng
 
-### Issue #34 - Lỗi download link
-- 🔗 **Vấn đề**: Link download Windows trên https://www.easy-claw.com/ trả về lỗi 404
-- 👤 **Người báo cáo**: @slowayear
-- ⚡ **Tương tác**: 0 comment, 0 reaction - nhưng được đóng nhanh
-- **Phân tích**: Mặc dù không có tương tác công khai, việc issue được đóng nhanh cho thấy team đã xử lý offline hoặc qua kênh khác
+### Issue #34 - Vấn đề phân phối quan trọng
+- 🎯 **Tác động**: Người dùng Windows không thể tải ứng dụng từ website chính thức
+- ⚡ **Phản hồi nhanh**: Issue được đóng trong cùng ngày, cho thấy team monitoring tốt
+- 📊 **Mức độ tương tác**: Thấp (0 comments, 0 reactions) - có thể đã được xử lý qua kênh khác
+
+**Insight**: Việc link download bị lỗi 404 đồng thời với việc phát hành 3 versions mới cho thấy có thể đang có vấn đề với CI/CD pipeline hoặc asset hosting.
 
 ---
 
 ## 🐛 Ổn định & Bugs
 
-### Vấn đề đã xử lý
-✅ **Website infrastructure**: Lỗi 404 trên download link đã được fix (issue #34 đóng)
+### Vấn đề đang tồn tại:
 
-### Vấn đề đang tồn tại
-⚠️ **macOS Gatekeeper**: Ứng dụng chưa được ký số, gây khó khăn cho người dùng macOS mới. Team đã cung cấp workaround nhưng đây không phải giải pháp lâu dài.
+1. **macOS Code Signing** 🔴
+   - Ứng dụng chưa được ký số
+   - Người dùng phải chạy lệnh Terminal để bypass bảo mật
+   - Ảnh hưởng đến độ tin cậy và UX
 
-**Khuyến nghị**: Xem xét đầu tư vào Apple Developer Program để ký số ứng dụng, cải thiện trải nghiệm người dùng và độ tin cậy.
+2. **Website Distribution** 🟡
+   - Link download Windows bị lỗi 404
+   - Đã được fix nhưng phản ánh vấn đề về asset management
+
+3. **Release Process** 🟡
+   - 3 versions trong 1 ngày với nội dung tương tự
+   - Có thể cần cải thiện QA process trước khi release
+
+**Khuyến nghị:**
+- Đầu tư vào Apple Developer Program để có code signing certificate
+- Thiết lập automated testing cho download links
+- Cân nhắc release cadence hợp lý hơn
 
 ---
 
 ## 💡 Yêu cầu tính năng
 
-Không có feature request mới trong 24 giờ qua. Dự án có vẻ đang tập trung vào stability và user experience hơn là thêm tính năng mới.
+Không có feature request mới trong 24h qua. Dự án đang tập trung vào stability và distribution.
 
 ---
 
-## 👥 Phản hồi người dùng
+## 💬 Phản hồi người dùng
 
-### Insights từ issue #34
-- Người dùng đang tích cực sử dụng website chính thức để download
-- Có nhu cầu rõ ràng về phiên bản Windows
-- Cộng đồng chủ động báo cáo lỗi infrastructure
+### Sentiment Analysis:
+- 😐 **Trung lập đến tiêu cực nhẹ**: Người dùng gặp khó khăn trong việc tải và cài đặt
+- 🔧 **Pain points chính**:
+  - Windows: Không tải được từ website
+  - macOS: Phải chạy lệnh Terminal phức tạp
 
-### Quan sát chung
-- Documentation song ngữ cho thấy base user đa dạng (Trung Quốc + quốc tế)
-- Vấn đề macOS Gatekeeper được ưu tiên trong release notes, cho thấy đây là pain point phổ biến
+### User Experience Issues:
+- Rào cản kỹ thuật cao cho người dùng non-technical
+- Thiếu hướng dẫn rõ ràng trên website chính thức
+- Trải nghiệm first-time user chưa mượt mà
 
 ---
 
 ## 🗺️ Backlog & Roadmap
 
-**Dựa trên dữ liệu hiện tại**:
+### Ưu tiên ngắn hạn (suy luận từ hoạt động):
 
-### Ưu tiên ngắn hạn (suy đoán)
-- 🔐 Giải quyết vấn đề code signing cho macOS
-- 🌐 Đảm bảo infrastructure website ổn định
-- 📦 Cải thiện quy trình distribution và download
+1. **Infrastructure** 🔴
+   - Ổn định hệ thống phân phối (CDN/hosting)
+   - Thiết lập proper release pipeline
 
-### Xu hướng phát triển
-- Dự án đang trong giai đoạn **maturity/stability** hơn là rapid feature development
-- Focus vào **user experience** và **accessibility** (đa nền tảng, đa ngôn ngữ)
-- Có thể đang chuẩn bị cho wider adoption với việc polish các vấn đề cơ bản
+2. **macOS Support** 🟠
+   - Xin Apple Developer certificate
+   - Notarize ứng dụng để tránh Gatekeeper issues
+
+3. **Documentation** 🟡
+   - Cập nhật hướng dẫn cài đặt trên website
+   - Tạo troubleshooting guide
+
+### Dài hạn:
+- Cải thiện CI/CD để tránh multiple releases trong ngày
+- Xây dựng automated testing cho distribution channels
+- Tăng cường community engagement (hiện tại tương tác thấp)
 
 ---
 
-## 📊 Đánh giá tổng quan
+## 📌 Kết luận
 
-**Điểm mạnh** ✨
-- Response time nhanh với issues
-- Documentation rõ ràng, đa ngôn ngữ
-- Phát hành thường xuyên (2 versions trong 1 ngày)
+Dự án đang trải qua giai đoạn **stabilization** với focus vào việc đảm bảo người dùng có thể tải và cài đặt sản phẩm. Mặc dù team phản hồi nhanh với issues, vẫn còn các vấn đề cơ bản về code signing và distribution cần được giải quyết để cải thiện trải nghiệm người dùng.
 
-**Cần cải thiện** 🔧
-- Code signing cho macOS
-- Có thể cần tăng transparency trong communication (issues có ít interaction)
-- Xem xét public roadmap để cộng đồng hiểu rõ hướng phát triển
+**Health Score**: 🟡 6.5/10 - Cần cải thiện infrastructure và release process.
 
 </details>
 

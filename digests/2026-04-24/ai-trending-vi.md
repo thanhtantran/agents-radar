@@ -1,6 +1,6 @@
 # Xu hướng AI Mã nguồn mở 2026-04-24
 
-> Nguồn: GitHub Trending + GitHub Search API | Thời gian tạo: 2026-04-24 01:03 UTC
+> Nguồn: GitHub Trending + GitHub Search API | Thời gian tạo: 2026-04-24 05:09 UTC
 
 ---
 
@@ -8,168 +8,220 @@
 
 ## 🎯 Tóm tắt hôm nay
 
-Hôm nay chứng kiến sự bùng nổ của **AI coding agents** và **infrastructure tools** với hơn 10 dự án liên quan đến Claude Code, coding automation và agent frameworks. Đặc biệt, cộng đồng đang tập trung vào việc tối ưu hóa context window, giảm chi phí token, và mở rộng khả năng của AI agents. Bên cạnh đó, **edge AI** trên Rockchip NPU (RK3588) đang có những bước tiến đáng kể với multimodal models và local inference.
+Hôm nay chứng kiến sự bùng nổ của **AI coding agents** và **infrastructure tools** với hơn 10,000 stars tổng cộng cho các dự án liên quan đến Claude Code. Xu hướng nổi bật là việc **democratize AI development** thông qua các công cụ miễn phí, self-hosted và tối ưu context window. Đồng thời, **edge AI** trên Rockchip NPU đang có những bước tiến đáng kể với multimodal models.
 
 ---
 
-## 🔥 Top Repos Theo Chiều
+## 🏆 Top Repos Theo Chiều
 
 ### 🤖 **AI Agents** (Frameworks, Multi-agent, Automation)
 
-**Trending hôm nay:**
-- **huggingface/ml-intern** (+720⭐) - ML engineer tự động đọc papers, train models và deploy
-- **cline/cline** (+123⭐) - Autonomous coding agent trong IDE với quyền kiểm soát từng bước
-- **microsoft/ai-agents-for-beginners** (+208⭐) - Khóa học 12 bài về xây dựng AI agents
+**⭐ Trending hôm nay:**
 
-**Top repos 7 ngày:**
-- **NousResearch/hermes-agent** (113K⭐) - Agent framework có khả năng tự phát triển
-- **zhayujie/CowAgent** (43.6K⭐) - AI assistant với task planning, long-term memory, hỗ trợ WeChat/Feishu/DingTalk
-- **HKUDS/nanobot** (40.6K⭐) - Ultra-lightweight personal AI agent
-- **CopilotKit/CopilotKit** (30.4K⭐) - Frontend stack cho agents & generative UI (React + Angular)
-- **activepieces/activepieces** (21.8K⭐) - AI workflow automation với ~400 MCP servers
+- **huggingface/ml-intern** (+720 ⭐) - Python
+  - 🤗 AI engineer tự động: đọc papers, train models, ship production
+  - Tín hiệu: HuggingFace đang mở rộng từ model hub sang agent ecosystem
+
+- **Alishahryar1/free-claude-code** (+1,962 ⭐) - Python  
+  - Sử dụng Claude Code miễn phí qua terminal, VSCode, Discord
+  - Tín hiệu: Nhu cầu cao cho alternatives miễn phí của premium AI tools
+
+- **cline/cline** (+123 ⭐) - TypeScript
+  - Autonomous coding agent trong IDE với permission-based workflow
+  - Tín hiệu: User control và transparency là ưu tiên hàng đầu
+
+**🔥 Top performers (7 ngày):**
+
+- **NousResearch/hermes-agent** (113K ⭐) - "The agent that grows with you"
+- **zhayujie/CowAgent** (43K ⭐) - AI assistant cho WeChat/Feishu với long-term memory
+- **HKUDS/nanobot** (40K ⭐) - Ultra-lightweight personal AI agent
 
 ### 🔧 **AI Infrastructure** (SDKs, Inference, CLIs, Tools)
 
-**Trending hôm nay:**
-- **zilliztech/claude-context** (+1,011⭐) - Code search MCP biến toàn bộ codebase thành context cho coding agents
-- **Alishahryar1/free-claude-code** (+1,962⭐) - Sử dụng Claude Code miễn phí qua terminal/VSCode/Discord
-- **mksglu/context-mode** (+238⭐) - Tối ưu context window cho AI coding agents, giảm 98% output
-- **coreyhaines31/marketingskills** (+285⭐) - Marketing skills cho Claude Code: CRO, copywriting, SEO
+**⭐ Trending hôm nay:**
 
-**Top repos 7 ngày:**
-- **affaan-m/everything-claude-code** (165K⭐) - Hệ thống tối ưu hiệu suất cho Claude Code với skills, memory, security
-- **googleworkspace/cli** (25.2K⭐) - CLI thống nhất cho Google Workspace (Drive, Gmail, Calendar...) với AI agent skills
-- **jackwener/OpenCLI** (17K⭐) - Biến bất kỳ website/tool nào thành CLI cho AI agents
-- **iOfficeAI/AionUi** (22.4K⭐) - Local 24/7 cowork app cho Gemini CLI, Claude Code, Codex...
+- **zilliztech/claude-context** (+1,011 ⭐) - TypeScript
+  - Code search MCP cho Claude Code - biến toàn bộ codebase thành context
+  - Tín hiệu: Context management là bottleneck lớn nhất của coding agents
 
-### 🧠 **Models & Training** (Model Weights, Fine-tuning)
+- **mksglu/context-mode** (+238 ⭐) - TypeScript
+  - Tối ưu context window: sandbox tool output, giảm 98% kích thước
+  - Hỗ trợ 12 platforms
+  - Tín hiệu: Token efficiency đang trở thành competitive advantage
 
-**Trending hôm nay:**
-- Không có repo nổi bật trong trending hôm nay
+- **thedotmack/claude-mem** (66K ⭐) - TypeScript
+  - Auto-capture và compress coding sessions, inject context vào future sessions
+  - Tín hiệu: Memory persistence là key cho long-running agent workflows
 
-**Top repos 7 ngày:**
-- **ollama/ollama** (169K⭐) - Local model runtime hỗ trợ Kimi-K2.5, GLM-5, MiniMax, DeepSeek, Qwen, Gemma
-- **huggingface/transformers** (159K⭐) - Framework cho SOTA ML models (text, vision, audio, multimodal)
-- **vllm-project/vllm** (77.8K⭐) - High-throughput inference engine cho LLMs
-- **hiyouga/LlamaFactory** (70.5K⭐) - Unified fine-tuning cho 100+ LLMs & VLMs
+**🔥 Infrastructure leaders:**
+
+- **ollama/ollama** (169K ⭐) - Go - Local LLM runtime
+- **vllm-project/vllm** (77K ⭐) - Python - High-throughput inference engine
+- **googleworkspace/cli** (25K ⭐) - Rust - Unified CLI cho Google Workspace + AI skills
+
+### 🧠 **Models & Training** (Weights, Frameworks, Fine-tuning)
+
+**⭐ Trending hôm nay:**
+
+- **microsoft/ai-agents-for-beginners** (+208 ⭐) - Jupyter Notebook
+  - 12 bài học để bắt đầu xây dựng AI agents
+  - Tín hiệu: Educational content cho agent development đang được ưu tiên
+
+**🔥 Model ecosystem:**
+
+- **huggingface/transformers** (159K ⭐) - Framework chuẩn cho ML models
+- **hiyouga/LlamaFactory** (70K ⭐) - Unified fine-tuning cho 100+ LLMs & VLMs
 
 ### 📦 **AI Applications** (Vertical Products, Solutions)
 
-**Trending hôm nay:**
-- **Z4nzu/hackingtool** (+1,383⭐) - All-in-one hacking tool
-- **Anil-matcha/Open-Generative-AI** (+316⭐) - Uncensored AI image & video generation với 200+ models (Flux, Midjourney, Kling, Sora)
-- **ruvnet/RuView** (+429⭐) - WiFi DensePose - biến WiFi signals thành real-time human pose estimation
+**⭐ Trending hôm nay:**
 
-**Top repos 7 ngày:**
-- **Significant-Gravitas/AutoGPT** (183K⭐) - Accessible AI for everyone
-- **langgenius/dify** (138K⭐) - Production-ready platform cho agentic workflow
-- **open-webui/open-webui** (133K⭐) - User-friendly AI interface (Ollama, OpenAI API...)
-- **CherryHQ/cherry-studio** (44.1K⭐) - AI productivity studio với smart chat, autonomous agents, 300+ assistants
-- **santifer/career-ops** (38.9K⭐) - AI-powered job search system trên Claude Code
-- **Mintplex-Labs/anything-llm** (58.8K⭐) - All-in-one AI productivity accelerator
+- **Anil-matcha/Open-Generative-AI** (+316 ⭐) - JavaScript
+  - Alternative mã nguồn mở cho Higgsfield, Freepik AI, Krea AI
+  - 200+ models (Flux, Midjourney, Kling, Sora, Veo), no content filters
+  - Tín hiệu: Demand mạnh cho uncensored, self-hosted generative AI
+
+- **coreyhaines31/marketingskills** (+285 ⭐) - JavaScript
+  - Marketing skills cho Claude Code: CRO, copywriting, SEO, analytics
+  - Tín hiệu: AI agents đang mở rộng sang non-technical domains
+
+- **santifer/career-ops** (38K ⭐) - JavaScript
+  - AI-powered job search system trên Claude Code với 14 skill modes
+
+**🔥 Production platforms:**
+
+- **langgenius/dify** (138K ⭐) - Agentic workflow development platform
+- **open-webui/open-webui** (133K ⭐) - User-friendly AI interface
+- **CherryHQ/cherry-studio** (44K ⭐) - AI productivity studio với 300+ assistants
 
 ### 🔍 **RAG & Knowledge** (Vector DBs, Retrieval)
 
-**Trending hôm nay:**
-- **HKUDS/RAG-Anything** (+590⭐) - All-in-One RAG Framework
-- **open-metadata/OpenMetadata** (+776⭐) - Unified metadata platform cho data discovery, observability, governance
+**⭐ Trending hôm nay:**
 
-**Top repos 7 ngày:**
-- **langchain-ai/langchain** (134K⭐) - Agent engineering platform
-- **Shubhamsaboo/awesome-llm-apps** (107K⭐) - 100+ AI Agent & RAG apps có thể chạy ngay
-- **infiniflow/ragflow** (78.8K⭐) - Leading RAG engine kết hợp Agent capabilities
-- **PaddlePaddle/PaddleOCR** (76.3K⭐) - OCR toolkit hỗ trợ 100+ ngôn ngữ, bridge giữa images/PDFs và LLMs
-- **thedotmack/claude-mem** (66.4K⭐) - Claude Code plugin tự động capture và compress context
-- **mem0ai/mem0** (53.9K⭐) - Universal memory layer cho AI Agents
-- **FlowiseAI/Flowise** (52.2K⭐) - Build AI Agents visually
+- **HKUDS/RAG-Anything** (+590 ⭐) - Python
+  - All-in-One RAG Framework
+  - Tín hiệu: Consolidation của RAG tooling đang diễn ra
+
+**🔥 RAG ecosystem:**
+
+- **langchain-ai/langchain** (134K ⭐) - Agent engineering platform
+- **Shubhamsaboo/awesome-llm-apps** (107K ⭐) - 100+ AI Agent & RAG apps
+- **infiniflow/ragflow** (78K ⭐) - RAG engine với Agent capabilities
+- **mem0ai/mem0** (53K ⭐) - Universal memory layer cho AI Agents
 
 ### 🔌 **Embedded AI** (NPU, Edge AI, Orange Pi, RKLLM)
 
-**Trending hôm nay:**
-- Không có repo trong trending chính, nhưng có nhiều hoạt động trong search results
+**⭐ Trending hôm nay:**
 
-**Top repos 7 ngày (RKLLM/RKNPU):**
-- **NotPunchnox/rkllama** (510⭐) - Ollama alternative cho Rockchip NPU với RKLLM support
-- **Leon6225/InternVL3.5-4B-NPU** (1⭐) - Multimodal AI InternVL3.5-4B cho RK3588 NPU
-- **toopac01/InternVL3.5-8B-NPU** (0⭐) - InternVL3.5-8B version cho RK3588
-- **jaylfc/tinyagentos** (73⭐) - Self-hosted auto clustering AI agent OS cho low-cost hardware (Orange Pi, Raspberry Pi)
-- **w568w/rknpu-module** (10⭐) - Out-of-tree Rockchip RKNPU kernel module cho mainline Linux
-- **schwankner/talos-rk3588-npu** (1⭐) - Talos Linux system extension + K8s CDI device plugin cho RK3588 NPU
+- **ruvnet/RuView** (+429 ⭐) - Rust
+  - WiFi DensePose: biến WiFi signals thành real-time human pose estimation
+  - Không cần camera, chỉ dùng WiFi
+  - Tín hiệu: Privacy-first sensing đang là breakthrough area
 
-**Orange Pi ecosystem:**
-- **MichaIng/DietPi** (6K⭐) - Lightweight OS cho SBCs
-- **RaspAP/raspap-webgui** (5.1K⭐) - Full-featured wireless router setup
-- **vanvught/rpidmx512** (440⭐) - Orange Pi DMX512/RDM/MIDI/OSC/Art-Net
-- **mhl221135/myrktop** (31⭐) - Orange Pi 5 system monitoring (CPU, RAM, NPU, GPU, temps)
-- **jaylfc/taosmd** (18⭐) - Local-first AI memory cho SBC clusters
+**🔥 Rockchip NPU ecosystem (7 ngày):**
+
+- **NotPunchnox/rkllama** (510 ⭐) - Python
+  - Ollama alternative cho Rockchip NPU với optimized support
+  - Tín hiệu: Ollama's success đang spawn specialized forks
+
+- **Leon6225/InternVL3.5-4B-NPU** (1 ⭐) - C++
+  - Multimodal AI (InternVL3.5-4B) trên RK3588 NPU
+  - Vision + language understanding trên edge device
+
+- **jaylfc/tinyagentos** (73 ⭐) - Python
+  - Self-hosted agent OS cho consumer hardware (Orange Pi, Raspberry Pi, Mac)
+  - Desktop shell, app store, distributed compute cluster
+  - Tín hiệu: Agent orchestration đang move xuống edge
+
+**🔥 Orange Pi ecosystem:**
+
+- **MichaIng/DietPi** (6K ⭐) - Lightweight OS cho SBCs
+- **mhl221135/myrktop** (31 ⭐) - System monitoring cho Orange Pi 5 (CPU, RAM, NPU, GPU)
 
 ---
 
 ## 🔮 Phân tích Tín hiệu Xu hướng
 
-### 1. **Context Window Optimization là ưu tiên hàng đầu**
-- **mksglu/context-mode** giảm 98% tool output
-- **thedotmack/claude-mem** tự động compress context với AI
-- **zilliztech/claude-context** biến toàn bộ codebase thành searchable context
-- **Insight**: Chi phí token và giới hạn context window đang thúc đẩy innovation trong việc quản lý và tối ưu context
+### 1️⃣ **Context Window Optimization là cuộc đua mới**
+- 98% reduction trong context size (context-mode)
+- Code search MCP để biến entire codebase thành searchable context
+- Memory compression và injection cho long-running sessions
+- **Insight**: Token costs và context limits đang là major friction → tools giải quyết vấn đề này sẽ win
 
-### 2. **AI Coding Agents đang mainstream hóa**
-- 7/16 repos trending liên quan đến coding agents
-- Xu hướng "free alternatives" (free-claude-code) và "skill libraries" (awesome-agent-skills, marketingskills)
-- **Insight**: Developers muốn agents có thể customize, extend, và chạy local/free
+### 2️⃣ **Democratization of Premium AI Tools**
+- Free alternatives cho Claude Code đạt gần 2K stars trong 1 ngày
+- Self-hosted, uncensored generative AI platforms
+- Open-source agent frameworks với production-ready features
+- **Insight**: Community đang reject vendor lock-in và content restrictions
 
-### 3. **Edge AI trên Rockchip NPU đang trưởng thành**
-- Multimodal models (InternVL3.5) đã chạy được trên RK3588
-- Kernel modules cho mainline Linux (rknpu-module)
-- Kubernetes integration (talos-rk3588-npu)
-- **Insight**: Edge AI không còn là experimental - đang tiến tới production-ready
+### 3️⃣ **Agent Skills Marketplace đang hình thành**
+- Marketing skills cho coding agents
+- Career ops automation
+- 1000+ curated agent skills (VoltAgent/awesome-agent-skills)
+- **Insight**: Agents đang evolve từ general-purpose sang specialized với pluggable skills
 
-### 4. **MCP (Model Context Protocol) đang bùng nổ**
-- activepieces có ~400 MCP servers
-- claude-context là MCP for code search
-- **Insight**: MCP đang trở thành standard protocol cho agent tool integration
+### 4️⃣ **Edge AI với NPU đang mature**
+- Multimodal models (vision + language) trên RK3588
+- Agent OS cho consumer hardware
+- WiFi-based sensing thay camera
+- **Insight**: Privacy-first, local-first AI đang có real implementations
 
-### 5. **"All-in-One" và "Universal" là keywords hot**
-- RAG-Anything, anything-llm, OpenCLI, hackingtool
-- **Insight**: Developers muốn unified platforms thay vì nhiều tools rời rạc
+### 5️⃣ **MCP (Model Context Protocol) adoption**
+- Claude Code MCP servers
+- 400+ MCP servers cho AI agents (activepieces)
+- Standardized tool integration
+- **Insight**: Interoperability standards đang được community embrace
 
-### 6. **Local-first & Privacy-first AI**
-- Open-Generative-AI (uncensored, self-hosted)
-- tinyagentos (self-hosted clustering)
-- taosmd (local-first memory)
-- **Insight**: Phản ứng với concerns về privacy và vendor lock-in
+### 6️⃣ **AI Infrastructure consolidation**
+- Unified CLIs cho multiple services (Google Workspace CLI)
+- Universal memory layers (mem0)
+- All-in-one RAG frameworks
+- **Insight**: Fragmentation đang được giải quyết bằng abstraction layers
 
 ---
 
 ## 🎪 Tâm điểm Cộng đồng
 
-### 🏆 **Breakout Stars** (Tăng trưởng nhanh nhất hôm nay)
-1. **Alishahryar1/free-claude-code** (+1,962⭐) - Democratizing access to Claude Code
-2. **Z4nzu/hackingtool** (+1,383⭐) - Security tools consolidation
-3. **zilliztech/claude-context** (+1,011⭐) - Solving the "entire codebase as context" problem
+### 🥇 **Most Viral Today**
 
-### 🔥 **Hot Topics**
-- **Claude Code ecosystem**: Skills, memory, context optimization, free alternatives
-- **Multimodal on edge**: InternVL3.5 trên RK3588 NPU
-- **AI for job search**: career-ops với 14 skill modes
-- **WiFi sensing**: RuView biến WiFi thành human pose estimation
+1. **free-claude-code** (+1,962 ⭐) - Democratizing access to premium AI coding
+2. **claude-context** (+1,011 ⭐) - Solving the context problem
+3. **open-metadata** (+776 ⭐) - Data governance cho AI era
+
+### 🔥 **Community Momentum**
+
+- **affaan-m/everything-claude-code** (165K ⭐) - Central hub cho Claude Code ecosystem
+- **f/prompts.chat** (160K ⭐) - Community-driven prompt sharing
+- **VoltAgent/awesome-agent-skills** (+228 ⭐) - Curated skills cho multiple agent platforms
 
 ### 💡 **Emerging Patterns**
-- **Agent skill marketplaces**: awesome-agent-skills (1000+ skills), marketingskills
-- **Agent OS**: tinyagentos cho distributed compute clusters
-- **Universal CLIs**: OpenCLI, googleworkspace/cli
-- **Memory layers**: mem0, claude-mem, taosmd
 
-### 🌊 **Undercurrents**
-- Rockchip NPU ecosystem đang phát triển mạnh với community-driven drivers và models
-- Orange Pi đang trở thành platform phổ biến cho edge AI experiments
-- Rust đang xuất hiện nhiều hơn trong AI infrastructure (RuView, rkllm-studio, googleworkspace/cli)
+- **Agent Harnesses**: Tools để optimize agent performance (everything-claude-code)
+- **Local-First Memory**: Zero-loss, framework-agnostic memory systems (taosmd)
+- **Universal CLIs**: Biến bất kỳ website/tool nào thành CLI (OpenCLI)
+- **Privacy-First Sensing**: WiFi-based alternatives cho camera (RuView)
+
+### 🌊 **Wave to Watch**
+
+**Rockchip NPU ecosystem** đang có critical mass:
+- Production-ready inference (rkllama)
+- Multimodal capabilities (InternVL3.5)
+- Agent orchestration (tinyagentos)
+- Kernel support cho mainline Linux (rknpu-module)
+
+→ Edge AI không còn là experiment, đang trở thành viable alternative cho cloud inference
 
 ---
 
-## 📌 Kết luận
+## 🎬 Kết luận
 
-Ngày 24/04/2026 đánh dấu sự trưởng thành của **AI coding agents** và **edge AI**. Context optimization, local-first approaches, và unified platforms là các xu hướng chính. Cộng đồng đang tích cực xây dựng alternatives miễn phí, skill libraries, và infrastructure cho production AI systems. Rockchip NPU ecosystem đang có những bước tiến đáng kể, hứa hẹn democratize edge AI trong tương lai gần.
+Hôm nay đánh dấu sự chuyển mình từ **"AI as a service"** sang **"AI as infrastructure"**. Community đang build:
+- Tools để làm AI accessible (free alternatives)
+- Standards để làm AI interoperable (MCP)
+- Optimizations để làm AI efficient (context compression)
+- Platforms để làm AI local-first (edge AI)
+
+Xu hướng rõ ràng: **Developers muốn control, privacy, và cost efficiency** - và họ đang build tools để đạt được điều đó.
 
 ---
 *Bản tin này được tạo tự động bởi [agents-radar](https://github.com/thanhtantran/agents-radar).*
