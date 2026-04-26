@@ -144,9 +144,7 @@ PAGES_URL=https://thanhtantran.github.io/agents-radar
 
 **Cài đặt thông báo Telegram** (tùy chọn):
 
-Xem hướng dẫn nhanh tại: **[TELEGRAM-QUICKSTART.md](./TELEGRAM-QUICKSTART.md)**
-
-Hoặc hướng dẫn chi tiết tại: **[docs/TELEGRAM-SETUP.md](./docs/TELEGRAM-SETUP.md)**
+Xem hướng dẫn tại: **[docs/TELEGRAM-SETUP.md](./docs/TELEGRAM-SETUP.md)**
 
 Tóm tắt:
 1. Tạo bot qua [@BotFather](https://t.me/BotFather) → Lấy Bot Token
@@ -223,7 +221,7 @@ export DIGEST_REPO=thanhtantran/agents-radar
 
 # Telegram (tùy chọn)
 export TELEGRAM_BOT_TOKEN=123456:ABC-DEF...
-export TELEGRAM_CHAT_ID=@your_channel
+export TELEGRAM_CHAT_ID=your_telegram_id
 ```
 
 ### Chạy thủ công

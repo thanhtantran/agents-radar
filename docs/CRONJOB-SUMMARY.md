@@ -247,9 +247,7 @@ MAILTO=your.email@example.com
 ## 📚 Documentation
 
 - [docs/CRONJOB-SETUP.md](./docs/CRONJOB-SETUP.md) - Chi tiết đầy đủ
-- [CRONJOB-QUICKSTART.md](./CRONJOB-QUICKSTART.md) - Hướng dẫn nhanh
 - [README.md](./README.md) - Overview
-- [QUICKSTART.md](./QUICKSTART.md) - Getting started
 
 ## 🎉 Conclusion
 
