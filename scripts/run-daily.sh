@@ -20,22 +20,6 @@ if [ -f "$HOME/.profile" ]; then
     source "$HOME/.profile"
 fi
 
-# Add common paths for Node.js and pnpm
-export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:$HOME/.nvm/versions/node/$(ls $HOME/.nvm/versions/node 2>/dev/null | tail -1)/bin:/usr/local/bin:/usr/bin:$PATH"
-
-# Try to find pnpm
-if ! command -v pnpm &> /dev/null; then
-    # Try to enable corepack (if available)
-    if command -v corepack &> /dev/null; then
-        corepack enable
-    fi
-    
-    # If still not found, try npm global path
-    if [ -d "$HOME/.npm-global/bin" ]; then
-        export PATH="$HOME/.npm-global/bin:$PATH"
-    fi
-fi
-
 # Create log directory if it doesn't exist
 mkdir -p "$LOG_DIR"
 
