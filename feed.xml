@@ -6,7 +6,28 @@
     <description>Bản tin hàng ngày về AI Agents và AI Nhúng</description>
     <language>vi</language>
     <atom:link href="https://thanhtantran.github.io/agents-radar/feed.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Wed, 17 Jun 2026 02:05:12 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jun 2026 02:06:00 +0000</lastBuildDate>
+    <item>
+      <title>Hệ sinh thái OpenClaw &amp; AI Agents 2026-06-18</title>
+      <link>https://thanhtantran.github.io/agents-radar/#2026-06-18/ai-agents-vi</link>
+      <guid isPermaLink="true">https://thanhtantran.github.io/agents-radar/#2026-06-18/ai-agents-vi</guid>
+      <pubDate>Thu, 18 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Hệ sinh thái OpenClaw &amp; AI Agents 2026-06-18</description>
+    </item>
+    <item>
+      <title>AI Nhúng (Orange Pi, RKLLM, RKNPU) 2026-06-18</title>
+      <link>https://thanhtantran.github.io/agents-radar/#2026-06-18/ai-embedded-vi</link>
+      <guid isPermaLink="true">https://thanhtantran.github.io/agents-radar/#2026-06-18/ai-embedded-vi</guid>
+      <pubDate>Thu, 18 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AI Nhúng (Orange Pi, RKLLM, RKNPU) 2026-06-18</description>
+    </item>
+    <item>
+      <title>Xu hướng AI GitHub 2026-06-18</title>
+      <link>https://thanhtantran.github.io/agents-radar/#2026-06-18/ai-trending-vi</link>
+      <guid isPermaLink="true">https://thanhtantran.github.io/agents-radar/#2026-06-18/ai-trending-vi</guid>
+      <pubDate>Thu, 18 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Xu hướng AI GitHub 2026-06-18</description>
+    </item>
     <item>
       <title>Hệ sinh thái OpenClaw &amp; AI Agents 2026-06-17</title>
       <link>https://thanhtantran.github.io/agents-radar/#2026-06-17/ai-agents-vi</link>
@@ -195,27 +216,6 @@
       <guid isPermaLink="true">https://thanhtantran.github.io/agents-radar/#2026-06-09/ai-trending-vi</guid>
       <pubDate>Tue, 09 Jun 2026 00:00:00 +0000</pubDate>
       <description>Xu hướng AI GitHub 2026-06-09</description>
-    </item>
-    <item>
-      <title>Hệ sinh thái OpenClaw &amp; AI Agents 2026-06-08</title>
-      <link>https://thanhtantran.github.io/agents-radar/#2026-06-08/ai-agents-vi</link>
-      <guid isPermaLink="true">https://thanhtantran.github.io/agents-radar/#2026-06-08/ai-agents-vi</guid>
-      <pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate>
-      <description>Hệ sinh thái OpenClaw &amp; AI Agents 2026-06-08</description>
-    </item>
-    <item>
-      <title>AI Nhúng (Orange Pi, RKLLM, RKNPU) 2026-06-08</title>
-      <link>https://thanhtantran.github.io/agents-radar/#2026-06-08/ai-embedded-vi</link>
-      <guid isPermaLink="true">https://thanhtantran.github.io/agents-radar/#2026-06-08/ai-embedded-vi</guid>
-      <pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate>
-      <description>AI Nhúng (Orange Pi, RKLLM, RKNPU) 2026-06-08</description>
-    </item>
-    <item>
-      <title>Xu hướng AI GitHub 2026-06-08</title>
-      <link>https://thanhtantran.github.io/agents-radar/#2026-06-08/ai-trending-vi</link>
-      <guid isPermaLink="true">https://thanhtantran.github.io/agents-radar/#2026-06-08/ai-trending-vi</guid>
-      <pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate>
-      <description>Xu hướng AI GitHub 2026-06-08</description>
     </item>
   </channel>
 </rss>
