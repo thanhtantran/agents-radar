@@ -22,42 +22,48 @@ Duyệt tất cả các bản tin lịch sử qua giao diện tối, sạch sẽ
 
 ## 📊 Nguồn theo dõi
 
-### 1. Hệ sinh thái OpenClaw & AI Agents
+### Dự án tham chiếu chính
 
-OpenClaw được theo dõi như dự án tham chiếu chính. Các dự án liên quan trong lĩnh vực AI agent được theo dõi cùng để so sánh đa hệ sinh thái.
+Dự án Hermes Agent được theo dõi là nguồn tham chiếu chính (deep-dive). Đây là trọng tâm báo cáo để so sánh các hệ sinh thái khác.
+
+| Dự án  | Repository                                                      | Mô tả |
+| ------ | --------------------------------------------------------------- | ----- |
+| Hermes Agent | [nousresearch/hermes-agent](https://github.com/nousresearch/hermes-agent) | Dự án Hermes Agent (primary focus) |
+
+### Hệ sinh thái OpenClaw & AI Agents
+
+Các dự án liên quan trong lĩnh vực AI agent được theo dõi cùng để so sánh đa hệ sinh thái (danh sách đồng bộ từ `config.yml`).
 
 | Dự án     | Repository                                                              | Mô tả |
 | --------- | ----------------------------------------------------------------------- | ----- |
-| OpenClaw  | [openclaw/openclaw](https://github.com/openclaw/openclaw)               | Dự án AI agent chính |
+| OpenClaw  | [openclaw/openclaw](https://github.com/openclaw/openclaw)               | Dự án OpenClaw (tham chiếu trong hệ sinh thái) |
 | NanoBot   | [HKUDS/nanobot](https://github.com/HKUDS/nanobot)                       | AI agent framework |
 | Zeroclaw  | [zeroclaw-labs/zeroclaw](https://github.com/zeroclaw-labs/zeroclaw)     | Alternative agent |
 | PicoClaw  | [sipeed/picoclaw](https://github.com/sipeed/picoclaw)                   | Lightweight agent |
 | NanoClaw  | [qwibitai/nanoclaw](https://github.com/qwibitai/nanoclaw)               | Nano-scale agent |
-| IronClaw  | [nearai/ironclaw](https://github.com/nearai/ironclaw)                   | Robust agent |
-| LobsterAI | [netease-youdao/LobsterAI](https://github.com/netease-youdao/LobsterAI) | Youdao's agent |
-| TinyClaw  | [TinyAGI/tinyclaw](https://github.com/TinyAGI/tinyclaw)                 | Tiny agent |
-| CoPaw     | [agentscope-ai/CoPaw](https://github.com/agentscope-ai/CoPaw)           | Collaborative agent |
-| ZeptoClaw | [qhkm/zeptoclaw](https://github.com/qhkm/zeptoclaw)                     | Minimal agent |
-| EasyClaw  | [gaoyangz77/easyclaw](https://github.com/gaoyangz77/easyclaw)           | Easy-to-use agent |
+| NullClaw  | [nullclaw/nullclaw](https://github.com/nullclaw/nullclaw)               | Project in the claw family |
+| IronClaw  | [nearai/ironclaw](https://github.com/nearai/ironclaw)                   | Robust agent implementation |
+| QwenPaw   | [agentscope-ai/QwenPaw](https://github.com/agentscope-ai/QwenPaw)       | Agent project (Qwen-Paw) |
 
-### 2. AI Nhúng (Orange Pi / RKLLM / RKNPU)
+### AI Nhúng (Orange Pi / RKLLM / RKNPU)
 
-Theo dõi các dự án liên quan đến AI trên phần cứng nhúng, đặc biệt là nền tảng Rockchip NPU.
+Theo dõi các dự án liên quan đến AI trên phần cứng nhúng, đặc biệt là nền tảng Rockchip NPU. Danh sách được đồng bộ từ `config.yml`.
 
 | Dự án              | Repository                                                                    | Mô tả |
 | ------------------ | ----------------------------------------------------------------------------- | ----- |
 | Orange Pi Build    | [orangepi-xunlong/orangepi-build](https://github.com/orangepi-xunlong/orangepi-build) | Hệ thống build cho Orange Pi |
-| RKNN Toolkit 2     | [rockchip-linux/rknn-toolkit2](https://github.com/rockchip-linux/rknn-toolkit2) | Toolkit cho Rockchip NPU |
-| RKNPU2             | [rockchip-linux/rknpu2](https://github.com/rockchip-linux/rknpu2)            | Driver và runtime cho NPU |
+| RKNN Toolkit 2     | [airockchip/rknn-toolkit2](https://github.com/airockchip/rknn-toolkit2)        | RKNN Toolkit 2 |
+| RKNN Model Zoo     | [airockchip/rknn_model_zoo](https://github.com/airockchip/rknn_model_zoo)      | RKNN model zoo và mẫu |
+| Media Process Platform (MPP) | [rockchip-linux/mpp](https://github.com/rockchip-linux/mpp)                | Media Process Platform (driver/runtime) |
 
 ### 3. GitHub Trending
 
 Hai nguồn dữ liệu được lấy song song mỗi ngày:
 
-| Nguồn                                                          | Chi tiết                                                                                                                                               |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [github.com/trending](https://github.com/trending?since=daily) | Các repo trending hôm nay — phân tích cú pháp từ HTML; bao gồm số star mới trong ngày                                                                  |
-| GitHub Search API                                              | Các repo hoạt động trong 7 ngày gần nhất khớp với các chủ đề: `llm`, `ai-agent`, `rag`, `orangepi`, `rkllm`, `rknpu` |
+| Nguồn                                                          | Chi tiết                                                                                                                     |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| [github.com/trending](https://github.com/trending?since=daily) | Các repo trending hôm nay — phân tích cú pháp từ HTML; bao gồm số star mới trong ngày                           |
+| GitHub Search API                                              | Các repo hoạt động trong 7 ngày gần nhất khớp với các chủ đề: `llm`, `ai-agent`, `rag`, `orangepi`, `rkllm`,... |
 
 LLM phân loại các repo theo chiều (AI Infrastructure / Agents / Applications / Models / RAG / Embedded AI) và trích xuất các tín hiệu xu hướng.
 
@@ -105,7 +111,7 @@ Hệ thống sử dụng LLM local qua OpenAI-compatible API. Bạn có thể s�
 - **LM Studio**: `http://localhost:1234/v1`
 - **vLLM**: `http://localhost:8000/v1`
 - **Text Generation WebUI**: `http://localhost:5000/v1`
-- **Hoặc bất kỳ server nào tương thích OpenAI API**
+- **Hoặc bất kỳ server nào tương thích OpenAI API`
 
 **Khuyến nghị model**: 
 - Qwen2.5 7B/14B/32B
@@ -341,7 +347,7 @@ Các file được ghi vào `digests/YYYY-MM-DD/`:
 ## Tâm điểm cộng đồng
 ```
 
-Các bản tin lịch sử được lưu trong [`digests/`](./digests/). Issues đã xuất bản được gắn thẻ theo loại: [`openclaw`](../../issues?label=openclaw) · [`embedded`](../../issues?label=embedded) · [`trending`](../../issues?label=trending).
+Các bản tin lịch sử được lưu trong [`digests/`](./digests/). Issues đã xuất bản được gắn thẻ theo loại: [`openclaw`](../../issues?label=openclaw) · [`embedded`](../../issues?label=embedded) · [`trending`](../../issues?label=trending)
 
 ## ⏰ Lịch chạy
 
