@@ -3,7 +3,7 @@
 [English](./README.en.md) | Tiếng Việt
 
 Một workflow GitHub Actions chạy hàng ngày để theo dõi và tạo báo cáo về:
-1. **Hệ sinh thái OpenClaw** và các dự án AI agent tương tự
+1. **Hệ sinh thái Hermes Agent** và các dự án AI agent tương tự
 2. **AI nhúng**: Orange Pi, RKLLM, RKNPU và các dự án liên quan
 
 Báo cáo được tạo tự động bằng LLM (chạy local), lưu dưới dạng Markdown và xuất bản qua GitHub Pages.
