@@ -140,7 +140,7 @@ export function buildPeersComparisonPrompt(
     })
     .join("\n\n---\n\n");
 
-  return `Bạn là một chuyên gia phân tích hệ sinh thái AI agent. Hãy so sánh và phân tích các dự án trong hệ sinh thái OpenClaw và các dự án tương tự trong ngày ${dateStr}.
+  return `Bạn là một chuyên gia phân tích hệ sinh thái AI agent. Hãy so sánh và phân tích các dự án trong hệ sinh thái Hermes Agent và các dự án tương tự trong ngày ${dateStr}.
 
 # Dữ liệu các dự án
 
@@ -154,7 +154,7 @@ Tạo báo cáo so sánh chi tiết bằng tiếng Việt với các phần sau:
 
 2. **Bảng so sánh hoạt động**: Tạo bảng markdown so sánh các chỉ số chính (issues, PRs, releases, mức độ tương tác)
 
-3. **Vị thế của OpenClaw**: Phân tích vị trí và vai trò của OpenClaw trong hệ sinh thái
+3. **Vị thế của Hermes Agent**: Phân tích vị trí và vai trò của Hermes Agent trong hệ sinh thái
 
 4. **Hướng kỹ thuật chung**: Các xu hướng công nghệ được nhiều dự án áp dụng
 
