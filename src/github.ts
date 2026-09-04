@@ -223,7 +223,8 @@ export async function createGitHubIssue(title: string, body: string, label: stri
     body = body.slice(0, GITHUB_ISSUE_BODY_LIMIT - TRUNCATION_NOTICE.length) + TRUNCATION_NOTICE;
   }
   const LABEL_COLORS: Record<string, string> = {
-    openclaw: "e11d48",
+    hermes: "e11d48",
+    openclaw: "e11d48", // legacy
     embedded: "10b981",
     trending: "f9a825",
     hn: "ff6600",

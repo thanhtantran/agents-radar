@@ -1,5 +1,5 @@
 /**
- * agents-radar: daily digest for OpenClaw ecosystem and embedded AI (Orange Pi, RKLLM, RKNPU).
+ * agents-radar: daily digest for Hermes Agent ecosystem and embedded AI (Orange Pi, RKLLM, RKNPU).
  *
  * Environment variables:
  *   GITHUB_TOKEN        - GitHub token for API access (required)
@@ -36,8 +36,8 @@ import { loadConfig } from "./config.ts";
 // ---------------------------------------------------------------------------
 
 const {
-  openclaw: OPENCLAW,
-  openclawPeers: OPENCLAW_PEERS,
+  hermes: HERMES,
+  hermesPeers: HERMES_PEERS,
   embeddedAiRepos: EMBEDDED_AI_REPOS,
 } = loadConfig();
 
@@ -72,7 +72,7 @@ async function fetchAllData(
   fetched: RepoFetch[];
   trendingData: TrendingData;
 }> {
-  const allConfigs = [OPENCLAW, ...OPENCLAW_PEERS, ...EMBEDDED_AI_REPOS];
+  const allConfigs = [HERMES, ...HERMES_PEERS, ...EMBEDDED_AI_REPOS];
   console.log(`  Tracking: ${allConfigs.map((r) => r.id).join(", ")}`);
 
   const [fetched, trendingData] = await Promise.all([
@@ -80,7 +80,7 @@ async function fetchAllData(
     (async () => {
       const results: RepoFetch[] = [];
       const batchSize = 3; // Process 3 repos at a time
-      
+
       for (let i = 0; i < allConfigs.length; i += batchSize) {
         const batch = allConfigs.slice(i, i + batchSize);
         const batchResults = await Promise.all(
@@ -98,13 +98,13 @@ async function fetchAllData(
           }),
         );
         results.push(...batchResults);
-        
+
         // Small delay between batches
         if (i + batchSize < allConfigs.length) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       }
-      
+
       return results;
     })(),
     fetchTrendingData().catch(
@@ -124,13 +124,13 @@ async function fetchAllData(
 // ---------------------------------------------------------------------------
 
 async function generateSummaries(
-  fetchedOpenclaw: RepoFetch,
+  fetchedHermes: RepoFetch,
   fetchedPeers: RepoFetch[],
   fetchedEmbeddedAi: RepoFetch[],
   trendingData: TrendingData,
   dateStr: string,
 ): Promise<{
-  openclawSummary: string;
+  hermesSummary: string;
   peerDigests: RepoDigest[];
   embeddedAiDigests: RepoDigest[];
   trendingSummary: string;
@@ -140,19 +140,19 @@ async function generateSummaries(
   const trendingNoData = "⚠️ Dữ liệu xu hướng không khả dụng, không thể tạo báo cáo.";
   const trendingFailed = "⚠️ Tạo báo cáo xu hướng thất bại.";
 
-  const [openclawSummary, peerDigests, embeddedAiDigests, trendingSummary] = await Promise.all([
+  const [hermesSummary, peerDigests, embeddedAiDigests, trendingSummary] = await Promise.all([
     (async () => {
-      const { cfg, issues, prs, releases } = fetchedOpenclaw;
+      const { cfg, issues, prs, releases } = fetchedHermes;
       const hasData = issues.length || prs.length || releases.length;
       if (!hasData) {
-        console.log(`  [openclaw] No activity, skipping LLM call`);
+        console.log(`  [hermes] No activity, skipping LLM call`);
         return noActivity;
       }
-      console.log(`  [openclaw] Calling LLM for OpenClaw report...`);
+      console.log(`  [hermes] Calling LLM for Hermes Agent report...`);
       try {
         return await callLlm(buildPeerPrompt(cfg, issues, prs, releases, dateStr, 50, 30, "vi"));
       } catch (err) {
-        console.error(`  [openclaw] LLM call failed: ${err}`);
+        console.error(`  [hermes] LLM call failed: ${err}`);
         return summaryFailed;
       }
     })(),
@@ -215,27 +215,27 @@ async function generateSummaries(
     })(),
   ]);
 
-  return { openclawSummary, peerDigests, embeddedAiDigests, trendingSummary };
+  return { hermesSummary, peerDigests, embeddedAiDigests, trendingSummary };
 }
 
 // ---------------------------------------------------------------------------
 // Report content builders
 // ---------------------------------------------------------------------------
 
-function buildOpenclawReportContent(
-  fetchedOpenclaw: RepoFetch,
+function buildHermesReportContent(
+  fetchedHermes: RepoFetch,
   peerDigests: RepoDigest[],
-  openclawSummary: string,
+  hermesSummary: string,
   peersComparison: string,
   utcStr: string,
   dateStr: string,
   footer: string,
 ): string {
-  const { issues, prs } = fetchedOpenclaw;
+  const { issues, prs } = fetchedHermes;
 
   const peersRepoLinks =
-    `- [OpenClaw](https://github.com/${OPENCLAW.repo})\n` +
-    OPENCLAW_PEERS.map((p) => `- [${p.name}](https://github.com/${p.repo})`).join("\n");
+    `- [${HERMES.name}](https://github.com/${HERMES.repo})\n` +
+    HERMES_PEERS.map((p) => `- [${p.name}](https://github.com/${p.repo})`).join("\n");
 
   const peerDetailSections = peerDigests
     .map((d) =>
@@ -251,12 +251,12 @@ function buildOpenclawReportContent(
     .join("\n\n");
 
   return (
-    `# Bản tin Hệ sinh thái OpenClaw ${dateStr}\n\n` +
-    `> Issues: ${issues.length} | PRs: ${prs.length} | Dự án: ${1 + OPENCLAW_PEERS.length} | Thời gian tạo: ${utcStr} UTC\n\n` +
+    `# Bản tin Hệ sinh thái Hermes Agent ${dateStr}\n\n` +
+    `> Issues: ${issues.length} | PRs: ${prs.length} | Dự án: ${1 + HERMES_PEERS.length} | Thời gian tạo: ${utcStr} UTC\n\n` +
     `${peersRepoLinks}\n\n` +
     `---\n\n` +
-    `## Phân tích sâu OpenClaw\n\n` +
-    openclawSummary +
+    `## Phân tích sâu Hermes Agent\n\n` +
+    hermesSummary +
     `\n\n---\n\n` +
     `## So sánh hệ sinh thái chéo\n\n` +
     peersComparison +
@@ -366,16 +366,16 @@ async function main(): Promise<void> {
   // 1. Fetch all data in parallel
   const { fetched, trendingData } = await fetchAllData(since);
 
-  const peerIds = new Set(OPENCLAW_PEERS.map((p) => p.id));
+  const peerIds = new Set(HERMES_PEERS.map((p) => p.id));
   const embeddedAiIds = new Set(EMBEDDED_AI_REPOS.map((r) => r.id));
-  const fetchedOpenclaw = fetched.find((f) => f.cfg.id === OPENCLAW.id)!;
+  const fetchedHermes = fetched.find((f) => f.cfg.id === HERMES.id)!;
   const fetchedPeers = fetched.filter((f) => peerIds.has(f.cfg.id));
   const fetchedEmbeddedAi = fetched.filter((f) => embeddedAiIds.has(f.cfg.id));
 
   // 2. Generate per-repo LLM summaries in parallel
   console.log(`  Generating summaries (Vietnamese only)...`);
-  const { openclawSummary, peerDigests, embeddedAiDigests, trendingSummary } = await generateSummaries(
-    fetchedOpenclaw,
+  const { hermesSummary, peerDigests, embeddedAiDigests, trendingSummary } = await generateSummaries(
+    fetchedHermes,
     fetchedPeers,
     fetchedEmbeddedAi,
     trendingData,
@@ -384,24 +384,24 @@ async function main(): Promise<void> {
 
   // 3. Generate cross-repo comparisons in parallel
   console.log(`  Calling LLM for comparative analyses...`);
-  const openclawDig: RepoDigest = {
-    config: OPENCLAW,
-    issues: fetchedOpenclaw.issues,
-    prs: fetchedOpenclaw.prs,
-    releases: fetchedOpenclaw.releases,
-    summary: openclawSummary,
+  const hermesDig: RepoDigest = {
+    config: HERMES,
+    issues: fetchedHermes.issues,
+    prs: fetchedHermes.prs,
+    releases: fetchedHermes.releases,
+    summary: hermesSummary,
   };
   const [peersComparison, embeddedAiComparison] = await Promise.all([
-    callLlm(buildPeersComparisonPrompt(openclawDig, peerDigests, dateStr, "vi")),
+    callLlm(buildPeersComparisonPrompt(hermesDig, peerDigests, dateStr, "vi")),
     callLlm(buildEmbeddedAiComparisonPrompt(embeddedAiDigests, dateStr)),
   ]);
 
   // 4. Build + save all reports
   const footer = autoGenFooter("vi");
-  const openclawContent = buildOpenclawReportContent(
-    fetchedOpenclaw,
+  const hermesContent = buildHermesReportContent(
+    fetchedHermes,
     peerDigests,
-    openclawSummary,
+    hermesSummary,
     peersComparison,
     utcStr,
     dateStr,
@@ -415,7 +415,7 @@ async function main(): Promise<void> {
     footer,
   );
 
-  console.log(`  Saved ${saveFile(openclawContent, dateStr, `ai-agents-vi.md`)}`);
+  console.log(`  Saved ${saveFile(hermesContent, dateStr, `ai-agents-vi.md`)}`);
   console.log(`  Saved ${saveFile(embeddedAiContent, dateStr, `ai-embedded-vi.md`)}`);
 
   // 5. Trending report
@@ -423,12 +423,12 @@ async function main(): Promise<void> {
 
   // 6. Create GitHub issues
   if (digestRepo) {
-    const openclawUrl = await createGitHubIssue(
-      issueTitle("openclaw", "vi", dateStr),
-      openclawContent,
-      "openclaw",
+    const hermesUrl = await createGitHubIssue(
+      issueTitle("hermes", "vi", dateStr),
+      hermesContent,
+      "hermes",
     );
-    console.log(`  Created OpenClaw issue: ${openclawUrl}`);
+    console.log(`  Created Hermes Agent issue: ${hermesUrl}`);
 
     const embeddedUrl = await createGitHubIssue(
       issueTitle("embedded", "vi", dateStr),

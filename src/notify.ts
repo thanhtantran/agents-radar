@@ -16,7 +16,7 @@ const CHAT_ID = process.env["TELEGRAM_CHAT_ID"] || "@agents_radar";
 const PAGES_URL = (process.env["PAGES_URL"] ?? "https://thanhtantran.github.io/agents-radar").replace(/\/$/, "");
 
 const VI_LABELS: Record<string, string> = {
-  "ai-agents-vi": "🦞 Hệ sinh thái OpenClaw & AI Agents",
+  "ai-agents-vi": "☤ Hệ sinh thái Hermes & AI Agents",
   "ai-embedded-vi": "🔌 AI Nhúng (Orange Pi, RKLLM, RKNPU)",
   "ai-trending-vi": "📈 Xu hướng AI GitHub",
 };

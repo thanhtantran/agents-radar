@@ -14,7 +14,7 @@ const REPORT_FILES = [
 const MAX_FEED_ITEMS = 30;
 
 const REPORT_LABELS: Record<string, string> = {
-  "ai-agents-vi": "Hệ sinh thái OpenClaw & AI Agents",
+  "ai-agents-vi": "Hệ sinh thái Hermes & AI Agents",
   "ai-embedded-vi": "AI Nhúng (Orange Pi, RKLLM, RKNPU)",
   "ai-trending-vi": "Xu hướng AI GitHub",
 };

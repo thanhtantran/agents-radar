@@ -20,45 +20,50 @@ interface RawRepoEntry {
 }
 
 interface RawConfig {
+  /** Primary focus project (preferred key). */
+  hermes?: RawRepoEntry;
+  /** Legacy alias for hermes. */
   openclaw?: RawRepoEntry;
   openclaw_peers?: RawRepoEntry[];
+  hermes_peers?: RawRepoEntry[];
   embedded_ai_repos?: RawRepoEntry[];
 }
 
 export interface RadarConfig {
-  openclaw: RepoConfig;
-  openclawPeers: RepoConfig[];
+  /** Primary focus project (Hermes Agent). */
+  hermes: RepoConfig;
+  /** Peer projects compared alongside Hermes. */
+  hermesPeers: RepoConfig[];
   embeddedAiRepos: RepoConfig[];
 }
 
 // ---------------------------------------------------------------------------
-// Defaults (mirrors the original hard-coded values)
+// Defaults
 // ---------------------------------------------------------------------------
 
-const DEFAULT_OPENCLAW: RepoConfig = {
-  id: "openclaw",
-  repo: "openclaw/openclaw",
-  name: "OpenClaw",
+const DEFAULT_HERMES: RepoConfig = {
+  id: "hermes",
+  repo: "nousresearch/hermes-agent",
+  name: "Hermes Agent",
   paginated: true,
 };
 
-const DEFAULT_OPENCLAW_PEERS: RepoConfig[] = [
-  { id: "nanobot", repo: "HKUDS/nanobot", name: "NanoBot", paginated: true },
+const DEFAULT_HERMES_PEERS: RepoConfig[] = [
+  { id: "openclaw", repo: "openclaw/openclaw", name: "OpenClaw", paginated: true },
+  { id: "nanobot", repo: "HKUDS/nanobot", name: "NanoBot" },
   { id: "zeroclaw", repo: "zeroclaw-labs/zeroclaw", name: "Zeroclaw" },
-  { id: "picoclaw", repo: "sipeed/picoclaw", name: "PicoClaw", paginated: true },
+  { id: "picoclaw", repo: "sipeed/picoclaw", name: "PicoClaw" },
   { id: "nanoclaw", repo: "qwibitai/nanoclaw", name: "NanoClaw" },
+  { id: "nullclaw", repo: "nullclaw/nullclaw", name: "NullClaw" },
   { id: "ironclaw", repo: "nearai/ironclaw", name: "IronClaw" },
-  { id: "lobsterai", repo: "netease-youdao/LobsterAI", name: "LobsterAI" },
-  { id: "tinyclaw", repo: "TinyAGI/tinyclaw", name: "TinyClaw" },
-  { id: "copaw", repo: "agentscope-ai/CoPaw", name: "CoPaw" },
-  { id: "zeptoclaw", repo: "qhkm/zeptoclaw", name: "ZeptoClaw" },
-  { id: "easyclaw", repo: "gaoyangz77/easyclaw", name: "EasyClaw" },
+  { id: "qwenpaw", repo: "agentscope-ai/QwenPaw", name: "Qwen-Paw" },
 ];
 
 const DEFAULT_EMBEDDED_AI_REPOS: RepoConfig[] = [
   { id: "orangepi-5", repo: "orangepi-xunlong/orangepi-build", name: "Orange Pi Build System" },
-  { id: "rknn-toolkit", repo: "rockchip-linux/rknn-toolkit2", name: "RKNN Toolkit 2" },
-  { id: "rknpu2", repo: "rockchip-linux/rknpu2", name: "RKNPU2" },
+  { id: "rknn-toolkit", repo: "airockchip/rknn-toolkit2", name: "RKNN Toolkit 2" },
+  { id: "rknn-model-zoo", repo: "airockchip/rknn_model_zoo", name: "RKNN Model Zoo" },
+  { id: "rockchip-mpp", repo: "rockchip-linux/mpp", name: "Media Process Platform (MPP) module" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -75,20 +80,23 @@ export function loadConfig(configPath = "config.yml"): RadarConfig {
   if (!fs.existsSync(resolved)) {
     console.log(`[config] ${configPath} not found — using built-in defaults.`);
     return {
-      openclaw: DEFAULT_OPENCLAW,
-      openclawPeers: DEFAULT_OPENCLAW_PEERS,
+      hermes: DEFAULT_HERMES,
+      hermesPeers: DEFAULT_HERMES_PEERS,
       embeddedAiRepos: DEFAULT_EMBEDDED_AI_REPOS,
     };
   }
 
   const raw = yaml.load(fs.readFileSync(resolved, "utf-8")) as RawConfig;
 
-  const openclaw = raw?.openclaw?.id && raw.openclaw.repo ? toRepoConfig(raw.openclaw) : DEFAULT_OPENCLAW;
+  const primaryRaw = raw?.hermes ?? raw?.openclaw;
+  const hermes =
+    primaryRaw?.id && primaryRaw.repo ? toRepoConfig(primaryRaw) : DEFAULT_HERMES;
 
-  const openclawPeers =
-    Array.isArray(raw?.openclaw_peers) && raw.openclaw_peers.length > 0
-      ? raw.openclaw_peers.map(toRepoConfig)
-      : DEFAULT_OPENCLAW_PEERS;
+  const peersRaw = raw?.hermes_peers ?? raw?.openclaw_peers;
+  const hermesPeers =
+    Array.isArray(peersRaw) && peersRaw.length > 0
+      ? peersRaw.map(toRepoConfig)
+      : DEFAULT_HERMES_PEERS;
 
   const embeddedAiRepos =
     Array.isArray(raw?.embedded_ai_repos) && raw.embedded_ai_repos.length > 0
@@ -96,9 +104,9 @@ export function loadConfig(configPath = "config.yml"): RadarConfig {
       : DEFAULT_EMBEDDED_AI_REPOS;
 
   console.log(
-    `[config] Loaded from ${configPath}: ` +
-      `${openclawPeers.length} OpenClaw peers, ${embeddedAiRepos.length} embedded AI repos`,
+    `[config] Loaded from ${configPath}: primary=${hermes.name} (${hermes.repo}), ` +
+      `${hermesPeers.length} peers, ${embeddedAiRepos.length} embedded AI repos`,
   );
 
-  return { openclaw, openclawPeers, embeddedAiRepos };
+  return { hermes, hermesPeers, embeddedAiRepos };
 }

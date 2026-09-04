@@ -186,11 +186,16 @@ export function getDigestLangs(): Lang[] {
 // Issue title map — language-aware GitHub Issue titles
 // ---------------------------------------------------------------------------
 
-const ISSUE_TITLES: Record<string, Record<Lang, string>> = {
+const ISSUE_TITLES: Record<string, Partial<Record<Lang, string>>> = {
   cli: {
     en: "📊 AI CLI Tools Daily Digest",
     vi: "📊 Bản tin hàng ngày công cụ AI CLI",
   },
+  hermes: {
+    en: "☤ Hermes Agent Ecosystem Daily Digest",
+    vi: "☤ Bản tin hàng ngày hệ sinh thái Hermes Agent",
+  },
+  // Legacy alias kept so old callers still resolve a title.
   openclaw: {
     en: "☤ Hermes Agent Ecosystem Daily Digest",
     vi: "☤ Bản tin hàng ngày hệ sinh thái Hermes Agent",

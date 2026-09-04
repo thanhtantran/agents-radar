@@ -2,7 +2,7 @@
 # Edit this file to customize which repositories are tracked.
 # Changes take effect on the next workflow run.
 
-# ── OpenClaw (primary focus project) ─────────────────────────────────────────
+# ── Hermes Agent (primary focus project) ─────────────────────────────────────
 # Tracked with a dedicated deep-dive report. Set paginated: true for high-volume repos.
 
 hermes:
@@ -11,8 +11,8 @@ hermes:
   name: Hermes Agent
   paginated: true
 
-# ── OpenClaw peer projects ────────────────────────────────────────────────────
-# Tracked alongside OpenClaw for cross-ecosystem comparison.
+# ── Peer AI agent projects ───────────────────────────────────────────────────
+# Tracked alongside Hermes for cross-ecosystem comparison.
 
 openclaw_peers:
   - id: openclaw

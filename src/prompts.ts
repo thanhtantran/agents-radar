@@ -122,12 +122,12 @@ Sử dụng markdown, bullet points, và emoji phù hợp. Tập trung vào insi
 }
 
 export function buildPeersComparisonPrompt(
-  openclawDigest: RepoDigest,
+  hermesDigest: RepoDigest,
   peerDigests: RepoDigest[],
   dateStr: string,
   lang: "vi" = "vi",
 ): string {
-  const allDigests = [openclawDigest, ...peerDigests];
+  const allDigests = [hermesDigest, ...peerDigests];
   const digestsText = allDigests
     .map((d) => {
       const { config, issues, prs, releases } = d;
