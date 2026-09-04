@@ -30,9 +30,9 @@ Dự án Hermes Agent được theo dõi là nguồn tham chiếu chính (deep-d
 | ------ | --------------------------------------------------------------- | ----- |
 | Hermes Agent | [nousresearch/hermes-agent](https://github.com/nousresearch/hermes-agent) | Dự án Hermes Agent (primary focus) |
 
-### Hệ sinh thái OpenClaw & AI Agents
+### Hệ sinh thái peers & AI Agents
 
-Các dự án liên quan trong lĩnh vực AI agent được theo dõi cùng để so sánh đa hệ sinh thái (danh sách đồng bộ từ `config.yml`).
+Các dự án liên quan trong lĩnh vực AI agent được theo dõi cùng để so sánh đa hệ sinh thái (danh sách đồng bộ từ `config.yml`). OpenClaw là một peer, không còn là dự án primary.
 
 | Dự án     | Repository                                                              | Mô tả |
 | --------- | ----------------------------------------------------------------------- | ----- |
@@ -282,23 +282,23 @@ Các file được ghi vào `digests/YYYY-MM-DD/`:
 
 | File                  | Nội dung                                                                                                 | GitHub Issue Label |
 | --------------------- | -------------------------------------------------------------------------------------------------------- | ------------------ |
-| `ai-agents-vi.md`     | Báo cáo chuyên sâu OpenClaw + so sánh đa hệ sinh thái + chi tiết các dự án liên quan                    | `openclaw`         |
+| `ai-agents-vi.md`     | Báo cáo chuyên sâu Hermes Agent + so sánh đa hệ sinh thái + chi tiết các dự án liên quan                 | `hermes`           |
 | `ai-embedded-vi.md`   | Báo cáo về Orange Pi, RKLLM, RKNPU và các dự án AI nhúng                                                | `embedded`         |
 | `ai-trending-vi.md`   | Báo cáo GitHub AI trending — repo được phân loại theo chiều + tín hiệu xu hướng (chỉ ghi khi có dữ liệu) | `trending`         |
 
 ### Cấu trúc `ai-agents-vi.md`:
 
 ```markdown
-# Bản tin Hệ sinh thái OpenClaw YYYY-MM-DD
+# Bản tin Hệ sinh thái Hermes Agent YYYY-MM-DD
 
 > Issues: N | PRs: N | Dự án: N | Thời gian tạo: UTC
 
-## Phân tích sâu OpenClaw
+## Phân tích sâu Hermes Agent
   Tóm tắt hôm nay / Releases / Tiến độ dự án / Điểm nổi bật cộng đồng /
   Ổn định & Bugs / Yêu cầu tính năng / Phản hồi người dùng / Backlog
 
 ## So sánh hệ sinh thái chéo
-  Tổng quan / Bảng so sánh hoạt động / Vị thế OpenClaw /
+  Tổng quan / Bảng so sánh hoạt động / Vị thế Hermes Agent /
   Hướng kỹ thuật chung / Điểm khác biệt / Mức độ trưởng thành / Tín hiệu xu hướng
 
 ## Báo cáo các dự án cùng nhóm
@@ -347,7 +347,7 @@ Các file được ghi vào `digests/YYYY-MM-DD/`:
 ## Tâm điểm cộng đồng
 ```
 
-Các bản tin lịch sử được lưu trong [`digests/`](./digests/). Issues đã xuất bản được gắn thẻ theo loại: [`openclaw`](../../issues?label=openclaw) · [`embedded`](../../issues?label=embedded) · [`trending`](../../issues?label=trending)
+Các bản tin lịch sử được lưu trong [`digests/`](./digests/). Issues đã xuất bản được gắn thẻ theo loại: [`hermes`](../../issues?label=hermes) · [`embedded`](../../issues?label=embedded) · [`trending`](../../issues?label=trending)
 
 ## ⏰ Lịch chạy
 
@@ -395,7 +395,7 @@ Xem hướng dẫn setup: [docs/CRONJOB-SETUP.md](./docs/CRONJOB-SETUP.md)
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │              2. Xử lý với LLM (Local)                        │
-│  • Tóm tắt từng repo (OpenClaw, peers, embedded AI)         │
+│  • Tóm tắt từng repo (Hermes, peers, embedded AI)           │
 │  • So sánh chéo giữa các dự án                               │
 │  • Phân loại trending repos theo chiều                       │
 │  • Phân tích xu hướng và insights                            │
@@ -403,7 +403,7 @@ Xem hướng dẫn setup: [docs/CRONJOB-SETUP.md](./docs/CRONJOB-SETUP.md)
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │              3. Tạo báo cáo (Markdown)                       │
-│  • ai-agents-vi.md    (OpenClaw ecosystem)                  │
+│  • ai-agents-vi.md    (Hermes Agent ecosystem)              │
 │  • ai-embedded-vi.md  (Orange Pi / RKLLM / RKNPU)           │
 │  • ai-trending-vi.md  (GitHub trending analysis)            │
 └─────────────────────────────────────────────────────────────┘
@@ -478,7 +478,7 @@ MIT License - xem file [LICENSE](LICENSE) để biết thêm chi tiết.
 ## 🙏 Credits
 
 - Dựa trên ý tưởng từ [compasify/agents-radar](https://github.com/compasify/agents-radar)
-- Được tùy chỉnh để tập trung vào OpenClaw ecosystem và embedded AI
+- Được tùy chỉnh để tập trung vào Hermes Agent ecosystem và embedded AI
 
 ## 📧 Liên hệ
 

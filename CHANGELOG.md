@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.1.0] - 2026-09-04
+
+### ☤ Primary focus: Hermes Agent
+- Primary deep-dive project đổi từ OpenClaw → **Hermes Agent** (`nousresearch/hermes-agent`)
+- `config.yml` dùng key `hermes:`; loader vẫn chấp nhận alias legacy `openclaw:`
+- OpenClaw chuyển thành **peer** trong `openclaw_peers` / `hermes_peers`
+- GitHub Issue label báo cáo AI agents: **`hermes`** (màu indigo `#6366f1`), không còn gắn `openclaw`
+- `ensureLabel` cập nhật màu/description nếu label đã tồn tại
+- Tiêu đề báo cáo / RSS / Telegram / README → Hệ sinh thái Hermes Agent
+
 ## [2.0.0] - 2026-04-22
 
 ### 🎯 Thay đổi từ mã nguồn ý tưởng
@@ -10,7 +20,7 @@
 - ❌ **Đã xóa**: Web scraping (Anthropic, OpenAI websites)
 - ❌ **Đã xóa**: Hacker News tracking
 - ❌ **Đã xóa**: Weekly và Monthly rollup reports
-- ✅ **Giữ lại**: OpenClaw ecosystem tracking
+- ✅ **Giữ lại**: OpenClaw ecosystem tracking (sau này đổi primary sang Hermes ở 2.1.0)
 - ✅ **Giữ lại**: GitHub Trending tracking
 - ✅ **Thêm mới**: Embedded AI tracking (Orange Pi, RKLLM, RKNPU)
 
@@ -122,7 +132,8 @@ TELEGRAM_CHAT_ID=@channel
 
 ### 🏷️ GitHub Issue Labels
 
-- `openclaw` (🔴 red) - OpenClaw ecosystem reports
+- `hermes` (🟣 indigo `#6366f1`) - Hermes Agent ecosystem reports (current)
+- `openclaw` (🔴 red `#e11d48`) - Legacy OpenClaw-era reports
 - `embedded` (🟢 green) - Embedded AI reports
 - `trending` (🟡 yellow) - GitHub trending reports
 
@@ -168,7 +179,7 @@ Nếu bạn đang sử dụng version cũ:
 - ✅ **Đơn giản hơn**: Ít nguồn dữ liệu, ít code
 - ✅ **Nhanh hơn**: Không cần web scraping, HN API
 - ✅ **Rẻ hơn**: Không cần API key, chạy local
-- ✅ **Tập trung hơn**: Chỉ theo dõi OpenClaw và embedded AI
+- ✅ **Tập trung hơn**: Theo dõi Hermes Agent (primary), peers và embedded AI
 - ✅ **Tiếng Việt tốt hơn**: Prompts được tối ưu
 - ✅ **Dễ maintain hơn**: Ít dependencies, ít complexity
 

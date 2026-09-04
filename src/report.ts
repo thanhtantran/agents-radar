@@ -195,11 +195,6 @@ const ISSUE_TITLES: Record<string, Partial<Record<Lang, string>>> = {
     en: "☤ Hermes Agent Ecosystem Daily Digest",
     vi: "☤ Bản tin hàng ngày hệ sinh thái Hermes Agent",
   },
-  // Legacy alias kept so old callers still resolve a title.
-  openclaw: {
-    en: "☤ Hermes Agent Ecosystem Daily Digest",
-    vi: "☤ Bản tin hàng ngày hệ sinh thái Hermes Agent",
-  },
   embedded: {
     zh: "🔌 嵌入式 AI 日报",
     en: "🔌 Embedded AI Daily Digest",

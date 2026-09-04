@@ -3,7 +3,7 @@
 English | [Tiếng Việt](./README.md)
 
 A GitHub Actions workflow that runs daily to track and generate reports on:
-1. **OpenClaw ecosystem** and similar AI agent projects
+1. **Hermes Agent ecosystem** and similar AI agent projects
 2. **Embedded AI**: Orange Pi, RKLLM, RKNPU and related projects
 
 Reports are automatically generated using LLM (running locally), saved as Markdown, and published via GitHub Pages.
@@ -22,9 +22,9 @@ Subscribe in any RSS reader to receive new digests automatically.
 
 ## 📊 Data Sources
 
-### 1. OpenClaw Ecosystem & AI Agents
+### 1. Hermes Agent Ecosystem & AI Agents
 
-Tracks OpenClaw as the primary reference project, along with related AI agent projects for cross-ecosystem comparison.
+Tracks Hermes Agent as the primary reference project, along with related AI agent projects (including OpenClaw as a peer) for cross-ecosystem comparison.
 
 ### 2. Embedded AI (Orange Pi / RKLLM / RKNPU)
 
@@ -42,7 +42,7 @@ Tracks projects related to AI on embedded hardware, especially Rockchip NPU plat
 - ✅ Multi-project comparison analysis
 - ✅ Daily GitHub Trending tracking with intelligent categorization
 - ✅ Topic-based repository search (AI agents, embedded AI, NPU)
-- ✅ Publish GitHub Issues for each report type
+- ✅ Publish GitHub Issues for each report type (`hermes`, `embedded`, `trending`)
 - ✅ Commit Markdown files to `digests/YYYY-MM-DD/`
 - ✅ Run on schedule via GitHub Actions
 - ✅ Support for local LLM (no API key needed)
@@ -59,7 +59,7 @@ MIT License
 
 ## 🙏 Credits
 
-Based on ideas from [compasify/agents-radar](https://github.com/compasify/agents-radar), customized to focus on OpenClaw ecosystem and embedded AI.
+Based on ideas from [compasify/agents-radar](https://github.com/compasify/agents-radar), customized to focus on Hermes Agent ecosystem and embedded AI.
 
 ---
 

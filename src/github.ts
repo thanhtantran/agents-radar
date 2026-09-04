@@ -181,14 +181,33 @@ export async function fetchRecentReleases(repo: string, since: Date): Promise<Gi
 
 export async function ensureLabel(name: string, color: string): Promise<void> {
   const digestRepo = process.env["DIGEST_REPO"] ?? "";
+  const common = { ...headers(), "Content-Type": "application/json" };
   const resp = await fetch(`https://api.github.com/repos/${digestRepo}/labels`, {
     method: "POST",
-    headers: { ...headers(), "Content-Type": "application/json" },
-    body: JSON.stringify({ name, color }),
+    headers: common,
+    body: JSON.stringify({ name, color, description: name === "hermes" ? "Hermes Agent ecosystem reports" : undefined }),
   });
-  if (!resp.ok && resp.status !== 422) {
-    throw new Error(`Failed to create label "${name}": ${await resp.text()}`);
+  if (resp.ok) return;
+  // 422 = label already exists — update color/description so renames stick.
+  if (resp.status === 422) {
+    const patch = await fetch(
+      `https://api.github.com/repos/${digestRepo}/labels/${encodeURIComponent(name)}`,
+      {
+        method: "PATCH",
+        headers: common,
+        body: JSON.stringify({
+          new_name: name,
+          color,
+          description: name === "hermes" ? "Hermes Agent ecosystem reports" : undefined,
+        }),
+      },
+    );
+    if (!patch.ok && patch.status !== 404) {
+      throw new Error(`Failed to update label "${name}": ${await patch.text()}`);
+    }
+    return;
   }
+  throw new Error(`Failed to create label "${name}": ${await resp.text()}`);
 }
 
 /**
@@ -222,9 +241,10 @@ export async function createGitHubIssue(title: string, body: string, label: stri
   if (body.length > GITHUB_ISSUE_BODY_LIMIT) {
     body = body.slice(0, GITHUB_ISSUE_BODY_LIMIT - TRUNCATION_NOTICE.length) + TRUNCATION_NOTICE;
   }
+  // hermes = indigo (distinct from legacy openclaw red e11d48)
   const LABEL_COLORS: Record<string, string> = {
-    hermes: "e11d48",
-    openclaw: "e11d48", // legacy
+    hermes: "6366f1",
+    openclaw: "e11d48", // legacy only — new AI-agent issues use hermes
     embedded: "10b981",
     trending: "f9a825",
     hn: "ff6600",

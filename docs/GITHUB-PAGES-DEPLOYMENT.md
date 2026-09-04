@@ -139,7 +139,7 @@ git config --global user.email "your.email@example.com"
 Sau khi deploy thành công, trang web sẽ hiển thị:
 - ✅ Danh sách các ngày có báo cáo (sidebar bên trái)
 - ✅ 3 loại báo cáo cho mỗi ngày:
-  - **Hệ sinh thái OpenClaw & AI Agents** (ai-agents-vi)
+  - **Hệ sinh thái Hermes & AI Agents** (ai-agents-vi)
   - **AI Nhúng (Orange Pi, RKLLM, RKNPU)** (ai-embedded-vi)
   - **Xu hướng AI GitHub** (ai-trending-vi)
 - ✅ Chức năng tìm kiếm báo cáo

@@ -359,8 +359,8 @@ TELEGRAM_CHAT_ID=@your_channel
 Nếu muốn theo dõi nhiều repos khác nhau:
 
 ```bash
-# Instance 1: OpenClaw
-0 9 * * * cd /path/to/agents-radar-openclaw && ./scripts/run-daily.sh
+# Instance 1: Hermes Agent
+0 9 * * * cd /path/to/agents-radar-hermes && ./scripts/run-daily.sh
 
 # Instance 2: Embedded AI
 0 10 * * * cd /path/to/agents-radar-embedded && ./scripts/run-daily.sh

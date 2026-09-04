@@ -2,7 +2,7 @@
  * agents-radar MCP Server — Cloudflare Worker
  *
  * Exposes agents-radar digest data as MCP tools so any MCP-compatible
- * client (Claude Desktop, OpenClaw, etc.) can query the latest AI ecosystem reports.
+ * client (Claude Desktop, Hermes, etc.) can query the latest AI ecosystem reports.
  *
  * Tools:
  *   list_reports  — list available dates and report types

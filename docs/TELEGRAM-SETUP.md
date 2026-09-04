@@ -126,7 +126,7 @@ Khi có báo cáo mới, bot sẽ gửi thông báo dạng:
 ```
 📊 Báo cáo AI mới - 2026-04-24
 
-✅ Hệ sinh thái OpenClaw & AI Agents
+✅ Hệ sinh thái Hermes & AI Agents
 ✅ AI Nhúng (Orange Pi, RKLLM, RKNPU)
 ✅ Xu hướng AI GitHub
 
